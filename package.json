@@ -1,0 +1,31 @@
+{
+  "name": "e-commerce-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "express-ejs-layouts": "^2.5.1",
+    "lodash": "^4.17.21",
+    "mailgen": "^2.0.27",
+    "mongoose": "^7.3.2",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.3",
+    "otp-generator": "^4.0.1",
+    "razorpay": "^2.9.1",
+    "twilio": "^4.13.0",
+    "two-step-auth": "^1.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
