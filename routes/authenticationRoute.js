@@ -1,14 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const {auth,createUser,getUserLogin}=require('../controller/authCtrl')
+const authorizationMiddleware=require('../middlewares/authorizationMiddleware')
+const {landingPage,createUser,getUserLogin
+    ,userLogin,getHomePage,getAdminHome}=require('../controller/authCtrl')
 
 
 
-router.get("/",auth);
+router.get("/",landingPage);
 
 
 router.post('/user-signup',createUser)
-router.get('/login',getUserLogin)
+router.get('/loginOrSignup',getUserLogin)
+router.post('/user-login',userLogin)
+router.get('/home',authorizationMiddleware,getHomePage)
+
+router.get('/admin-home',getAdminHome)
 
 
 
