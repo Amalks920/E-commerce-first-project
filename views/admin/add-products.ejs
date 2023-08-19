@@ -1,0 +1,174 @@
+<section class="content-main">
+  <form action="/admin/product/add-product" method="post" enctype="multipart/form-data">
+
+  <div class="row">
+    <div class="col-9">
+      <div class="content-header">
+        <h2 class="content-title">Add New Product</h2>
+        <div>
+          <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">
+            Save to draft
+          </button>
+          <button type="submit" class="btn btn-md rounded font-sm hover-up">Publish</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4>Basic</h4>
+        </div>
+        <div class="card-body">
+            <div class="mb-4">
+              <label for="product_name" class="form-label">Product title</label>
+              <input
+                type="text"
+                name="productname"
+                placeholder="Type here"
+                class="form-control"
+                id="product_name" />
+            </div>
+            <div class="mb-4">
+              <label class="form-label">Full description</label>
+              <textarea
+                name="description"
+                placeholder="Type here"
+                class="form-control"
+                rows="4"></textarea>
+            </div>
+            <div class="row">
+              <div class="col-lg-4">
+                <div class="mb-4">
+                  <label class="form-label">Regular price</label>
+                  <div class="row gx-2">
+                    <input
+                      placeholder="$"
+                      name="price"
+                      type="number"
+                      class="form-control" />
+                  </div>
+                </div>
+              </div>
+            </div>
+        
+        </div>
+      </div>
+      <!-- card end// -->
+    </div>
+    <div class="col-lg-3">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4>Media</h4>
+        </div>
+        <div class="card-body">
+          <div class="input-upload">
+            <img src="admin-assets/imgs/theme/upload.svg" alt="" />
+            <input class="form-control" name="images" type="file" multiple />
+          </div>
+        </div>
+      </div>
+
+      <!-- card end// -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4>Organization</h4>
+        </div>
+        <div class="card-body">
+          <div class="row gx-2">
+            <div class="col-sm-6 mb-3">
+              <label class="form-label">Category</label>
+              <select name="productCategory" class="form-select">
+                <% data?.forEach((items)=>{ %>
+                  <option  value=<%=items._id %> ><%=items?.productCategory %></option>
+              <%  }) %>
+                
+               
+              </select>
+            </div>
+            <div class="col-sm-6 mb-3">
+              <label class="form-label">Sub-category</label>
+              <select name="subcategory" class="form-select">
+                <option>Nissan</option>
+                <option>Honda</option>
+                <option>Mercedes</option>
+                <option>Chevrolet</option>
+              </select>
+            </div>
+          </div>
+          <!-- row.// -->
+        </div>
+      </div>
+      <!-- card end// -->
+    </div>
+  </div>
+
+</form>
+</section>
+<!-- content-main end// -->
+
+<script>
+  const productForm = document.getElementById("productForm");
+  const productNameInput = document.getElementById("productName");
+  const productCategorySelect = document.querySelector(
+    'select[name="productCategory"]'
+  );
+  const descriptionInput = document.getElementById("description");
+  const mrpInput = document.getElementById("mrp");
+  const priceInput = document.getElementById("price");
+  const stockInput = document.getElementById("stock");
+  const imagesInput = document.querySelector('input[type="file"]');
+  const submitButton = document.querySelector('button[type="submit"]');
+
+  // Reset previous error messages
+  productNameInput.classList.remove("is-invalid");
+  productCategorySelect.classList.remove("is-invalid");
+  descriptionInput.classList.remove("is-invalid");
+  mrpInput.classList.remove("is-invalid");
+  priceInput.classList.remove("is-invalid");
+  stockInput.classList.remove("is-invalid");
+  imagesInput.classList.remove("is-invalid");
+
+  productForm.addEventListener("submit", function (event) {
+    let isValid = true;
+
+    // Perform validation for each field
+    if (productNameInput.value.trim() === "") {
+      isValid = false;
+      productNameInput.classList.add("is-invalid");
+    }
+
+    // if (productCategorySelect.value === '1') {
+    //     isValid = false;
+    //     productCategorySelect.classList.add('is-invalid');
+    // }
+
+    if (descriptionInput.value.trim() === "") {
+      isValid = false;
+      descriptionInput.classList.add("is-invalid");
+    }
+
+    if (isNaN(mrpInput.value) || parseFloat(mrpInput.value) <= 0) {
+      isValid = false;
+      mrpInput.classList.add("is-invalid");
+    }
+
+    if (isNaN(priceInput.value) || parseFloat(priceInput.value) <= 0) {
+      isValid = false;
+      priceInput.classList.add("is-invalid");
+    }
+
+    if (isNaN(stockInput.value) || parseInt(stockInput.value) < 0) {
+      isValid = false;
+      stockInput.classList.add("is-invalid");
+    }
+
+    if (imagesInput.files.length === 0) {
+      isValid = false;
+      imagesInput.classList.add("is-invalid");
+    }
+
+    if (!isValid) {
+      event.preventDefault(); // Prevent form submission if validation fails
+    }
+  });
+</script>
