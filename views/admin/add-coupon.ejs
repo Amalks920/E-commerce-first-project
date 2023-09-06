@@ -1,0 +1,115 @@
+<section class="content-main">
+    <form action="/admin/add-coupon" method="post" 
+  
+    <div class="row" style="margin-left: 450px; margin-top: 100px;">
+      <div class="col-9">
+        <div class="content-header">
+          <h2 class="content-title" style="margin-left: 200px;">Add Coupon</h2>
+
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>Basic</h4>
+          </div>
+          <div class="card-body">
+              <div class="mb-4">
+                <label for="product_name" class="form-label">Enter Promocode</label>
+                <input
+                  type="text"
+                  name="code"
+                  id="code"
+                  placeholder="Type here"
+                  class="form-control"
+                      />
+              </div>
+
+
+
+              <div class="mb-4">
+                <label class="form-label">Choose Discount Type</label>
+                <select name="discountType" class="form-select">
+                    <option value="Percentage">Percentage Amount</option>
+                    <option value="Fixed">Fixed Amount</option>
+                  </select>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label">Code Description</label>
+                <textarea
+                type="text"
+                  name="description"
+                  id="description"
+                  placeholder="Type here"
+                  class="form-control"
+                  rows="4"></textarea>
+              </div>
+
+
+
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="mb-4">
+                    <label class="form-label">Discount Amount</label>
+                    <div class="row gx-2">
+                      <input
+                        placeholder="discount amount"
+                        name="discountAmount"
+                        id="discountAmount"
+                        type="number"
+                        class="form-control" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="mb-4">
+                    <label class="form-label">Minimum Amount</label>
+                    <div class="row gx-2">
+                      <input
+                        placeholder="$"
+                        name="minimumAmount"
+                        id="minimumAmount"
+                        type="number"
+                        class="form-control" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="mb-4">
+                    <label class="form-label">Maximum Redemption</label>
+                    <div class="row gx-2">
+                      <input
+                        placeholder="max redemptions"
+                        name="maxRedemptions"
+                        id="maxRedemptions"
+                        type="number"
+                        class="form-control" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="mb-4">
+                    <label class="form-label">Expiration date</label>
+                    <div class="row gx-2">
+                      <input
+                        placeholder="max redemptions"
+                        name="expirationDate"
+                        id="expirationDate"
+                        type="datetime-local"
+                        class="form-control" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button style="background-color: green; color: white; border-radius: 5px; margin-left: 220px;">Add Coupon</button>
+          
+          </div>
+        </div>
+        <!-- card end// -->
+      </div>
+
+    </div>
+  
+  </form>
+  </section>

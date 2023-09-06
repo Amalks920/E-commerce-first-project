@@ -1,0 +1,198 @@
+
+<div id="modalbg" style="border: 2px solid red; position: absolute;height: 100vh;width: 100vw;z-index: 5;background-color: black;opacity:0.2 ;display: none;">
+
+</div>
+<div id="delete-modal" style="background-color: white;opacity: 1; width: 800px;height: 400px;margin-top: 250px;margin-left: 450px;position: absolute;z-index: 6;display: none;">
+    <h2 style="text-align: center;margin-top: 50px;">Do You Want to Change status of the User?</h2>
+    <span style="display: flex;justify-content: center;gap: 15px;margin-top: 100px;">
+        <button id="blockbtn" style="width: 100px;height: 40px;background-color: red;color: white;">Change</button>
+        <button id="cancelbtn" style="width: 100px;height: 40px;background-color: blue;color: white;">Cancel</button>
+    </span>
+</div>
+
+
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Users</h2>
+           <% console.log(data) %>
+        </div>
+
+    </div>
+    <div class="card mb-4">
+
+        <div class="card-body">
+            <article class="itemlist">
+                <div class="row align-items-center">
+
+                    <div class="col-lg-2 col-sm-2 col-8  col-name">
+                        <a class="itemside" href="#">
+
+                            <div class="info">
+                                <h4 class="mb-0">SL NO</h4>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-sm-2 col-8  col-name">
+                        <a class="itemside" href="#">
+
+                            <div class="info">
+                                <h4 class="mb-0">User</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-2 col-sm-2 col-4 col-price"> <h4>Email/phone</h4> </div>
+                    <div class="col-lg-2 col-sm-2 col-4 col-status">
+                        <h4>Address</h4>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-2 col-4 col-status" style="padding-left: 100px;">
+                        <h4>Block/Unblock</h4>
+                    </div>
+
+                </div> <!-- row .// -->
+            </article> <!-- itemlist  .// -->
+        
+
+            <% data.map(el=>{ %>
+
+          
+
+             <article id="table-body" class="itemlist">
+                <div  class="row align-items-center">
+
+                    <div class="col-lg-2 col-sm-2 col-8 flex-grow-1 col-name">
+                        <a class="itemside" href="#">
+
+                            <div class="info">
+                                <h6 class="mb-0">1</h6>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="col-lg-2 col-sm-2 col-8  col-name">
+                        <a class="itemside" href="#">
+
+                            <div class="info">
+                                <h4 class="mb-0"><%=el.username-%></h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-2 col-sm-2 col-4 col-price"> <span><%=el.email -%></span> </div>
+
+                    <div class="col-lg-2 col-sm-2 col-4 col-status">
+                        Ernakulam
+                    </div>
+                    <% if(!el.isBlocked){ %>
+                    
+                    <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                        <button id="block" data-id="<%=el._id -%>" style="background-color: white;color: black;padding: 10px 30px;border: 1px solid green;width: 150px;">Block User</button>
+                    </div>
+                    <%  }else{ %>
+
+                        <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                            <button id="block" data-id="<%=el._id -%>"  style="background-color: white;color: black;padding: 10px 30px;border: 1px solid red;width: 150px;">Unblock User</button>
+                        </div>
+
+                        <%  } %>
+                        <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                        </div>
+                </div> <!-- row .// -->
+            </article> <!-- itemlist  .// -->
+            
+            
+
+
+                
+
+
+
+            <% }) %>
+       
+          
+        </div> <!-- card-body end// -->
+    </div> <!-- card end// -->
+    <div class="pagination-area mt-30 mb-50">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                <li class="page-item"><a class="page-link" href="#">02</a></li>
+                <li class="page-item"><a class="page-link" href="#">03</a></li>
+                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">16</a></li>
+                <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+            </ul>
+        </nav>
+    </div>
+</section> <!-- content-main end// -->
+
+
+<script>
+    const blockFirstBtns=document.querySelectorAll('#block');
+    const modalbg=document.getElementById('modalbg');
+    const deleteModal=document.getElementById('delete-modal');
+    const blockBtn=document.getElementById('blockbtn');
+    const cancelbtn=document.getElementById('cancelbtn');
+
+
+    let userId
+    console.log(blockFirstBtns.forEach(blockbtn=>{
+        console.log(blockbtn.attributes[1].value)
+    }))
+    blockFirstBtns.forEach(blockFirstBtn=> {
+    blockFirstBtn.addEventListener('click',()=>{
+    userId=blockFirstBtn.getAttribute('data-id')
+    console.log(userId)
+    modalbg.style.display="block";
+    deleteModal.style.display="block";
+})
+})
+
+    cancelbtn.addEventListener('click',()=>{
+        modalbg.style.display="none";
+        deleteModal.style.display="none";
+    })
+
+blockBtn.addEventListener('click',()=>{
+    fetch(`/admin/block-user/${userId}`,{
+            method:"PUT",
+            headers:{
+                'Content-Type':'application/json',
+            }
+    })
+    .then((response)=>{
+         console.log(response) 
+         if(response.status===200){
+
+           response.text().then((bodyText)=>{
+
+            blockFirstBtns.forEach(blockbtns=>{
+                if(blockbtns.attributes[1].value==bodyText){
+
+                    if(blockbtns.textContent==="Block User"){
+                    blockbtns.style.border="1px solid red";
+                    blockbtns.textContent="Unblock User";
+                    blockbtns.color='green';
+                    modalbg.style.display="none";
+                    deleteModal.style.display="none";
+                    }else{
+                    blockbtns.style.border="1px solid green";
+                    blockbtns.textContent="Block User";
+                    blockbtns.color='red';  
+                    modalbg.style.display="none";
+                    deleteModal.style.display="none";
+                    }
+
+                }
+            })
+           })
+         }
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
+})
+
+</script>

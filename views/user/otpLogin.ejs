@@ -1,0 +1,38 @@
+
+<div class="form-w3ls" style="margin-top: 200px;">
+
+    <ul class="tab-group cl-effect-4" style="margin-left: 250px;">
+        <li class="tab active"><a href="#signin-agile">OTP Login</a></li>
+    </ul>
+    <div class="">
+        <div id="signin-agile">   
+			<form action="/otp-login" method="post" id="loginform" >
+				
+					
+                <h2 style="color: red; margin-left: 230px;"><%=req.query.err -%></h2>
+
+				<p class="header">Email</p>
+				<input type="text" name="email" id="typeEmailX" placeholder="email"   >
+				
+				
+				
+				<input type="submit" class="sign-in" value="Submit">
+			</form>
+		</div>
+
+		
+    </div><!-- tab-content -->
+</div> <!-- /form -->	  
+<!-- js files -->
+
+<script>
+    // Function to clear the query parameters from the URL
+function clearQueryParams() {
+  const urlWithoutQuery = window.location.origin + window.location.pathname;
+  history.replaceState(null, null, urlWithoutQuery);
+  console.log(urlWithoutQuery)
+}
+
+// Check if the page was refreshed using the "beforeunload" event
+window.addEventListener("beforeunload", clearQueryParams);
+</script>

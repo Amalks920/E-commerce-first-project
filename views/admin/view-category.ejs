@@ -1,0 +1,148 @@
+
+
+<div id="modalbg" style="border: 2px solid red; position: absolute;height: 100vh;width: 100vw;z-index: 5;background-color: black;opacity:0.2 ;display: none;">
+
+    </div>
+    <div id="delete-modal" style="background-color: white;opacity: 1; width: 800px;height: 400px;margin-top: 250px;margin-left: 450px;position: absolute;z-index: 6;display: none;">
+        <h2 style="text-align: center;margin-top: 50px;">Do You Want to Delete  Category?</h2>
+        <span style="display: flex;justify-content: center;gap: 15px;margin-top: 100px;">
+            <button id="deletebtn" style="width: 100px;height: 40px;background-color: red;color: white;">Delete</button>
+            <button id="cancelbtn" style="width: 100px;height: 40px;background-color: blue;color: white;">Cancel</button>
+        </span>
+</div>
+
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Categories</h2>
+           
+        </div>
+
+    </div>
+    <div class="card mb-4">
+
+        <div class="card-body">
+            <article class="itemlist">
+                <div class="row align-items-center">
+
+                    <div class="col-lg-4 col-sm-2 col-8  col-name">
+                        <a class="itemside" href="#">
+
+                            <div class="info">
+                                <h4 class="mb-0">Category</h4>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-sm-2 col-4 col-price"> <h4>Description</h4> </div>
+                    <div class="col-lg-4 col-sm-2 col-4 col-status">
+                        <h4>Image</h4>
+                    </div>
+
+                </div> <!-- row .// -->
+            </article> <!-- itemlist  .// -->
+        
+
+          <% data?.map((el)=>{ %>
+                <% console.log(el.images[0]) %>
+             <article id="table-body" data-id="<%=el?._id%>" class="itemlist">
+                <div  class="row align-items-center">
+
+                    <div class="col-lg-4 col-sm-2 col-8 flex-grow-1 col-name">
+                        <a class="itemside" href="#">
+
+                            <div class="info">
+                                <h6 class="mb-0"><%= el?.productCategory -%></h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-sm-2 col-4 col-price"> <span><%= el?.categoryDescription -%></span> </div>
+                    <div class="col-lg-2 col-sm-2 col-4 col-status">
+                        <img src="/images/uploads/<%= el?.images[0] -%>" alt="category image" width="50">
+                    </div>
+
+                    <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                        <a href="/admin/category/edit-category/<%= el?._id -%>" class="btn btn-sm font-sm rounded btn-brand">
+                            <i class="material-icons md-edit"></i> Edit
+                        </a>
+                        <input type="text" value="<%= el?._id-%>" name="" id="catId" hidden>
+                        <a href="#" id="delete" data-id="<%= el?._id -%>" class="btn btn-sm font-sm btn-light rounded">
+                            <i class="material-icons md-delete_forever"></i> Delete
+                        </a>
+                    </div>
+                </div> <!-- row .// -->
+            </article> <!-- itemlist  .// -->
+            
+            <% }) %>
+          
+        </div> <!-- card-body end// -->
+    </div> <!-- card end// -->
+    <div class="pagination-area mt-30 mb-50">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                <li class="page-item"><a class="page-link" href="#">02</a></li>
+                <li class="page-item"><a class="page-link" href="#">03</a></li>
+                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">16</a></li>
+                <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+            </ul>
+        </nav>
+    </div>
+</section> <!-- content-main end// -->
+
+
+<script>
+    const deleteFirstBtns=document.querySelectorAll('#delete');
+    const modalbg=document.getElementById('modalbg');
+    const deleteModal=document.getElementById('delete-modal');
+    const deleteBtn=document.getElementById('deletebtn');
+    const cancelbtn=document.getElementById('cancelbtn');
+    const tableBody=document.querySelectorAll('#table-body');
+    console.log(tableBody)
+
+    // const catId=document.getAttr('catId').value
+        let catId
+
+    deleteFirstBtns.forEach(deleteFirstBtn=> {
+        deleteFirstBtn.addEventListener('click',()=>{
+        catId=deleteFirstBtn.getAttribute('data-id')
+        modalbg.style.display="block";
+        deleteModal.style.display="block";
+    })
+    })
+   
+
+    cancelbtn.addEventListener('click',()=>{
+        modalbg.style.display="none";
+        deleteModal.style.display="none";
+    })
+
+    deleteBtn.addEventListener('click',()=>{
+        console.log(catId)
+        fetch(`/admin/category/delete-category/${catId}`,{
+            method:"GET",
+            headers:{
+                'Content-Type':'application/json',
+            }
+        })
+        .then((response)=>{
+            console.log('responseee');
+            response.text().then((bodyText) => {
+            // const elementToRemove = document.querySelector(`[data_id="${bodyText}"]`);
+            // console.log(elementToRemove)
+
+                if(response?.status==201){
+                tableBody.forEach(node=>{
+        if(node.attributes[1].value==bodyText){
+           node.remove()
+           modalbg.style.display="none";
+           deleteModal.style.display="none";
+        }
+    })
+            }     
+        });
+
+        })
+        .catch(error=>console.log(error))
+    })
+</script>

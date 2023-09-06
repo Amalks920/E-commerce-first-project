@@ -1,24 +1,43 @@
-<section class="content-main">
-  <form action="/admin/product/add-product" method="post" enctype="multipart/form-data">
 
-  <div class="row">
-    <div class="col-9">
-      <div class="content-header">
-        <h2 class="content-title">Add New Product</h2>
-        <div>
-          <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">
-            Save to draft
-          </button>
-          <button type="submit" class="btn btn-md rounded font-sm hover-up">Publish</button>
+
+<div
+  id="image-crop"
+  style="
+    width: 70vw;
+    height: 70vh;
+    position: absolute;
+    border: 1px solid blue;
+    z-index: 4;
+    display: none;
+  ">
+  <img id="crpImg" src="" alt="crop image" />
+  <button id="crop-submit">submit</button>
+</div>
+
+<section class="content-main">
+  <form
+    id="productForm"
+    action="/admin/product/add-product"
+    method="post"
+    enctype="multipart/form-data">
+    <div class="row">
+      <div class="col-9">
+        <div class="content-header">
+          <h2 class="content-title">Add New Product</h2>
+          <div>
+            <button type="submit" class="btn btn-md rounded font-sm hover-up">
+              Publish
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col-lg-6">
-      <div class="card mb-4">
-        <div class="card-header">
-          <h4>Basic</h4>
-        </div>
-        <div class="card-body">
+
+      <div class="col-lg-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>Basic</h4>
+          </div>
+          <div class="card-body">
             <div class="mb-4">
               <label for="product_name" class="form-label">Product title</label>
               <input
@@ -26,11 +45,12 @@
                 name="productname"
                 placeholder="Type here"
                 class="form-control"
-                id="product_name" />
+                id="productName" />
             </div>
             <div class="mb-4">
               <label class="form-label">Full description</label>
               <textarea
+              id="description"
                 name="description"
                 placeholder="Type here"
                 class="form-control"
@@ -39,70 +59,86 @@
             <div class="row">
               <div class="col-lg-4">
                 <div class="mb-4">
-                  <label class="form-label">Regular price</label>
+                  <label  class="form-label">Regular price</label>
                   <div class="row gx-2">
                     <input
                       placeholder="$"
+                      id="price"
                       name="price"
                       type="number"
                       class="form-control" />
                   </div>
                 </div>
+
+                <div class="mb-4">
+                  <label  class="form-label">stock</label>
+                  <div class="row gx-2">
+                    <input
+                      placeholder="stock"
+                      id="stock"
+                      name="stock"
+                      type="number"
+                      class="form-control" />
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <!-- card end// -->
+      </div>
+      <div class="col-lg-3">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>Images</h4>
+          </div>
+          <div class="card-body">
+
+            <div class="input-upload">
+              <div id="images" style="display: flex; gap: 9px;">
+              </div>
+              <button type="button" id="crpBtn" style="display: none;">crop</button>
+              <img src="admin-assets/imgs/theme/upload.svg" alt="" />
+              <input
+                id="fileInput"
+                class="form-control"
+                name="images"
+                type="file"
+                multiple />
+            </div>
+          </div>
+        </div>
+
+        <!-- card end// -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>category</h4>
+          </div>
+          <div class="card-body">
+            <div class="row gx-2">
+              <div class="col-sm-6 mb-3">
+                <label class="form-label">Category</label>
+                <select name="productCategory" class="form-select">
+                <option value="1" disabled selected>Choose Category</option>
+                <% data.forEach(cat=>{ %>
+
+           
+                  <option value="<%=cat._id -%>">
+                  <%= cat.productCategory -%>
+                  </option>
+                  <%    })     %>  
+                
+                </select>
               </div>
             </div>
-        
-        </div>
-      </div>
-      <!-- card end// -->
-    </div>
-    <div class="col-lg-3">
-      <div class="card mb-4">
-        <div class="card-header">
-          <h4>Media</h4>
-        </div>
-        <div class="card-body">
-          <div class="input-upload">
-            <img src="admin-assets/imgs/theme/upload.svg" alt="" />
-            <input class="form-control" name="images" type="file" multiple />
+            <!-- row.// -->
           </div>
         </div>
+        <!-- card end// -->
       </div>
-
-      <!-- card end// -->
-      <div class="card mb-4">
-        <div class="card-header">
-          <h4>Organization</h4>
-        </div>
-        <div class="card-body">
-          <div class="row gx-2">
-            <div class="col-sm-6 mb-3">
-              <label class="form-label">Category</label>
-              <select name="productCategory" class="form-select">
-                <% data?.forEach((items)=>{ %>
-                  <option  value=<%=items._id %> ><%=items?.productCategory %></option>
-              <%  }) %>
-                
-               
-              </select>
-            </div>
-            <div class="col-sm-6 mb-3">
-              <label class="form-label">Sub-category</label>
-              <select name="subcategory" class="form-select">
-                <option>Nissan</option>
-                <option>Honda</option>
-                <option>Mercedes</option>
-                <option>Chevrolet</option>
-              </select>
-            </div>
-          </div>
-          <!-- row.// -->
-        </div>
-      </div>
-      <!-- card end// -->
     </div>
-  </div>
-
-</form>
+  </form>
 </section>
 <!-- content-main end// -->
 
@@ -113,62 +149,189 @@
     'select[name="productCategory"]'
   );
   const descriptionInput = document.getElementById("description");
-  const mrpInput = document.getElementById("mrp");
   const priceInput = document.getElementById("price");
   const stockInput = document.getElementById("stock");
   const imagesInput = document.querySelector('input[type="file"]');
   const submitButton = document.querySelector('button[type="submit"]');
+  // const imageInput = document.getElementById("fileInput");
+  // const imagePreview = document.getElementById("imgPreview");
+  // const imageContainer = document.getElementById("images");
+  // const imageCropContainer = document.getElementById("image-crop");
+  // const cropSubmitBtn = document.getElementById("crop-submit");
+  // const cropContainer = document.getElementById("crpImg");
+  // const crpBtn=document.getElementById('crpBtn')
+
+
+  let imageCount = 0;
+
+  productForm.addEventListener('submit',function(event){
+    let isValid=true;
+      // Reset previous error messages
+      productNameInput.classList.remove('is-invalid');
+      productCategorySelect.classList.remove('is-invalid');
+      descriptionInput.classList.remove('is-invalid');
+      priceInput.classList.remove('is-invalid');
+      stockInput.classList.remove('is-invalid');
+      imagesInput.classList.remove('is-invalid');
+      
+      console.log(productNameInput)
+            // Perform validation for each field
+      if (productNameInput.value.trim() === '') {
+        isValid = false;
+        productNameInput.classList.add('is-invalid');
+      }
+
+      if (productCategorySelect.value === '1') {
+          isValid = false;
+          productCategorySelect.classList.add('is-invalid');
+      }
+
+      if (descriptionInput.value.trim() === '') {
+          isValid = false;
+          descriptionInput.classList.add('is-invalid');
+      }
+
+      if (isNaN(stockInput.value) || parseInt(stockInput.value) < 0) {
+          isValid = false;
+          stockInput.classList.add('is-invalid');
+      }
+      
+      if (imagesInput.files.length === 0) {
+          isValid = false;
+          imagesInput.classList.add('is-invalid');
+      }
+
+      if (!isValid) {
+          event.preventDefault(); // Prevent form submission if validation fails
+      }
+      
+  })
+
+  // cropSubmitBtn.addEventListener("click", () => {
+  //   imageCropContainer.style.display = "none";
+  // });
+
+  // imagesInput.addEventListener("change", () => {
+  //   const files = imageInput.files;
+  //   console.log(files[0])
+  //   if (imageCount < 3) {
+  //     const reader = new FileReader();
+
+  //     reader.onload = function (event) {
+  //       const img = document.createElement("img");
+  //       img.src = event.target.result;
+  //       img.alt = "Image " + (imageCount + 1);
+
+       
+
+  //       imageContainer.appendChild(img);
+  //       imageCount++;
+
+  //       // Clear the input field after selecting an image
+  //       imagesInput.value = "";
+  //     };
+  //     if (files.length > 0) {
+  //       reader.readAsDataURL(files[0]);
+  //     }
+  //   } else {
+  //     alert("You can upload a maximum of three images.");
+  //     // Clear the input field to prevent further selection
+  //     imagesInput.value = "";
+  //   }
+  // });
+
+  // imageContainer.addEventListener('click',(event)=>{
+  //   if(event.target.tagName==="IMG"){
+  //     cropImg(event.target)
+     
+  //     crpBtn.style.display="block"
+  //   }
+  // })
+
+  // images.forEach(image=>{
+  //   console.log(image)
+  //   image.addEventListener('click',()=>{
+  //     console.log(image)
+  //   })
+  // })
+
+  // img.addEventListener("click", function () {
+          // console.log(img)
+          //call function to create a modal
+        //  imageCropModal(img.src);
+     //   });
+
+
+  function imageCropModal(img) {
+    // cropContainer.src = imgSrc;
+    // console.log(crop)
+    // const newImg=document.createElement('img')
+    // newImg.src=img.src
+    // newImg.id="crpImg"
+    // console.log(imageCropContainer.removeChild(imageCropContainer.lastChild))
+    // imageCropContainer.style.display = "block";
+    // imageCropContainer.appendChild(img)
+    cropImg(img);
+  }
 
   // Reset previous error messages
-  productNameInput.classList.remove("is-invalid");
-  productCategorySelect.classList.remove("is-invalid");
-  descriptionInput.classList.remove("is-invalid");
-  mrpInput.classList.remove("is-invalid");
-  priceInput.classList.remove("is-invalid");
-  stockInput.classList.remove("is-invalid");
-  imagesInput.classList.remove("is-invalid");
+  // productNameInput.classList.remove("is-invalid");
+  // productCategorySelect.classList.remove("is-invalid");
+  // descriptionInput.classList.remove("is-invalid");
+  // mrpInput.classList.remove("is-invalid");
+  // priceInput.classList.remove("is-invalid");
+  // stockInput.classList.remove("is-invalid");
+  // imagesInput.classList.remove("is-invalid");
 
-  productForm.addEventListener("submit", function (event) {
-    let isValid = true;
+  // productForm.addEventListener("submit", function (event) {
+  //   let isValid = true;
 
     // Perform validation for each field
-    if (productNameInput.value.trim() === "") {
-      isValid = false;
-      productNameInput.classList.add("is-invalid");
-    }
+    // if (productNameInput.value.trim() === "") {
+    //   isValid = false;
+    //   productNameInput.classList.add("is-invalid");
+    // }
 
     // if (productCategorySelect.value === '1') {
     //     isValid = false;
     //     productCategorySelect.classList.add('is-invalid');
     // }
 
-    if (descriptionInput.value.trim() === "") {
-      isValid = false;
-      descriptionInput.classList.add("is-invalid");
-    }
 
-    if (isNaN(mrpInput.value) || parseFloat(mrpInput.value) <= 0) {
-      isValid = false;
-      mrpInput.classList.add("is-invalid");
-    }
+    
 
-    if (isNaN(priceInput.value) || parseFloat(priceInput.value) <= 0) {
-      isValid = false;
-      priceInput.classList.add("is-invalid");
-    }
+    // if (descriptionInput.value.trim() === "") {
+    //   isValid = false;
+    //   descriptionInput.classList.add("is-invalid");
+    // }
 
-    if (isNaN(stockInput.value) || parseInt(stockInput.value) < 0) {
-      isValid = false;
-      stockInput.classList.add("is-invalid");
-    }
+    // if (isNaN(mrpInput.value) || parseFloat(mrpInput.value) <= 0) {
+    //   isValid = false;
+    //   mrpInput.classList.add("is-invalid");
+    // }
 
-    if (imagesInput.files.length === 0) {
-      isValid = false;
-      imagesInput.classList.add("is-invalid");
-    }
+    // if (isNaN(priceInput.value) || parseFloat(priceInput.value) <= 0) {
+    //   isValid = false;
+    //   priceInput.classList.add("is-invalid");
+    // }
 
-    if (!isValid) {
-      event.preventDefault(); // Prevent form submission if validation fails
-    }
-  });
+    // if (isNaN(stockInput.value) || parseInt(stockInput.value) < 0) {
+    //   isValid = false;
+    //   stockInput.classList.add("is-invalid");
+    // }
+
+    // if (imagesInput.files.length === 0) {
+    //   isValid = false;
+    //   imagesInput.classList.add("is-invalid");
+    // }
+
+    // if (!isValid) {
+    //   event.preventDefault(); // Prevent form submission if validation fails
+    // }
+  // });
 </script>
+
+<!-- Images on click -->
+
+<script src="/cropperjs/cropper.min.js" type="text/javascript"></script>
+<script src="/javascript/cropper.js"></script>

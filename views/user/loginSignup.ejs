@@ -1,48 +1,60 @@
-<h1>stylish Sign in and Sign up  form</h1>
-<div class="form-w3ls">
-	<div class="form-head-w3l">
-		<h2>s</h2>
-	</div>
-    <ul class="tab-group cl-effect-4">
+
+<div class="form-w3ls" style="margin-top: 200px;">
+
+    <ul class="tab-group cl-effect-4" style="margin-left: 170px;">
         <li class="tab active"><a href="#signin-agile">Sign In</a></li>
 		<li class="tab"><a href="#signup-agile">Sign Up</a></li>        
     </ul>
     <div class="tab-content">
         <div id="signin-agile">   
-			<form action="user-login" method="post">
+			<form action="/user-login" method="post" id="loginform" >
 				
-				<p class="header">Email</p>
-				<input type="text" name="email" placeholder="email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'User Name';}" required="required">
+					<h2 style="color: red; margin-left: 170px;"><%= req.query.isValid %></h2>
+			
+				<p class="header" style="margin-top: 10px;">Email</p>
 				
-				<p class="header">Password</p>
-				<input type="password" name="password" placeholder="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" required="required">
+				<span id="emailError" style="color: red;margin-top: 20px;"></span>
+				<input type="text" name="email" id="typeEmailX" placeholder="email"   >
+
+				<p class="header" style="margin-top: 10px;">Password</p>
+				<input type="password" id="typePasswordX" name="password" placeholder="Password">
+				<div id="passwordError" style="color: red;margin-bottom: 10px;"></div>
 				
 				<input type="checkbox" id="brand" value="">
-				<label for="brand"><span></span> Remember me?</label>
+				<label for="brand"><a href="/otp-login">Login With Otp?</a> </label>
 				
 				<input type="submit" class="sign-in" value="Sign In">
 			</form>
 		</div>
+
 		<div id="signup-agile">   
-			<form action="/user-signup" method="post">
+			<form action="/user-signup" method="post" id="signupForm">
 				
 				<p class="header">User Name</p>
-				<input type="text" name="name" placeholder="Your Full Name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Your Full Name';}" required="required">
+				<p style="color: red; position: relative; top: 20px;" id="usernameErr"></p>
+				<input type="text" id="username" name="username" placeholder="Your Full Name">
 				
 				<p class="header">Email Address</p>
-				<input type="email" name="email" placeholder="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}" required="required">
+				<p style="color: red; position: relative; top: 20px;" id="emailErr"></p>
+				<input type="email" id="signupEmail" name="email" placeholder="Email">
 				
 				
 				<p class="header">Password</p>
-				<input type="password" name="password" placeholder="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" required="required">
+				<p style="color: red; position: relative; top: 20px;" id="passwordErr"></p>
+				<input type="password" id="signupPassword" name="password" placeholder="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" required="required">
 				
 				<p class="header">Confirm Password</p>
-				<input type="password" name="password" placeholder="Confirm Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Confirm Password';}" required="required">
+				<input type="password" id="signupPassword" name="password" placeholder="Confirm Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Confirm Password';}" required="required">
 				
-				<input type="submit" class="register" value="Sign up">
+				<input type="submit"  class="register"  value="Sign up">
 			</form>
 		</div> 
     </div><!-- tab-content -->
 </div> <!-- /form -->	  
-<p class="copyright">&copy; 2018 stylish sign in and sign up Form. All Rights Reserved | Design by <a href="https://w3layouts.com/" target="_blank">w3layouts</a></p>
 <!-- js files -->
+
+
+
+<script src="javascript/loginValidations.js"></script>
+<script src="javascript/signupValidation.js"></script>
+

@@ -1,0 +1,113 @@
+<% console.log("data data data") %>
+<% console.log(data) %>
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title"> Edit Categories </h2>
+            
+        </div>
+        <div>
+            <input type="text" placeholder="Search Categories" class="form-control bg-white">
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <form id="cat-form" action="/admin/category/edit-category/<%=data?._id-%>" method="post" enctype="multipart/form-data">
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Category Name</label>
+                            <input type="text" id="category" name="productCategory" value="<%=data?.productCategory -%>" placeholder="Type here" class="form-control" id="category-name" />
+                        </div>
+
+
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Image</label>
+
+                            <input type="file" value="<%=data?.images -%>" name="images" placeholder="Type here" class="form-control" id="product_name" multiple/>
+                        </div>
+
+
+                        <div class="mb-4">
+                            <label class="form-label">Description</label>
+                            <textarea id="description" type="text" placeholder="Type here"  name="categoryDescription" class="form-control"><%=data?.categoryDescription -%></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Edit category</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-9">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                   
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>images</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center">
+                                       1
+                                    </td>
+                                    <td><%=data.productCategory -%></td>
+                                    <td><%=data.categoryDescription -%></td>
+                                    <td><img src="/images/uploads/<%=data.images[0]-%>" width="30" style="position: absolute;" alt=""></td>
+                                </tr>
+                              
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- .col// -->
+            </div> <!-- .row // -->
+        </div> <!-- card body .// -->
+    </div> <!-- card .// -->
+</section> <!-- content-main end// -->
+
+
+
+
+<script>
+    const imagesInput = document.querySelector('input[type="file"]');
+    const category=document.getElementById('category');
+    const description=document.getElementById('description');
+    const categoryForm=document.getElementById('cat-form')
+
+
+    categoryForm.addEventListener('submit',function(event){
+    let isValid=true;
+      // Reset previous error messages
+      imagesInput.classList.remove('is-invalid');
+      category.classList.remove('is-invalid');
+      description.classList.remove('is-invalid');
+
+            // Perform validation for each field
+      if (category.value.trim() === '') {
+        isValid = false;
+        category.classList.add('is-invalid');
+      }
+
+
+      if (description.value.trim() === '') {
+          isValid = false;
+          description.classList.add('is-invalid');
+      }
+
+
+      
+      if (imagesInput.files.length === 0) {
+          isValid = false;
+          imagesInput.classList.add('is-invalid');
+      }
+
+      if (!isValid) {
+          event.preventDefault(); // Prevent form submission if validation fails
+      }
+      
+  })
+
+</script>

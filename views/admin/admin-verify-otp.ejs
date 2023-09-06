@@ -1,0 +1,20 @@
+<main>
+
+	<section class="content-main mt-80 mb-80 mt-80" >
+		<div class="card mx-auto card-login" style="margin-top: 100px;">
+			<div class="card-body" style="background-color: rgb(196, 193, 193);">
+				<h4 class="card-title mb-4">Enter OTP</h4>
+				<form id="loginform" action="/admin/verify-otp-login" method="post">
+                    <p id="otpErr" style="color: red;"><%=req.query.err-%></p>
+					<div class="mb-3">
+						<input id="otp" class="form-control"  name="otp" placeholder="otp" type="text">
+					</div> <!-- form-group// -->
+					
+
+					<div class="mb-4">
+						<button type="submit" class="btn btn-primary w-100"> submit </button>
+					</div> <!-- form-group// -->
+				</form>
+		</div>
+	</section>
+</main>

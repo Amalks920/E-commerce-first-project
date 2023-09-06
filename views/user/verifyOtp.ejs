@@ -1,0 +1,26 @@
+
+<div class="form-w3ls" style="margin-top: 200px;">
+
+    <ul class="tab-group cl-effect-4" style="margin-left: 250px;">
+        <li class="tab active"><a href="#signin-agile">Verify OTP</a></li>
+    </ul>
+    <div class="">
+        <div id="signin-agile">   
+			<form action="/verify-otp" method="post" id="loginform" >
+				
+					<h2 style="color: red; margin-left: 270px;"><%= req.query.err -%></h2>
+			
+				<p class="header">OTP</p>
+				
+				<input type="text" name="otp" id="typeEmailX" placeholder="otp"   >
+				
+				
+				
+				<input type="submit" class="sign-in" value="Submit">
+			</form>
+		</div>
+
+		
+    </div><!-- tab-content -->
+</div> <!-- /form -->	  
+<!-- js files -->

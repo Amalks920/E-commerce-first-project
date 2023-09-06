@@ -1,0 +1,69 @@
+<main>
+
+	<section class="content-main mt-80 mb-80 mt-80" >
+		<div class="card mx-auto card-login" style="margin-top: 100px;">
+			<div class="card-body" style="background-color: rgb(196, 193, 193);">
+				<h4 class="card-title mb-4">Enter E-Mail ID</h4>
+				<form id="loginform" action="/admin/admin-otp-login" method="post">
+					 <p id="emailError" style="color: red;"><%=req.query.err -%></p> 
+					<div class="mb-3">
+						<input id="typeEmailX" class="form-control" id="typeEmailX" name="email" placeholder="Username or email" type="text">
+					</div> <!-- form-group// -->
+					<p id="emailError" style="color: red;"></p>
+
+					<div class="mb-4">
+						<button type="submit" class="btn btn-primary w-100"> submit </button>
+					</div> <!-- form-group// -->
+				</form>
+		</div>
+	</section>
+</main>
+
+
+<script>
+    //validation
+
+    // Function to validate the email
+function validateEmail(email) {
+    // Regular expression for email validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  }
+
+
+  function handleSubmit(event) {
+    // Prevents the form from being submitted
+  
+    // Get the email input value
+    const emailInput = document.getElementById("typeEmailX");
+    const email = emailInput.value;
+    console.log('hioasdij')
+    // Get the error element
+    const emailError = document.getElementById("emailError");
+  
+    // Validate the email
+    console.log(email)
+    if (email === "") {
+      // Email is blank
+      emailError.textContent = "Email cannot be blank.";
+      event.preventDefault();
+      return; // Prevent further execution
+    }
+    if (validateEmail(email)) {
+      // Email is valid
+      emailError.textContent = ""; // Clear the error message
+      // Perform other form submission actions
+    } else {
+      // Email is invalid
+      emailError.textContent = "Invalid email address!";
+      event.preventDefault();
+      // Prevent the form from being submitted
+    }
+
+}
+
+  const form = document.getElementById("loginform");
+  console.log(form)
+  form.addEventListener("submit", handleSubmit);
+
+</script>

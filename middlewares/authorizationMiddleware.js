@@ -1,21 +1,30 @@
+const userSchema = require("../model/userSchema");
 
+const authorizationMiddleware = async (req, res, next) => {
+  let user;
+  try {
+    user = await userSchema.findById(req.session.user._id);
 
-const authorizationMiddleware=async(req,res,next)=>{
-    if(req.session.user){
-        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-        next()
+    if (user?.isBlocked){
+      delete req.session.user;
     }
-   else res.redirect('/loginOrSignup')
-}
-
-const adminAuthorizationMiddleware=async(req,res,next)=>{
-    if(req.session.admin){
-        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-        next()
+  
+    if (req.session.user && !user.isBlocked) {
+      next();
+    } else {
+      res.redirect("/loginOrSignup");
     }
-   else res.redirect('/admin/admin-login')
-}
+  } catch (error) {
+    console.log(error);
+  }
 
+ 
+};
 
+const adminAuthorizationMiddleware = async (req, res, next) => {
+  if (req.session.admin) {
+    next();
+  } else res.redirect("/admin/admin-login");
+};
 
-module.exports={authorizationMiddleware,adminAuthorizationMiddleware}
+module.exports = { authorizationMiddleware, adminAuthorizationMiddleware };

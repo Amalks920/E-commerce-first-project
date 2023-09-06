@@ -23,18 +23,31 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		}
 	</script>
 	<!-- //custom-theme -->
-	<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
-	<link rel="stylesheet" href="css/shop.css" type="text/css" media="screen" property="" />
-	<link href="css/style7.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+	<link rel="stylesheet" href="/css/shop.css" type="text/css" media="screen" property="" />
+	<link href="/css/style7.css" rel="stylesheet" type="text/css" media="all" />
+	<link rel="stylesheet" href="/css/flexslider.css" type="text/css" media="screen" />
+	<link href="/css/easy-responsive-tabs.css" rel='stylesheet' type='text/css' />
+	<link rel="stylesheet" type="text/css" href="/css/checkout.css">
+
+	<link href="/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+
+
+
+	<!-- bootstrap -->
+	<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"> -->
+	
+
 	<!-- Owl-carousel-CSS -->
-	<link rel="stylesheet" type="text/css" href="css/jquery-ui1.css">
-	<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+	<link rel="stylesheet" type="text/css" href="/css/jquery-ui1.css">
+	<link href="/css/style.css" rel="stylesheet" type="text/css" media="all" />
 	<!-- font-awesome-icons -->
-	<link href="css/font-awesome.css" rel="stylesheet">
+	<link href="/css/font-awesome.css" rel="stylesheet">
 	<!-- //font-awesome-icons -->
 	<link href="//fonts.googleapis.com/css?family=Montserrat:100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800"
 	    rel="stylesheet">
 	<link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800" rel="stylesheet">
+
 </head>
 
 <body>
@@ -43,12 +56,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <%- body %>
     <%-include('../partials/footer.ejs') %>
 
+
+
+	<script src="/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/admin-assets/js/vendors/select2.min.js"></script>
+    <script src="/admin-assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="/admin-assets/js/vendors/chart.js"></script>
+    <!-- Main Script -->
+    <script src="/admin-assets/js/main.js" type="text/javascript"></script>
+    <script src="/admin-assets/js/custom-chart.js" type="text/javascript"></script>
+
+
 	
 	<!-- js -->
-	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script>
 	<!-- //js -->
 	<!-- cart-js -->
-	<script src="js/minicart.js"></script>
+	<script src="/js/minicart.js"></script>
 	<script>
 		shoe.render();
 
@@ -64,15 +90,48 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	</script>
 	<!-- //cart-js -->
 	<!-- /nav -->
-	<script src="js/modernizr-2.6.2.min.js"></script>
-	<script src="js/classie.js"></script>
-	<script src="js/demo1.js"></script>
+	<script src="/js/modernizr-2.6.2.min.js"></script>
+	<script src="/js/classie.js"></script>
+	<script src="/js/demo1.js"></script>
 	<!-- //nav -->
+
+
+
 	<!--search-bar-->
-	<script src="js/search.js"></script>
+	<script src="/js/search.js"></script>
 	<!--//search-bar-->
+		<!--Image Zoom-->
+	<script src="/js/imagezoom.js"></script>
+	<!-- script for responsive tabs -->
+	<script src="/js/easy-responsive-tabs.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#horizontalTab').easyResponsiveTabs({
+				type: 'default', //Types: default, vertical, accordion           
+				width: 'auto', //auto or any width like 600px
+				fit: true, // 100% fit in a container
+				closed: 'accordion', // Start closed if in accordion view
+				activate: function (event) { // Callback function if tab is switched
+					var $tab = $(this);
+					var $info = $('#tabInfo');
+					var $name = $('span', $info);
+					$name.text($tab.text());
+					$info.show();
+				}
+			});
+			$('#verticalTab').easyResponsiveTabs({
+				type: 'vertical',
+				width: 'auto',
+				fit: true
+			});
+		});
+	</script>
+
+
+
 	<!-- price range (top products) -->
-	<script src="js/jquery-ui.js"></script>
+	<script src="/js/jquery-ui.js"></script>
+	
 	<script>
 		//<![CDATA[ 
 		$(window).load(function () {
@@ -90,10 +149,22 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		}); //]]>
 	</script>
 	<!-- //price range (top products) -->
+	<!-- FlexSlider -->
+	<script src="/js/jquery.flexslider.js"></script>
+	<script>
+		// Can also be used with $(document).ready()
+		$(window).load(function () {
+			$('.flexslider').flexslider({
+				animation: "slide",
+				controlNav: "thumbnails"
+			});
+		});
+	</script>
+
 
 	<!-- start-smoth-scrolling -->
-	<script type="text/javascript" src="js/move-top.js"></script>
-	<script type="text/javascript" src="js/easing.js"></script>
+	<script type="text/javascript" src="/js/move-top.js"></script>
+	<script type="text/javascript" src="/js/easing.js"></script>
 	<script type="text/javascript">
 		jQuery(document).ready(function ($) {
 			$(".scroll").click(function (event) {
@@ -105,7 +176,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		});
 	</script>
 	<!-- //end-smoth-scrolling -->
-	<script type="text/javascript" src="js/bootstrap-3.1.1.min.js"></script>
+	<script type="text/javascript" src="/js/bootstrap-3.1.1.min.js"></script>
 
 
 </body>

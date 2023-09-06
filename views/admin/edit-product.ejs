@@ -1,0 +1,234 @@
+<section class="content-main">
+    <form id="productForm" action="/admin/edit-product" method="POST" enctype="multipart/form-data">
+  
+    <div class="row">
+      <div class="col-9">
+        
+        <div class="content-header">
+          <input name="id" value="<%= product._id %>" hidden />
+          <h2 class="content-title">Edit Product</h2>
+          <% console.log(product) %>
+          <div>
+
+            <button type="submit" class="btn btn-md rounded font-sm hover-up">Publish</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>Basic</h4>
+            <input name="id" value="<%= product._id %>" hidden />
+          </div>
+          <div class="card-body">
+              <div class="mb-4">
+                <label for="product_name" class="form-label">Product title</label>
+                <input
+                  type="text"
+                  value="<%=product.productname %>"
+                  name="productname"
+                  placeholder="Type here"
+                  class="form-control"
+                  id="productName" />
+              </div>
+              <div class="mb-4">
+                <label class="form-label">Full description</label>
+                <% console.log(product.description) %>
+                <textarea
+                value="<%=product.description %>"
+                  id="description"
+                  name="description"
+                  placeholder="Type here"
+                  class="form-control"
+                  rows="4"><%=product.description %></textarea>
+              </div>
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="mb-4">
+                    <label class="form-label">Regular price</label>
+                    <div class="row gx-2">
+                      <input
+                        id="price"
+                        value="<%=product.price %>"
+                        placeholder="$"
+                        name="price"
+                        type="number"
+                        class="form-control" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="mb-4">
+                    <label class="form-label">Stock</label>
+                    <div class="row gx-2">
+                      <input
+                        id="stock"
+                        value="<%=product.stock %>"
+                        placeholder="$"
+                        name="stock"
+                        type="number"
+                        class="form-control" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+          
+          </div>
+        </div>
+        <!-- card end// -->
+      </div>
+      <div class="col-lg-3">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>Media</h4>
+          </div>
+          <div class="card-body">
+            <% product.images.forEach(function(item) { %>
+              <div>
+              <img src="/images/uploads/<%= item %>" height="50px" /><button data-id="<%= item %>" class="removeImagesButton ms-4">Remove Image</button>
+              </div>
+              <% }); %>
+            <div class="input-upload">
+              <img src="admin-assets/imgs/theme/upload.svg" alt="" />
+              
+        
+
+              <input value="<%=product.images[0] %>" class="form-control" name="images" type="file" multiple />
+            </div>
+          </div>
+        </div>
+  
+        <!-- card end// -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>Organization</h4>
+          </div>
+          <div class="card-body">
+            <div class="row gx-2">
+              <div class="col-sm-6 mb-3">
+                <label class="form-label">Category</label>
+                <select name="productCategory" class="form-select">
+                  <% data?.forEach((items)=>{ %>
+                    <% if (product.productCategory.toString() === items._id.toString()) { %>
+                    <option  value=<%=items._id %> ><%=items?.productCategory %></option>
+                    <% } else { %>
+                      <option value="<%= items._id %>"><%= items.productCategory %></option>
+                    <% } %>
+                <%  }) %>
+                  
+                 
+                </select>
+              </div>
+
+            </div>
+            <!-- row.// -->
+            <div class="col-12">
+              <select class="select form-control-lg" name="status">
+                <option value="1" <%= product.status === 'Listed' ? 'selected' : '' %>>Listed</option>
+                <option value="2" <%= product.status === 'Delisted' ? 'selected' : '' %>>Delisted</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- card end// -->
+      </div>
+    </div>
+  
+  </form>
+  </section>
+
+
+
+  <script>
+      const productForm = document.getElementById("productForm");
+  const productNameInput = document.getElementById("productName");
+  const productCategorySelect = document.querySelector(
+    'select[name="productCategory"]'
+  );
+  const descriptionInput = document.getElementById("description");
+  const priceInput = document.getElementById("price");
+  const stockInput = document.getElementById("stock");
+  const imagesInput = document.querySelector('input[type="file"]');
+  const submitButton = document.querySelector('button[type="submit"]');
+
+    const button = document.querySelectorAll('.removeImagesButton')
+
+
+    productForm.addEventListener('submit',function(event){
+    let isValid=true;
+      // Reset previous error messages
+      productNameInput.classList.remove('is-invalid');
+      productCategorySelect.classList.remove('is-invalid');
+      descriptionInput.classList.remove('is-invalid');
+      priceInput.classList.remove('is-invalid');
+      stockInput.classList.remove('is-invalid');
+      imagesInput.classList.remove('is-invalid');
+      
+      console.log(productNameInput)
+            // Perform validation for each field
+      if (productNameInput.value.trim() === '') {
+        isValid = false;
+        productNameInput.classList.add('is-invalid');
+      }
+
+      if (productCategorySelect.value === '1') {
+          isValid = false;
+          productCategorySelect.classList.add('is-invalid');
+      }
+
+      if (descriptionInput.value.trim() === '') {
+          isValid = false;
+          descriptionInput.classList.add('is-invalid');
+      }
+
+      if (isNaN(stockInput.value) || parseInt(stockInput.value) < 0) {
+          isValid = false;
+          stockInput.classList.add('is-invalid');
+      }
+      
+      // if (imagesInput.files.length === 0) {
+      //     isValid = false;
+      //     imagesInput.classList.add('is-invalid');
+      // }
+
+      if (!isValid) {
+          event.preventDefault(); // Prevent form submission if validation fails
+      }
+      
+  })
+
+
+
+    button.forEach(item=>{
+    
+    item.addEventListener('click', function(e) {
+      
+      // Add logic to remove the existing images here
+      // You can use Fetch API to send a request to your server and handle the removal process
+    
+     const file = e.target.getAttribute("data-id")
+     console.log(file)
+      fetch('/admin/remove-images', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: '<%= product._id %>' ,file  }) // Assuming you have access to the product ID in your EJS template
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data, such as displaying a success message
+        if(data.success)
+        {location.reload(true)}
+    
+      })
+      .catch(error => {
+        // Handle any error that occurred during the request
+        console.error(error);
+      });
+    
+      // Optionally, you can also manipulate the DOM to remove the images from the UI directly
+     }) // This can be done before or after making the Fetch request, depending on your requirements
+    });
+    
+    </script>

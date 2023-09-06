@@ -115,7 +115,7 @@ h1 {
     border-radius: 50%;
     border: 2px solid #3e3939;
     margin: 0 auto;
-    background: #a0da4f;
+    background: #e87979;
     text-shadow: 2px 2px 3px;
     font-weight: 600;
 	color:#3e3939;
@@ -167,7 +167,7 @@ h1 {
 	left: 0;
 	width: 100%;
 	height: 1px;
-	background:#a0da4f;
+	background:#e87979;
 	content: '';
 	opacity: 0;
 	-webkit-transition: height 0.3s, opacity 0.3s, -webkit-transform 0.3s;
@@ -195,7 +195,7 @@ p.header {
 div#signin-agile input[type="text"],div#signin-agile input[type="password"],div#signup-agile input[type="text"],div#signup-agile input[type="email"],div#signup-agile input[type="password"] {
 	padding: 10px;
     width: 100%;
-    border-bottom: 2px solid #a0da4f;
+    border-bottom: 2px solid #050404;
     border-top: none;
     border-left: none;
     border-right: none;
@@ -231,10 +231,10 @@ div#signin-agile input[type="checkbox"]+label {
 div#signin-agile input[type="checkbox"]+label span:first-child {
     width: 14px;
     height: 14px;
-    border: 2px solid #a0da4f;
+    border: 2px solid #e87979;
     position: absolute;
     left: 0;
-	background:#a0da4f;
+	background:#e87979;
 	top:3px;
 }
 div#signin-agile input[type="checkbox"]:checked+label span:first-child:before {
@@ -260,7 +260,7 @@ div#signin-agile .sign-in {
 	border: none;
 	outline: none;
 	color: #212121;
-	background-color: #a0da4f;
+	background-color: #e87979;
 	font-family: 'Sansita', sans-serif;
 	transition: all 0.5s ease-in-out;
 	-webkit-transition: all 0.5s ease-in-out;
@@ -268,7 +268,7 @@ div#signin-agile .sign-in {
 	-o-transition: all 0.5s ease-in-out;
 }
 div#signin-agile .sign-in:hover {
-	background-color: #84bf31;
+	background-color: #e87979;
 	font-family: 'Sansita', sans-serif;
 	
 	color: #000000;
@@ -277,7 +277,7 @@ div#signin-agile .sign-in:hover {
 /*-- Sign Up Form --*/
 div#signup-agile .register {
 	padding: 10px;
-	background-color: #a0da4f;
+	background-color: #e87979;
 	width: 100%;
 	border: none;
 	cursor: pointer;
@@ -294,7 +294,7 @@ div#signup-agile .register {
 	-o-transition: all 0.5s ease-in-out;
 }
 div#signup-agile .register:hover {
-	background-color: #84bf31;
+	background-color: #bf3131;
 	color: #000000;
 }
 /*-- /Sign Up Form --*/
@@ -307,7 +307,7 @@ p.copyright {
 	color: #fff;
 }
 p.copyright a {
-	color: #7bf904;;
+	color: #000000;;
 }
 p.copyright a:hover {
 	color: #b0b5a9;
