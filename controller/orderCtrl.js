@@ -147,6 +147,13 @@ const viewOrders = async (req, res, next) => {
 
     const allOrders = await orderModal.aggregate([
       {
+        $match: {
+          orderStatus: {
+            $nin: ['Delivered', 'Cancelled'], // Use $nin (not in) to exclude specific statuses
+          },
+        },
+      },
+      {
         $sort: {
           _id: -1,
         },
@@ -192,7 +199,15 @@ const cancelOrder = async (req, res, next) => {
 
 const viewOrdersAdmin = async (req, res, next) => {
   try {
+    const ITEMS_PER_PAGE=5;
     const orders = await orderModal.aggregate([
+      {
+        $match: {
+          orderStatus: {
+            $nin: ['Delivered', 'Cancelled'], // Use $nin (not in) to exclude specific statuses
+          },
+        },
+      },
       {
         $lookup: {
           from: "users", // The name of the collection
