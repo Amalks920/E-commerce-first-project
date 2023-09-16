@@ -1,5 +1,5 @@
 <section class="content-main">
-    <form action="/admin/add-coupon" method="post" 
+    <form id="submit-form" action="/admin/add-coupon" method="post">
   
     <div class="row" style="margin-left: 450px; margin-top: 100px;">
       <div class="col-9">
@@ -8,6 +8,7 @@
 
         </div>
       </div>
+
       <div class="col-lg-6">
         <div class="card mb-4">
           <div class="card-header">
@@ -29,7 +30,8 @@
 
               <div class="mb-4">
                 <label class="form-label">Choose Discount Type</label>
-                <select name="discountType" class="form-select">
+                <select id="discountType" name="discountType" class="form-select">
+                    <option value="">Choose Discount Type</option>
                     <option value="Percentage">Percentage Amount</option>
                     <option value="Fixed">Fixed Amount</option>
                   </select>
@@ -102,7 +104,7 @@
                   </div>
                 </div>
               </div>
-              <button style="background-color: green; color: white; border-radius: 5px; margin-left: 220px;">Add Coupon</button>
+              <button id="submit" style="background-color: green; color: white; border-radius: 5px; margin-left: 220px;">Add Coupon</button>
           
           </div>
         </div>
@@ -113,3 +115,18 @@
   
   </form>
   </section>
+ 
+  <script src="/javascript/addCouponValidations.js">
+    // const promocodeInput=document.querySelector('#code')
+
+    // promocodeInput.addEventListener('input',()=>{
+
+    // })
+
+
+    // const yesterday=new Date();
+    // yesterday.setDate(yesterday.getDate()-1);
+
+    // const formatedYesterDay=yesterday.toISOString().slice(0,16);
+    // document.getElementById('expirationDate').setAttribute('min',formatedYesterDay)
+  </script>

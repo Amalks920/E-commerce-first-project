@@ -1,4 +1,6 @@
+const productModal = require("../model/productModal")
 const userSchema = require("../model/userSchema")
+const addressModal=require('../model/addressModal')
 
 const getViewUsers=async(req,res,next)=>{
     try {
@@ -38,7 +40,29 @@ const blockUser=async(req,res,next)=>{
     // }
 }
 
+//shop page on user side
+
+const getShopPage=async(req,res,next)=>{
+
+    try {
+       let products=await productModal.find({ status: { $ne: "Delisted" } })
+       res.render('user/shopPage.ejs',{layout:'./layout/homeLayout.ejs',isLoggedIn:true,products})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const userDashboard=async(req,res,next)=>{
+    try {
+        const addresses=await addressModal.findOne({user:req.session.user._id})
+        res.render('user/add-or-view-address.ejs',{layout:'./layout/homeLayout.ejs',isUserDashboard:true,isLoggedIn:true,addresses:addresses})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports={
-    getViewUsers,blockUser
+    getViewUsers,blockUser,
+    getShopPage,userDashboard
 }

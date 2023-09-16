@@ -9,10 +9,6 @@ const otpGenerator = require("otp-generator");
 const userSchema = require("../model/userSchema");
 
 
-const landingPage = expressAsycnHandler(async (req, res, next) => {
-  console.log(req.session.user);
-  res.render("user/user");
-});
 
 const createUser = expressAsycnHandler(async (req, res) => {
   console.log(req.body);
@@ -115,7 +111,7 @@ const userLogin = expressAsycnHandler(async (req, res, next) => {
       //   res.status(401).json({msg:"invalid credentials"})
     }
   } catch (error) {
-    res.status(401).json({ error: error.message });
+    res.status(401).json({ error: error.message +"  " +error.status });
   }
 });
 
@@ -155,7 +151,7 @@ const adminLogin = expressAsycnHandler(async (req, res, next) => {
       );
     }
   } catch (error) {
-    res.status(401).json({ error: error.message });
+    res.status(401).json({ error: error.message + " " + error.status });
   }
 });
 
@@ -337,6 +333,149 @@ const otpLoginPost = async (req, res, next) => {
     console.log(error);
   }
 };
+
+const getForgotPassword=async (req,res,next) => {
+  if(req?.session?.user){
+    return res.redirect('/home')
+  }
+  try {
+    res.render('user/forgot-password',{layout:'./layout/signupLogin'})
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getAdminForgotPassword=async (req,res,next) => {
+  if(req?.session?.admin){
+    return res.redirect('/admin-home')
+  }
+  try {
+    res.render('admin/forgot-password',{layout:'./layout/adminLoginLayout.ejs',req:req})
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const adminForgotPasswordPost=async(req,res,next)=>{
+  try {
+    const {email}=req.body
+    const user=await userSchema.findOne({email:email})
+    if(user && user.role==='admin'){
+
+      res.redirect(
+        url.format({
+          pathname: "/admin/change-password",
+          query: {
+            email: `${email}`,
+          },
+        })
+      );
+      
+    }else{
+      res.redirect(
+        url.format({
+          pathname: "/admin/forgot-password",
+          query: {
+            err: `invalid email`,
+          },
+        })
+      );
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getAdminChangePassword=async (req,res,next)=>{
+
+  if(req?.session?.admin){
+    return res.redirect('/admin-home')
+  }
+
+  console.log(req.query.email)
+  try {
+    res.render('admin/change-password',{layout:'./layout/adminLoginLayout.ejs',req:req})
+  } catch (error) {
+    console.log(error)
+  }
+} 
+
+const adminChangePasswordPost=async (req,res,next)=>{
+  const {oldPassword,newPassword,email}=req.body
+   try {
+     const findUser=await User.findOne({email:email})
+    //  console.log(await findUser.isPasswordMatched(oldPassword))
+    //  if((await findUser.isPasswordMatched(oldPassword))){
+       findUser.password=newPassword;
+       findUser.save()
+       res.redirect('/admin/admin-login')
+    //  }else{
+    //    console.log('failed')
+    //  }
+   } catch (error) {
+     console.log(error)
+   }
+ }
+
+const forgotPasswordPost=async(req,res,next)=>{
+  try {
+    const {email}=req.body
+    const user=await userSchema.findOne({email:email})
+    if(user && user.role==='user'){
+
+      res.redirect(
+        url.format({
+          pathname: "/change-password",
+          query: {
+            email: `${email}`,
+          },
+        })
+      );
+      
+    }else{
+      res.redirect(
+        url.format({
+          pathname: "/forgot-password",
+          query: {
+            err: `invalid email`,
+          },
+        })
+      );
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const changePassword=async (req,res,next)=>{
+  if(req?.session?.user){
+    return res.redirect('/home')
+  }
+  console.log(req.query.email)
+  try {
+    res.render('user/change-password',{layout:'./layout/signupLogin',req:req})
+  } catch (error) {
+    console.log(error)
+  }
+} 
+
+const changePasswordPost=async (req,res,next)=>{
+ const {oldPassword,newPassword,email}=req.body
+  try {
+     const findUser=await User.findOne({email:email})
+     console.log(findUser)
+    // console.log(await findUser.isPasswordMatched(oldPassword))
+    // if((await findUser.isPasswordMatched(oldPassword))){
+      findUser.password=newPassword;
+      findUser.save()
+      res.redirect('/loginOrSignup')
+    // }else{
+    //   console.log('failed')
+    // }
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 const adminOtpLoginPost = async (req, res, next) => {
   try {
@@ -520,14 +659,14 @@ const adminLogout = async (req, res) => {
 };
 
 module.exports = {
-  landingPage,
   adminLogin,
   getUserLogin,
   getAdminLogin,
   getAdminOtpLogin,
-  createUser,
+  getForgotPassword,
+  createUser,forgotPasswordPost,
   adminOtpLoginPost,
-  userLogin,
+  userLogin,changePassword,
   getAdminVerifyOtpLogin,
   getHomePage,
   getHomePageNotLoggedIn,
@@ -539,4 +678,7 @@ module.exports = {
   otpLoginPost,
   getVerifyOtp,
   verifyOtpPost,
+  changePasswordPost,
+  getAdminForgotPassword,adminForgotPasswordPost,
+  getAdminChangePassword,adminChangePasswordPost
 };

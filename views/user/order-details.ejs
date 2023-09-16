@@ -1,0 +1,146 @@
+<div id="modalbgo" style="border: 2px solid red; position: absolute;width: 100vw;z-index: 5;background-color: black;opacity:0.2 ;display: none;height: 100%;">
+
+</div>
+
+<div id="delete-modalo" style="background-color: white;opacity: 1; width: 800px;height: 400px;margin-top: 250px;margin-left: 650px;position: fixed;z-index: 6;display: none;">
+  <h2 style="text-align: center;margin-top: 50px;">Do You Want to Cancel Order?</h2>
+  <span style="display: flex;justify-content: center;gap: 15px;margin-top: 100px;">
+    <button id="deletebtno" style="width: 100px;height: 40px;background-color: red;color: white;">Cancel</button>
+    <button id="cancelbtno" style="width: 100px;height: 40px;background-color: blue;color: white;">Exit</button>
+  </span>
+</div>
+
+
+<div class="ads-grid_shop">
+    <div class="shop_inner_inf">
+      <div class="privacy about">
+        <h3>Order<span>Details</span></h3>
+  
+        <div class="checkout-right" style="margin-bottom: 50px;">
+          <table class="timetable_sub">
+            <thead>
+              <% console.log('orderss') %>
+              <% console.log(orders?.address.address[0]) %>
+                
+              <tr>
+                <th>SL No.</th>
+                <th>Product</th>
+                <th>Quality</th>
+                <th>Product Name</th>
+  
+                <th>Price</th>
+               
+              </tr>
+           
+            </thead>
+            <tbody>
+            <% orders.items.forEach((item,index)=>{ %>
+                <% console.log(orders._id) %>
+                <input type="text" value="<%=orders._id -%>" name="" id="orderId" hidden>
+              <tr class="rem1">
+                <td class="invert"><h3><%=index+1 -%></h3></td>
+                <td class="invert-image">
+                  <a href=""
+                    ><img
+                      src="/images/uploads/<%=item.productId.images[0] %>"
+                      alt=""
+                      class="img-responsive"
+                      style="width: 250px"
+                  /></a>
+                </td>
+                <td class="invert">
+                <h3> <%=item.quantity %></h3>
+                </td>
+                <td class="invert"><h3><%=item.productId.productname %></h3></td>
+  
+                <td class="invert"><h3>₹ <%=item.productId.price %></h3></td>
+                <!-- <td class="invert">
+                  <div class="rem">
+                    
+                </td> -->
+              </tr>
+            <% }) %>
+            
+            </tbody>
+          </table>
+          <button id="cancel-btn" style="margin-top: 40px;background-color: red;color:white; width: 200px;height: 60px;">Cancel Order</button>
+        </div>
+
+      </div>
+    </div>
+    <!-- /newsletter-->
+    <div class="newsletter_w3layouts_agile">
+      <div class="col-sm-6 newsleft">
+        <h3>Sign up for Newsletter !</h3>
+      </div>
+      <div class="col-sm-6 newsright">
+        <form action="#" method="post">
+          <input
+            type="email"
+            placeholder="Enter your email..."
+            name="email"
+            required="" />
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
+  
+      <div class="clearfix"></div>
+    </div>
+    <!-- //newsletter-->
+  </div>
+
+  <script>
+    const cancelBtn=document.querySelector('#cancel-btn')
+    const orderId=document.querySelector('#orderId').value;
+    
+    // modal
+    const modalBg=document.querySelector('#modalbgo')
+    const deleteModal=document.querySelector('#delete-modalo')
+    const deleteModalBtn=document.querySelector('#deletebtno')
+    const cancelModalBtn=document.querySelector('#cancelbtno')
+   
+    cancelBtn.addEventListener('click',function () {
+      modalBg.style.display='block';
+      deleteModal.style.display='block';
+     
+    })
+
+    cancelModalBtn.addEventListener('click', function () {
+      modalBg.style.display='none';
+      deleteModal.style.display='none';
+      
+    })
+
+    deleteModalBtn.addEventListener('click', function () {
+      handleOrderCancel()
+    })
+    
+
+    // cancelBtn.addEventListener('click',function () {
+    //     fetch(`/cancel-order/${orderId}`, {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //    window.location='http://localhost:5000/view-orders'
+    //   })
+    //   .catch((error) => console.error(error));
+    // })
+
+    function handleOrderCancel(){
+      fetch(`/cancel-order/${orderId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+       window.location='http://localhost:5000/view-orders'
+      })
+      .catch((error) => console.error(error));
+    }
+  </script>

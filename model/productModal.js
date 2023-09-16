@@ -5,6 +5,7 @@ const productSchema = new mongoose.Schema({
 		type: String,
 		required: [true, 'Please enter product name'],
 		trim: true,
+		lowercase:true
 	},
 	description: {
 		type: String,
@@ -31,6 +32,7 @@ const productSchema = new mongoose.Schema({
 		maxlength: [4, 'Stock cannot exceed limit'],
 		default: 1,
 		min: 0,
+		
 	},
 	images: [{ type: String, required: true }],
 	avgRating: {

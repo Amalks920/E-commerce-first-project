@@ -1,0 +1,537 @@
+<div id="couponModal" style="position: absolute;background-color: white;
+width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
+  <h1 style="text-align: center;margin-top: 10px;">Coupons</h1>
+  <button id="close">close</button>
+  <% coupons.forEach((coupon,index)=>{ %>
+    
+  
+  <div id="coupon" style="border: 1px solid black;margin: 10px;padding: 5px;">
+    <button id="select-btn" style="margin-left: 250px;width: 100px;background-color: black;color: white;font-weight: bold;">Add</button>
+    Code : <span id="coupon-code" class="coupon-details"> <%=coupon.code %></span>
+    Description : <span id="description" class="coupon-details">  <%=coupon.descripiton %></span>
+    Discount Amount :<span id="discountAmount" class="coupon-details"> <%=coupon.discountAmount %></span>
+    Minimum Amount : <span id="minimumAmount" class="coupon-details"> <%=coupon.minimumAmount %></span>
+    Expiry : <sapn id="expirationDate" class="coupon-details"> <%=coupon.expirationDate %></span>
+      <input type="text" id="discountType" value="<%=coupon?.discountType %>">
+  </div>
+  <% }) %>
+</div>
+
+<% console.log(coupons) %>
+
+<div class="ads-grid_shop">
+  <% console.log('checkout address') %>
+   <% console.log(cart.products) %>
+
+  
+  <div class="shop_inner_inf">
+    <div class="privacy about">
+      <h3>Chec<span>kout</span></h3>
+
+      <div class="checkout-right">
+        <!-- <h4>Your shopping cart contains: <span>3 Products</span></h4> -->
+        <table class="timetable_sub">
+          <thead>
+            <tr>
+              <th>SL No.</th>
+              <th>Product</th>
+              <th>Quality</th>
+              <th>Product Name</th>
+
+              <th>Price</th>
+              
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% cart?.products.forEach((product,index)=>{ %>
+            
+            <tr class="rem1">
+              <td class="invert"><%=index+1 -%></td>
+              <td class="invert-image">
+                <a href="single.html"
+                  ><img
+                    src="/images/uploads/<%=product?.product?.images[0] -%>"
+                    alt=" "
+                    class="img-responsive"
+                    style="width: 50px"
+                /></a>
+              </td>
+              <td class="invert">
+                <div class="quantity">
+                  <div class="quantity-select">       
+                    <div class="entry value" id="qty"><span><%=product?.quantity %></span></div>
+                    <p id="insufficent-stock" data-id="<%=product?.product._id %>" style="color: red;display: none;">Insufficent Stock</p>
+                  </div>
+                </div>
+              </td>
+              <td class="invert"><%=product?.product?.productname -%></td>
+
+              <td class="invert"><%=product?.product?.price -%></td>
+              <td class="invert">
+                <div class="rem">
+                  <div class="close1"></div>
+                </div>
+              </td>
+            </tr>
+            <% })%>
+          </tbody>
+        </table>
+      </div>
+      <div class="checkout-left">
+        <div class="col-md-4 checkout-left-basket">
+          <h4>Continue to basket</h4>
+          <ul id="checkout-list">
+            <% cart?.products.forEach((product,index)=>{ %>
+            <li>
+              Product<%=index+1 %> <i>-</i>
+              <span>₹<%=product?.product?.price -%> </span>
+            </li>
+            <% })%>
+            <li>Total Service Charges <i>-</i> <span>₹00.00</span></li>
+
+            <li>
+              Total <i>-</i>
+              <span id="total-amount">
+                <% var total = cart?.products.map((product) => { 
+                return product.product.price * product.quantity; }).reduce(
+                function (total, acc) { return Number(total) + Number(acc); }, 0); %>
+                 <%= total %>
+              </span>
+            </li>
+            <li id="price-after-coupon-el">
+              Price After Coupon  <span id="priceAfterCoupon"><%=total %></span>
+            </li>
+          </ul>
+        </div>
+        <div
+          class="col-md-6 address_form"
+          style=" display: flex;background-color: aliceblue; margin-bottom: 30px;">
+          <% if(address){ %>
+
+         
+          <div style="background-color: aliceblue; width: 50%;padding: 20px;">
+            <h2 style="text-align: left">Address</h2>
+            <h4>
+              Address <span style="color: black"> : </span><%=address[0].address
+              -%>
+            </h4>
+            <h4>
+              city <span style="color: black"> : </span> <%=address[0].city-%>
+            </h4>
+            <h4>
+              state <span style="color: black"> : </span> <%=address[0].state-%>
+            </h4>
+            <h4>
+              Mobile Number
+              <span style="color: black"> : </span><%=address[0].mobileNumber-%>
+            </h4>
+            <h4>
+              Pincode
+              <span style="color: black"> : </span> <%=address[0].pincode -%>
+            </h4>
+            <a href="/user-dashboard"
+              ><button
+                style="
+                  color: black;
+                 
+                  padding: 5px;
+                  width: 200px;
+                ">
+                Change Address
+              </button></a
+            >
+          </div>
+          <% }else{ %>
+            <a href="/user-dashboard">Add Address</a>
+            <% } %>
+          <div style="margin-left: 20px; margin-top: 175px;background-color: aliceblue;" class="placeorder">
+            <p id="paymentErr" style="color: red;display: none;">select any payment Method</p>
+            <div>
+              <input class="placeorder" id="payment" type="radio" value="COD" name="payment" />
+              <label for="">COD</label>
+            </div>
+            <div>
+              <input class="placeorder" id="payment" type="radio" value="ONLINE" name="payment" />
+              <label for="">Online Payment</label>
+            </div>
+            <button   id="place-order" class="submit check_out placeorder" style="margin-bottom: 20px;">
+              Place Order
+            </button>
+            <div id="add-coupon"  style="color: blue;cursor: pointer;">Apply Coupon?</div>
+
+
+          </div>
+      
+          <!-- <div class="checkout-right-basket">
+                        <a href="payment.html">Make a Payment </a>
+                    </div> -->
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+  <!-- //top products -->
+  <div class="mid_slider_w3lsagile">
+    <div class="col-md-3 mid_slider_text">
+      <h5>Some More Shoes</h5>
+    </div>
+    <div class="col-md-9 mid_slider_info">
+      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+          <li data-target="#myCarousel" data-slide-to="0" class=""></li>
+          <li data-target="#myCarousel" data-slide-to="1" class="active"></li>
+          <li data-target="#myCarousel" data-slide-to="2" class=""></li>
+          <li data-target="#myCarousel" data-slide-to="3" class=""></li>
+        </ol>
+        <div class="carousel-inner" role="listbox">
+          <div class="item">
+            <div class="row">
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g1.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g2.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g3.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g4.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item active">
+            <div class="row">
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g5.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g6.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g2.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g1.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="row">
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g1.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g2.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g3.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g4.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="row">
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g1.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g2.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g3.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-3 slidering">
+                <div class="thumbnail">
+                  <img
+                    src="images/g4.jpg"
+                    alt="Image"
+                    style="max-width: 100%" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a
+          class="left carousel-control"
+          href="#myCarousel"
+          role="button"
+          data-slide="prev">
+          <span class="fa fa-chevron-left" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a
+          class="right carousel-control"
+          href="#myCarousel"
+          role="button"
+          data-slide="next">
+          <span class="fa fa-chevron-right" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+        <!-- The Modal -->
+      </div>
+    </div>
+
+    <div class="clearfix"></div>
+  </div>
+  <!-- /newsletter-->
+  <div class="newsletter_w3layouts_agile">
+    <div class="col-sm-6 newsleft">
+      <h3>Sign up for Newsletter !</h3>
+    </div>
+    <div class="col-sm-6 newsright">
+      <form action="#" method="post">
+        <input
+          type="email"
+          placeholder="Enter your email..."
+          name="email"
+          required="" />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+
+    <div class="clearfix"></div>
+  </div>
+  <!-- //newsletter-->
+</div>
+
+<script>
+  const paymentMethods = document.querySelectorAll("#payment");
+  const placeOrderBtn = document.querySelector("#place-order");
+  const totalAmountInput = document.querySelector("#total-amount");
+  const placeorder=document.querySelectorAll('.placeorder');
+  const confirmOrderBtn=document.querySelector('.confirmorder');
+  const addCoupon=document.querySelector('#add-coupon');
+  const totalAmount = Number(totalAmountInput.textContent);
+  const modalBg=document.querySelector('#modalbg')
+  const couponModal=document.querySelector('#couponModal')
+  const couponDetails=document.querySelectorAll('#coupon')
+  const closeBtn=document.querySelector('#close')
+  const priceAfterCouponEl=document.querySelector('#price-after-coupon-el');
+  const priceAfterCoupon=document.querySelector('#priceAfterCoupon')
+  const qty=document.querySelector('#qty');
+  const insufficentQtyErr=document.querySelectorAll('#insufficent-stock')
+  const paymentErr=document.querySelector('#paymentErr')
+
+  let paymentMode;
+
+  let totalAmountAfterCoupon=priceAfterCoupon.textContent
+ 
+  paymentMethods.forEach((paymentMethod, index) => {
+    paymentMethod.addEventListener("change", function () {
+      if(this.checked) paymentErr.style.display="none"
+      if (this.checked && paymentMethod.value === "COD") {
+        paymentMode = "COD";
+      } else {
+        paymentMode = "ONLINE";
+      }
+    });
+  });
+
+  placeOrderBtn.addEventListener("click", function (event) {
+    if(!paymentMode){
+      paymentErr.style.display='block'
+      event.preventDefault()
+    }
+    fetch("/place-order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ totalAmountAfterCoupon, paymentMode }),
+    })
+      .then((response) => {
+        //
+        console.log(response)
+        return response.json()
+      })
+      .then((data) => {
+        if(data?.errors){
+          let productId=data?.errors[0]?.productId
+        insufficentQtyErr.forEach((element,index)=>{
+          const dataId=element.getAttribute('data-id')
+          console.log(dataId,productId)
+          if(dataId===productId){
+            qty.style.display='none';
+            element.style.display="block"
+          }
+
+         
+        })
+        }else{
+          if(data?.success){
+             window.location=data.url
+          }else{
+          localStorage.removeItem('coupon')
+          window.location.href='/order-page'
+          }
+
+        }
+
+      })
+      .catch((error) => console.log(error));
+  });
+
+  addCoupon.addEventListener('click',function () {
+    modalBg.style.display="block"
+    couponModal.style.display="block"
+  })
+
+couponDetails.forEach((item,index)=>{
+const couponCode=item.querySelector('#coupon-code');
+const discountAmount=item.querySelector('#discountAmount');
+const minimumAmount=item.querySelector('#minimumAmount');
+const expiryDate=item.querySelector('#expirationDate');
+const discountType=item.querySelector('#discountType')
+const selectBtn=item.querySelector('#select-btn');
+
+
+
+couponData=JSON.parse(localStorage?.getItem('coupon'))
+
+if(couponData?.couponcode===couponCode?.textContent){
+  console.log(couponData?.discountType )
+  let priceAfterCpn;
+  
+
+   if(couponData?.discountType==="Fixed")priceAfterCpn=totalAmount-couponData?.discountAmount
+   else priceAfterCpn=(Number(couponData?.discountAmount)/100)*totalAmount;
+  priceAfterCoupon.textContent=priceAfterCpn
+  totalAmountAfterCoupon=priceAfterCoupon.textContent
+  
+  selectBtn.textContent="cancel";
+    selectBtn.style.backgroundColor="red"
+}
+
+
+
+selectBtn.addEventListener('click',function () {
+
+
+  couponData=JSON.parse(localStorage.getItem('coupon'))
+  if(couponData?.couponcode===couponCode.textContent && selectBtn.textContent==="cancel"){
+    localStorage.removeItem('coupon')
+    totalAmountAfterCoupon=priceAfterCoupon.textContent;
+    selectBtn.textContent="Add" 
+    selectBtn.style.backgroundColor="black"
+
+  }else if(!couponData?.couponcode){
+    let couponObj={
+    couponcode:couponCode.textContent,
+    discountAmount:discountAmount.textContent,
+    expiryDate:expiryDate.textContent,
+    minimumAmount:minimumAmount.textContent,
+    discountType:discountType?.value
+  }
+  if(Number(minimumAmount.textContent>totalAmount)){
+    return alert('minimum Amount in Your cart should be '+minimumAmount.textContent)
+  }
+
+    localStorage.setItem('coupon',JSON.stringify(couponObj));
+    totalAmountAfterCoupon=priceAfterCoupon.textContent;
+    selectBtn.textContent="cancel";
+    selectBtn.style.backgroundColor="red"
+  }
+  // if(selectBtn.textContent==="select" && selectBtn.style.backgroundColor==="black"){
+  //   selectBtn.textContent="cancel";
+  //   selectBtn.style.backgroundColor="red"
+  // }else{
+  //   selectBtn.textContent="select" 
+  //   selectBtn.style.backgroundColor="black"
+  // }
+
+
+  
+})
+})
+
+closeBtn.addEventListener('click', function () {
+ 
+  modalBg.style.display="none"
+  couponModal.style.display="none"
+  location.reload(true)
+
+})
+</script>

@@ -1,0 +1,412 @@
+
+
+<% if(cart?.products?.length!=0 && cart){ %>
+
+<div class="colorlib-product">
+  <input type="text" value="<%=cart._id -%>" name="" id="cartId" hidden />
+  <div class="container">
+    <div class="row row-pb-lg">
+      <div class="col-md-10 offset-md-1">
+        <div class="process-wrap">
+          <div class="process text-center active">
+            <p><span>01</span></p>
+            <h3>Shopping Cart</h3>
+          </div>
+          <div class="process text-center">
+            <p><span>02</span></p>
+            <h3>Checkout</h3>
+          </div>
+          <div class="process text-center">
+            <p><span>03</span></p>
+            <h3>Order Complete</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row row-pb-lg">
+      <div class="col-md-12">
+        <div class="product-name d-flex">
+          <div class="one-forth text-left px-4">
+            <span>Product Details</span>
+          </div>
+          <div class="one-eight text-center">
+            <span>Price</span>
+          </div>
+          <div class="one-eight text-center">
+            <span>Quantity</span>
+          </div>
+          <div class="one-eight text-center">
+            <span>Total</span>
+          </div>
+          <div class="one-eight text-center px-4">
+            <span>Remove</span>
+          </div>
+        </div>
+        <% cart?.products?.forEach(product=>{ %>
+
+        <div class="product-cart d-flex incrementdecrement">
+
+          <div class="one-forth">
+            <div
+              class="product-img"
+              style="
+                background-image: url(images/uploads/<%=product.product.images[0]%>);
+                margin-left: 30px;
+              "></div>
+            <div class="display-tc">
+              <h3><%=product?.product?.productname -%></h3>
+              <p id="out-of-stock" style="color: red;display: none;"></p>
+
+            </div>
+
+          </div>
+              <input type="text" id="stock" class="" value="<%=product?.product?.stock -%>" hidden>
+       
+          <div class="one-eight text-center">
+            <div class="display-tc">
+              ₹<span class="price"> <%=product?.product?.price -%></span>
+            </div>
+          </div>
+
+          <div class="one-eight text-center">
+            <div class="" class="display-tc" style="margin-top: 20px">
+              <input
+                class=""
+                type="text"
+                id="countInput"
+                value="<%=product.product._id -%>"
+                hidden />
+              <button
+                class="dec-btn"
+                style="height: 43px; width: 40px; border: 1px solid gainsboro">
+                -
+              </button>
+              <input
+                class="inputQuantity"
+                type="text"
+                value="<%=product?.quantity -%>"
+                style="
+                  width: 40px;
+                  text-align: center;
+                  border: 1px solid gainsboro;
+                  margin-top: 5px;
+                "
+                readonly />
+              <button
+                class="inc-btn"
+                style="height: 43px; width: 40px; border: 1px solid gainsboro" 
+                >
+                +
+              </button>
+            </div>
+          </div>
+
+          <div class="one-eight text-center">
+            <div class="display-tc">
+              ₹
+              <span class="total-price"
+                ><%=product?.quantity*product?.product?.price-%></span
+              >
+              
+            </div>
+          </div>
+
+          <div class="one-eight text-center">
+            <div class="display-tc">
+              <a
+                id="delete-cart-prod"
+                data-id="<%=product?.product?._id -%>"
+                href="#"
+                class="closed"></a>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <div class="row row-pb-lg">
+      <div class="col-md-12">
+        <div class="total-wrap">
+          <div class="row">
+            <div class="col-sm-8">
+              <form action="#">
+                <div class="row form-group">
+                  <div class="col-sm-9">
+                    <input
+                      type="text"
+                      name="quantity"
+                      class="form-control input-number"
+                      placeholder="Your Coupon Number..." />
+                  </div>
+                  <div class="col-sm-3">
+                    <input
+                      type="submit"
+                      value="Apply Coupon"
+                      class="btn btn-primary" />
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-sm-4 text-center">
+              <div class="total">
+                <div class="sub">
+                  <p>
+                    <span>Subtotal:</span>₹<span class="total-price-sum"
+                      >200.00</span
+                    >
+                  </p>
+                  <p><span>Delivery:</span>₹<span>0.00</span></p>
+                  <p><span>Discount:</span>₹<span>00.00</span></p>
+                </div>
+                <div>
+                  <p>
+                    <span><strong>Total:</strong></span>
+                    <span class="grand-total"></span>
+                  </p>
+                </div>
+                <a href="/checkout">
+                  <input
+                    type="submit"
+                    value="Proceed To Checkout"
+                    class="btn btn-primary"
+                /></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div
+        class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm">
+        <h2>Related Products</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-lg-3 mb-4 text-center">
+        <div class="product-entry border">
+          <a href="#" class="prod-img">
+            <img
+              src="images/item-1.jpg"
+              class="img-fluid"
+              alt="Free html5 bootstrap 4 template" />
+          </a>
+          <div class="desc">
+            <h2><a href="#">Women's Boots Shoes Maca</a></h2>
+            <span class="price">$139.00</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-lg-3 mb-4 text-center">
+        <div class="product-entry border">
+          <a href="#" class="prod-img">
+            <img
+              src="images/item-2.jpg"
+              class="img-fluid"
+              alt="Free html5 bootstrap 4 template" />
+          </a>
+          <div class="desc">
+            <h2><a href="#">Women's Minam Meaghan</a></h2>
+            <span class="price">$139.00</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-lg-3 mb-4 text-center">
+        <div class="product-entry border">
+          <a href="#" class="prod-img">
+            <img
+              src="images/item-3.jpg"
+              class="img-fluid"
+              alt="Free html5 bootstrap 4 template" />
+          </a>
+          <div class="desc">
+            <h2><a href="#">Men's Taja Commissioner</a></h2>
+            <span class="price">$139.00</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-lg-3 mb-4 text-center">
+        <div class="product-entry border">
+          <a href="#" class="prod-img">
+            <img
+              src="images/item-4.jpg"
+              class="img-fluid"
+              alt="Free html5 bootstrap 4 template" />
+          </a>
+          <div class="desc">
+            <h2><a href="#">Russ Men's Sneakers</a></h2>
+            <span class="price">$139.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% }else{ %>
+
+<div
+  style="
+    height: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  ">
+  <h1>Cart is Empty</h1>
+</div>
+<% } %>
+
+<script>
+  //Quantity
+  const displayCount = document.querySelectorAll(".incrementdecrement");
+  const totalpricesum = document.querySelector(".total-price-sum");
+  const priceaftercoupon = document.querySelector(".price-after-coupon");
+  const grandTotal = document.querySelector(".grand-total");
+  const cartId = document.querySelector("#cartId").value;
+  
+
+  let initialTotalPrice = 0;
+  displayCount.forEach((item) => {
+    const decBtn = item.querySelector(".dec-btn");
+    const incBtn = item.querySelector(".inc-btn");
+    const inputQuantity = item.querySelector(".inputQuantity");
+    const price = item.querySelector(".price");
+    let totalprice = item.querySelector(".total-price");
+    const productId = item.querySelector("#countInput").value;
+     const stock=item.querySelector('#stock').value
+    const outOfStock=item.querySelector('#out-of-stock')
+
+    initialTotalPrice =
+      initialTotalPrice +
+      Number(price.textContent) * Number(inputQuantity.value);
+
+      let qty = Number(inputQuantity.value);
+      console.log(stock,qty)
+      
+      if(qty>stock){
+        console.log('hsdljf')
+        console.log(stock,' ',qty)
+        // outOfStock.style.display='block'
+        
+        return 
+      }
+
+
+    totalpricesum.textContent = initialTotalPrice;
+    grandTotal.textContent = initialTotalPrice;
+    incBtn.addEventListener("click", () => {
+      
+      let qty = Number(inputQuantity.value);
+      console.log(stock,qty)
+      if(qty>=stock){
+        console.log('hsdljf')
+        console.log(stock,' ',qty)
+        outOfStock.style.display='block'
+        incBtn.disabled=true
+        return 
+      }
+      if (qty < 10) {
+        inputQuantity.value = ++qty;
+        console.log(totalprice.textContent);
+        totalprice.textContent = price.textContent * qty;
+        updatetotalpricesum();
+        updateQuantity(productId, qty);
+      }
+    });
+
+    decBtn.addEventListener("click", () => {
+      let qty = Number(inputQuantity.value);
+      console.log(qty);
+      if (qty > 1) {
+        incBtn.disabled=false
+        outOfStock.style.display='none'
+        inputQuantity.value = --qty;
+        totalprice.textContent = price.textContent * qty;
+        updatetotalpricesum();
+        updateQuantity(productId, qty);
+      }
+    });
+  });
+
+  function updatetotalpricesum() {
+    let sum = 0;
+    displayCount.forEach((item) => {
+      const totalprice = item.querySelector(".total-price");
+      sum += Number(totalprice.textContent);
+    });
+    totalpricesum.textContent = sum;
+    grandTotal.textContent = totalpricesum.textContent;
+    //   const coupondiscount = document.querySelector('.coupon-discount')
+    //   priceaftercoupon.textContent=Number(totalpricesum.textContent)-Number(coupondiscount.textContent)
+  }
+  function updateQuantity(productId, quantity) {
+
+    fetch("/updatecart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ productId, quantity }),
+    })
+      .then((response) => response.json())
+      .then((data) => {})
+      .catch((error) => console.error(error));
+  }
+
+  //   const applycoupon=document.querySelector('.applycoupon')
+  //   applycoupon.addEventListener('click',e =>{
+  //     e.preventDefault();
+  //     window.location.href=`/addcoupon?total=${totalpricesum.textContent}`
+  //   })
+
+  const modalBg = document.querySelector("#modalbg");
+  const deleteModal = document.querySelector("#delete-modal");
+  const deleteModalBtn = document.querySelector("#deletebtn");
+  const cancelModalBtn = document.querySelector("#cancelbtn");
+  const deleteCartProdBtns = document.querySelectorAll("#delete-cart-prod");
+  let productId; // Define productId outside the loop
+
+  deleteCartProdBtns.forEach((deleteCartProdBtn, index) => {
+    deleteCartProdBtn.addEventListener("click", function () {
+      modalBg.style.display = "block";
+      deleteModal.style.display = "block";
+    });
+  });
+
+  cancelModalBtn.addEventListener("click", function () {
+    modalBg.style.display = "none";
+    deleteModal.style.display = "none";
+  });
+
+  deleteCartProdBtns.forEach((deleteCartProdBtn, index) => {
+    deleteCartProdBtn.addEventListener("click", function () {
+      productId = deleteCartProdBtn.dataset.id; // Store productId when clicking the delete button
+    });
+  });
+
+  deleteModalBtn.addEventListener("click", function () {
+    handleDeleteProductFromCart(productId);
+  });
+
+  function handleDeleteProductFromCart(productId) {
+    console.log(cartId, productId);
+    fetch("/remove-from-cart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ productId: productId, cartId: cartId }),
+    })
+      .then((response) => {
+        response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        location.reload(true)
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+</script>

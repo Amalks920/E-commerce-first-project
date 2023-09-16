@@ -1,4 +1,4 @@
-<div class="ads-grid_shop">
+<div class="ads-grid_shop" style="margin-bottom: 100px;" >
     <div class="shop_inner_inf">
         <div class="col-md-4 single-right-left ">
             <div class="grid images_3_of_2">
@@ -25,6 +25,7 @@
             <p><span class="item_price">₹<%=data?.price -%></span>
                 <del></del>
             </p>
+
             <p><%=data?.description-%></p>
             <div class="rating1">
                 <ul class="stars">
@@ -34,24 +35,36 @@
                     <li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
                     <li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
                 </ul>
+               
             </div>
+           
 
             <div class="color-quality" style="margin-top: 20px; margin-bottom: 20px;">
                 <div class="color-quality-right">
                     <h5>Quantity :</h5>
+                    <% if(data?.stock!=0){ %>
+
+                   
                     <div class="quantity">
+                        <h1 id="out-of-stock" style="display: none;color: red;">Out Of Stock</h1>
                         <div class="quantity-select">
-                            <div class="entry value-minus" id="dec-btn">&nbsp;</div>
+                            <div class="entry value-minus" id="dec-btn"  >&nbsp;</div>
                             <div class="entry value" id="inputQuantity"><span>1</span></div>
-                            <div class="entry value-plus active" id="inc-btn">&nbsp;</div>
+                            <div class="entry value-plus active" id="inc-btn" >&nbsp;</div>
                         </div>
+
+                        <% } %>
                     </div>
                 </div>
             </div>
+            <input type="text" id="stock" value="<%=data?.stock %>" name="" id="" hidden>
+            <% if(data?.stock===0){ %>
+                <h2 style="color: red;">Out of Stock</h2>
+            <% } %>
 
             <div class="occasion-cart">
                 <div class="shoe single-item single_page_b">
-                    <form action="#" method="post">
+                    <div >
                         <input type="hidden" name="cmd" value="_cart">
                         <input type="hidden" name="add" value="1">
                         <input type="hidden" name="shoe_item" value="Chikku Loafers">
@@ -59,7 +72,7 @@
                         <input type="submit" id="addtocart" name="submit" value="Add to cart" class="button add">
 
                         <a href="#" data-toggle="modal" data-target="#myModal1"></a>
-                    </form>
+                    </div>
 
                 </div>
 
@@ -98,7 +111,7 @@
         
         <div class="clearfix"></div>
         <!--/tabs-->
-        <div class="responsive_tabs">
+        <div class="responsive_tabs" >
             <div id="horizontalTab">
                 <ul class="resp-tabs-list">
                     <li>Description</li>
@@ -479,16 +492,44 @@
 
  
     <script>
+
+
+       
         //Quantity
         const displayCount = document.getElementById("inputQuantity");
         const decBtn = document.querySelector("#dec-btn")
         const incBtn = document.querySelector("#inc-btn")
+        const inputQuantity=document.querySelector('#inputQuantity')
+        const stock=document.querySelector('#stock')
+        const quantitySelect=document.querySelector('.quantity-select')
+        const outOfStock=document.querySelector('#out-of-stock')
+
+        let qty;
+   
+
+
+        incBtn.addEventListener('click',()=>{
+        
+            console.log(inputQuantity)
+            qty=inputQuantity.textContent
+            console.log(qty,stock.value)
+            if(Number(qty)>=Number(stock.value)){
+            
+                
+        }
+        })
+
           incBtn.addEventListener("click", () => {
+            if(Number(qty)>=Number(stock.value)){
+                return 
+                
+        }
             if (displayCount.innerText < 10) displayCount.innerText++
-            else showToast("Maximum 10 quantities are allowed")
+            
         })
     
         decBtn.addEventListener("click", () => {
+           
             if (displayCount.innerText > 1) displayCount.innerText--
         })
     
@@ -500,10 +541,24 @@
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ productId:"<%= data._id %>",quantity: displayCount.textContent }),
+        body: JSON.stringify({ productId:"<%= data._id %>",quantity:displayCount.textContent }),
       })
-      
+        .then((response)=>{
+            console.log(response)
+           if(response?.status===200){
+            // console.log('success')
+            // let cartCount=document.querySelector('#cart-icon-nav')
+            // cartCount.textContent="hello"
+            // console.log(document.getElementById('cart-icon-nav'))
+            window.location.href='http://localhost:5000/get-cart'
+
+            
+           }else{
+            console.log('failed')
+           }
+        })
 
         .catch((error) => console.error(error));
     });
+
     </script>

@@ -1,11 +1,14 @@
 const userSchema = require("../model/userSchema");
 
 const authorizationMiddleware = async (req, res, next) => {
+  
   let user;
   try {
-    user = await userSchema.findById(req.session.user._id);
+    if(!req.session.user) return res.redirect("/loginOrSignup");
 
-    if (user?.isBlocked){
+    user = await userSchema.findById(req?.session?.user?._id);
+    console.log(user)
+    if (user && user?.isBlocked){
       delete req.session.user;
     }
   
@@ -15,7 +18,7 @@ const authorizationMiddleware = async (req, res, next) => {
       res.redirect("/loginOrSignup");
     }
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 
  

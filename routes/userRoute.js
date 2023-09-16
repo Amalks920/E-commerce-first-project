@@ -1,54 +1,197 @@
 const express = require("express");
 const router = express.Router();
 
-const {authorizationMiddleware}=require('../middlewares/authorizationMiddleware')
+const {
+  authorizationMiddleware,
+} = require("../middlewares/authorizationMiddleware");
 
-const {landingPage,createUser,getUserLogin
-    ,userLogin,getHomePage,getAdminHome,
-    logout,getOtpLogin, otpLoginPost,getVerifyOtp, verifyOtpPost, getHomePageNotLoggedIn}=require('../controller/authCtrl');
+const {
+  landingPage,
+  createUser,
+  getUserLogin,
+  userLogin,
+  getHomePage,
+  getAdminHome,
+  logout,
+  getOtpLogin,
+  otpLoginPost,
+  getVerifyOtp,
+  verifyOtpPost,
+  getHomePageNotLoggedIn,
+  getForgotPassword,
+  forgotPasswordPost,
+  changePassword,
+  changePasswordPost,
+} = require("../controller/authCtrl");
 
-const {getProductPage}=require('../controller/productCtrl')
-const {setCacheControl}=require('../middlewares/cacheControllMiddleware');
+const {
+  getCart,
+  addToCartPost,
+  updateCartPost,
+  removeFromCart,
+} = require("../controller/cartCtrl");
 
+const { getProductPage } = require("../controller/productCtrl");
+const { setCacheControl } = require("../middlewares/cacheControllMiddleware");
+
+//checkout
+const { checkout } = require("../controller/checkoutCtrl");
 
 //search page
-const {searchPage} = require('../controller/searchCtrl')
+const { searchPage, filteredProducts } = require("../controller/searchCtrl");
+const { getShopPage, userDashboard } = require("../controller/userCtrl");
+const {
+  addAddressPost,
+  deleteAddress,
+  selectAddress,
+} = require("../controller/addressCtrl");
+
+const {
+  placeOrder,
+  orderPage,
+  viewOrders,
+  orderDetails,
+  cancelOrder,
+  editOrder,
+} = require("../controller/orderCtrl");
+const { getPaymentPage, checkPayment } = require("../controller/paymentCtrl");
+
+router.get("/", setCacheControl, getHomePageNotLoggedIn);
+
+router.post("/user-signup", setCacheControl, createUser);
+router.get("/loginOrSignup", setCacheControl, getUserLogin);
+router.post("/user-login", setCacheControl, userLogin);
+router.get("/otp-login", setCacheControl, getOtpLogin);
+router.post("/otp-login", setCacheControl, otpLoginPost);
+router.get("/verify-otp", setCacheControl, getVerifyOtp);
+router.post("/verify-otp", setCacheControl, verifyOtpPost);
+router.get("/forgot-password", setCacheControl, getForgotPassword);
+router.post("/forgot-password", setCacheControl, forgotPasswordPost);
+router.get("/change-password", setCacheControl, changePassword);
+router.post("/change-password", setCacheControl, changePasswordPost);
+
+//user-dashboard
+router.get(
+  "/user-dashboard",
+  setCacheControl,
+  authorizationMiddleware,
+  userDashboard
+);
+router.post(
+  "/add-address",
+  setCacheControl,
+  authorizationMiddleware,
+  addAddressPost
+);
+router.post(
+  "/delete-address",
+  setCacheControl,
+  authorizationMiddleware,
+  deleteAddress
+);
+router.post(
+  "/select-address",
+  setCacheControl,
+  authorizationMiddleware,
+  selectAddress
+);
+
+router.get("/home", setCacheControl, authorizationMiddleware, getHomePage);
+router.get("/shop", setCacheControl, authorizationMiddleware, getShopPage);
+router.get(
+  "/product-page/:id",
+  setCacheControl,
+  authorizationMiddleware,
+  getProductPage
+);
+
+//cart
+router.get("/get-cart", setCacheControl, authorizationMiddleware, getCart);
+router.post("/add-to-cart", authorizationMiddleware, addToCartPost);
+router.post(
+  "/updatecart",
+  setCacheControl,
+  authorizationMiddleware,
+  updateCartPost
+);
+router.post(
+  "/remove-from-cart",
+  setCacheControl,
+  authorizationMiddleware,
+  removeFromCart
+);
+
+router.post(
+  '/filter-products',
+  setCacheControl,
+  authorizationMiddleware,
+  filteredProducts
+)
+
+//checkout
+router.get("/checkout", setCacheControl, authorizationMiddleware, checkout);
+
+// Order
+router.post(
+  "/place-order",
+  setCacheControl,
+  authorizationMiddleware,
+  placeOrder
+);
+
+router.get("/order-page", setCacheControl, authorizationMiddleware, orderPage);
+
+router.get(
+  "/cancel-order/:id",
+  setCacheControl,
+  authorizationMiddleware,
+  cancelOrder
+);
+
+router.get("/logout", authorizationMiddleware, logout);
+
+router.get(
+  "/search-page",
+  setCacheControl,
+  authorizationMiddleware,
+  searchPage
+);
+
+router.get(
+  "/view-orders",
+  setCacheControl,
+  authorizationMiddleware,
+  viewOrders
+);
+
+router.get(
+  "/order-details/:id",
+  setCacheControl,
+  authorizationMiddleware,
+  orderDetails
+);
 
 
-router.get("/",setCacheControl,getHomePageNotLoggedIn);
+router.get(
+  '/razor-pay',
+  setCacheControl,
+  authorizationMiddleware,
+  getPaymentPage
 
+)
 
-router.post('/user-signup',setCacheControl,createUser)
-router.get('/loginOrSignup',setCacheControl,getUserLogin)
-router.post('/user-login',setCacheControl,userLogin)
-router.get('/otp-login',setCacheControl,getOtpLogin)
-router.post('/otp-login',setCacheControl,otpLoginPost)
-router.get('/verify-otp',setCacheControl,getVerifyOtp)
-router.post('/verify-otp',setCacheControl,verifyOtpPost)
-
-router.get('/home',setCacheControl,authorizationMiddleware,getHomePage)
-router.get('/product-page/:id',setCacheControl,authorizationMiddleware,getProductPage)
-
-
-router.get('/logout',authorizationMiddleware,logout)
-
-router.get('/search-page',setCacheControl,authorizationMiddleware,searchPage)
+router.post(
+  '/check-payment',
+  setCacheControl,
+  authorizationMiddleware,
+  checkPayment
+)
 
 
 
+module.exports = router;
 
-module.exports=router
-
-
-
-
-
-
-// router.get('/get-cart',setCacheControl,authorizationMiddleware,getCart)
-// router.post('/add-to-cart',authorizationMiddleware,addToCartPost)
 // router.get('/coupon',setCacheControl,authorizationMiddleware,getCoupon)
 // router.get('/payment',setCacheControl,getPaymentPage)
 // router.get('/add-address',setCacheControl,authorizationMiddleware,getAddAddress)
 // router.post('/add-address',setCacheControl,authorizationMiddleware,addAddressPost)
-// router.post('/update-cart',setCacheControl,authorizationMiddleware,updateCartPost)
-// router.post('/remove-from-cart',setCacheControl,authorizationMiddleware,removeFromCart)

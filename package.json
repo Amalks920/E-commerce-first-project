@@ -17,6 +17,7 @@
     "express-async-handler": "^1.2.0",
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.17.3",
+    "express-validator": "^7.0.1",
     "lodash": "^4.17.21",
     "mailgen": "^2.0.27",
     "moment": "^2.29.4",
@@ -26,7 +27,7 @@
     "nocache": "^4.0.0",
     "nodemailer": "^6.9.4",
     "otp-generator": "^4.0.1",
-    "razorpay": "^2.9.1",
+    "razorpay": "^2.9.2",
     "sharp": "^0.32.5",
     "twilio": "^4.13.0",
     "two-step-auth": "^1.1.2"

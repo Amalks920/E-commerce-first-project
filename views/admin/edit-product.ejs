@@ -110,7 +110,7 @@
                 <select name="productCategory" class="form-select">
                   <% data?.forEach((items)=>{ %>
                     <% if (product.productCategory.toString() === items._id.toString()) { %>
-                    <option  value=<%=items._id %> ><%=items?.productCategory %></option>
+                    <option  value=<%=items._id %> selected><%=items?.productCategory %></option>
                     <% } else { %>
                       <option value="<%= items._id %>"><%= items.productCategory %></option>
                     <% } %>

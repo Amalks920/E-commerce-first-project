@@ -1,3 +1,4 @@
+
 <section class="content-main">
     <div class="content-header">
         <div>
@@ -16,22 +17,23 @@
             <div class="row">
                 <div class="col-md-3">
                     <form id="cat-form" action="/admin/category/add-category" method="post" enctype="multipart/form-data">
+                        <p style="color: red;" id="err"><%=req.query.err %></p>
                         <div class="mb-4">
                             <label for="product_name" class="form-label">Category Name</label>
-                            <input type="text" id="category" name="productCategory"  placeholder="Type here" class="form-control" id="category-name" />
+                            <input  type="text" id="category" name="productCategory"  placeholder="Type here" class="form-control input" id="category-name" />
                         </div>
 
 
                         <div class="mb-4">
-                            <label for="product_name" class="form-label">Image</label>
+                            <label for="product_name" class="form-label ">Image</label>
 
-                            <input type="file"  name="images" placeholder="Type here" class="form-control" id="product_name" multiple/>
+                            <input type="file"  name="images" placeholder="Type here" class="form-control input" id="product_name" multiple/>
                         </div>
 
 
                         <div class="mb-4">
                             <label class="form-label">Description</label>
-                            <textarea id="description" type="text" placeholder="Type here"  name="categoryDescription" class="form-control"></textarea>
+                            <textarea  id="description" type="text" placeholder="Type here"  name="categoryDescription" class="form-control input"></textarea>
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">Edit category</button>
@@ -80,6 +82,7 @@
     const category=document.getElementById('category');
     const description=document.getElementById('description');
     const categoryForm=document.getElementById('cat-form')
+    const err=document.getElementById('err')
 
 
     categoryForm.addEventListener('submit',function(event){
@@ -101,7 +104,10 @@
           description.classList.add('is-invalid');
       }
 
-
+      if (!validateFiles(imagesInput)) {
+          isValid = false;
+          imagesInput.classList.add('is-invalid');
+      }
       
       if (imagesInput.files.length === 0) {
           isValid = false;
@@ -113,5 +119,38 @@
       }
       
   })
+
+
+  const inputElements=document.querySelectorAll('.input');
+
+  inputElements.forEach((element,index)=>{
+    element.addEventListener('input',function () {
+    err.style.display="none";
+
+    })
+  })
+
+
+
+  function validateFiles(input) {
+    const files = input.files;
+    
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        console.log(file)
+        const fileType = file.type;
+
+        // Check if the file type is an image (you can add more image types as needed)
+        if (fileType.startsWith('image/')) {
+            // File is an image
+            console.log(`File ${file.name} is an image.`);
+            return true
+        } else {
+            // File is not an image
+            console.log(`File ${file.name} is not an image.`);
+            return false
+        }
+    }
+}
 
 </script>

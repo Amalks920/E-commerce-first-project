@@ -1,0 +1,305 @@
+<!-- Bootstrap Core CSS -->
+<link href="/css/userdashboard/bootstrap.css" rel='stylesheet' type='text/css' />
+
+<!-- Custom CSS -->
+<link href="/css/userdashboard/style.css" rel='stylesheet' type='text/css' />
+
+<!-- font-awesome icons CSS -->
+<link href="/css/userdashboard/font-awesome.css" rel="stylesheet"> 
+<!-- //font-awesome icons CSS-->
+
+<!-- side nav css file -->
+<link href='/css/userdashboard/SidebarNav.min.css' media='all' rel='stylesheet' type='text/css'/>
+<!-- //side nav css file -->
+ <!-- js-->
+ <script src="js/jquery-1.11.1.min.js"></script>
+ <script src="js/modernizr.custom.js"></script>
+
+
+
+
+ <% console.log("addresses from amalks") %>
+<% console.log(addresses) %>
+<div style="display: flex; height: fit-content;">
+
+<aside class="sidebar-left" style="width: 15%;height: 1000px; box-shadow: 50px;background-color: rgb(205, 205, 205);">
+    <nav class="navbar navbar-inverse">
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="sidebar-menu">
+            <li class="treeview" style="background-color: rgb(247, 247, 247);">
+              <a href="index.html">
+              <i class="fa fa-dashboard"></i> <span>OverView</span>
+              </a>
+            </li>
+            <li class="treeview" style="background-color: rgb(247, 247, 247);margin-top: 5px;">
+                <a href="index.html">
+                <i class="fa fa-dashboard"></i> <span>Add Address</span>
+                </a>
+              </li>
+              <li class="treeview" style="background-color: rgb(247, 247, 247);margin-top: 5px;">
+                <a href="index.html">
+                <i class="fa fa-dashboard"></i> <span>Manage Address</span>
+                </a>
+              </li>
+              <li class="treeview" style="background-color: rgb(247, 247, 247);margin-top: 5px;">
+                <a href="/view-orders">
+                <i class="fa fa-dashboard"></i> <span>View Orders</span>
+                </a>
+              </li>
+           
+          </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </nav>
+  </aside>
+
+  <div style="width: 100%;"> 
+    <section class="content-main"style=" height: fit-content;">
+        <form
+          id="address-form"
+          action="/add-address"
+          method="post"
+          enctype="application/x-www-form-urlencoded">
+         
+          <div class="row">
+            <div class="col-9" style="background-color: white;">
+              <div class="content-header" style="background-color: white;">
+                <h2 class="content-title" >Add Your Address</h2>
+
+              </div>
+            </div>
+      
+            <div class="col-lg-6">
+              <div class="card mb-4">
+                <div class="card-header">
+                  <h4>Basic</h4>
+                </div>
+                <div class="card-body">
+                  <div class="mb-4">
+                    <label for="product_name" class="form-label">City</label>
+                    <input
+                      type="text"
+                      name="city"
+                      placeholder="Type here"
+                      class="form-control input"
+                      id="city" />
+                  </div>
+                  <div class="mb-4">
+                    <label class="form-label">Address</label>
+                    <textarea
+                    id="address"
+                    type="text"
+                      name="address"
+                      placeholder="Type here"
+                      class="form-control input"
+                      rows="4"></textarea>
+                  </div>
+
+                  <div class="mb-4">
+                    <label for="product_name" class="form-label">state</label>
+                    <input
+                      type="text"
+                      name="state"
+                      placeholder="Type here"
+                      class="form-control input"
+                      id="state" />
+                  </div>
+                  <div class="mb-4">
+                    <label for="product_name" class="form-label">Phone Number</label>
+                    <input
+                      type="number"
+                      name="mobileNumber"
+                      placeholder="Type here"
+                      class="form-control input"
+                      id="mobileNumber" />
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="mb-4">
+                        <label  class="form-label">Pincode</label>
+                        <div class="row gx-2">
+                          <input
+                            placeholder="$"
+                            id="pincode"
+                            name="pincode"
+                            type="number"
+                            class="form-control input" />
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+              <!-- card end// -->
+            </div>
+
+
+          </div>
+          <button id="submit" type="submit" style="margin-left: 270px;width: 260px;height: 40px; color: white;background-color: black;">ADD</button>
+
+        </form>
+      </section>
+     
+     <% if(addresses?.address.length!=0 && addresses){ %>
+
+      
+      <section style="position: absolute; top: 17%;left:1300px;">
+        <h1>My Addresses</h1>
+        <div style=" width: 600px;height: 250px;margin-top: 20px;height: fit-content;">
+          <div class="address-list" style="height: fit-content;">
+      
+            <% addresses?.address?.forEach((address,index)=>{ %>
+
+          
+            <div class="address" style="margin: 10px;padding: 20px;background-color: azure;">
+                <input type="radio" id="address1" name="address" value="123 Main St, City, Country" <% if(address?.isSelected){ %>
+                 checked
+               <% } %> >
+                <div for="address1" >
+                  <p><%=address.address -%></p>
+                  <p><%=address.city -%></p>
+                  <p><%=address.state -%></p>
+                  <p><%=address.mobileNumber -%></p>
+                  <p><%=address.pincode -%></p>
+                  <button id="delete-address" data-id="<%=index -%>" style="margin-right: 15px;">DELETE</button>
+                  <button>EDIT</button>
+                </div>
+            </div>
+
+            <% }) %>
+         
+
+    
+            <!-- Add more address options as needed -->
+        </div>
+    
+        <button id="selectedAddressButton" style="margin-left: 220px;background-color: blue; padding: 10px;color: white;">Select Address</button>
+        </div>
+
+
+      </section>
+    <% } %>
+</div>
+
+<div></div>
+</div>
+
+
+<script>
+  // Get all radio buttons by name
+  const radioButtons = document.getElementsByName("address");
+  const deleteButtons=document.querySelectorAll('#delete-address');
+  const addressButton=document.getElementById('selectedAddressButton');
+  const modalBg=document.querySelector('#modalbg')
+  const deleteModal=document.querySelector('#delete-modal')
+  const deleteModalBtn=document.querySelector('#deletebtn')
+  const cancelModalBtn=document.querySelector('#cancelbtn')
+  const inputs=document.querySelectorAll('.input')
+   const addressForm=document.querySelector('#address-form');
+
+   
+  
+
+ 
+
+addressForm.addEventListener('submit', function (event) {
+  let isValid=true
+  inputs.forEach((input,index)=>{
+   
+   if(input.value===""){
+    
+     isValid=false
+   }
+ })
+  console.log('dsfkjjjjjjj')
+  if(!isValid){
+    event.preventDefault()
+}
+})
+
+
+  // addressForm.addEventListener('submit',function (event) {
+  //   event.preventDefault()
+  // })
+
+
+  let addressIndex
+  let index
+  // Add an event listener to each radio button
+  radioButtons.forEach((radioButton,index) => {
+    console.log("radioButton")
+    console.log(radioButton)
+      radioButton.addEventListener("change", function () {
+          if (this.checked) {
+           addressIndex=index-1
+          console.log(addressIndex)
+          }
+      });
+  });
+
+
+
+  addressButton.addEventListener('click',function () {
+    fetch('/select-address', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ index:addressIndex}) 
+      })
+      .then(response => response.json())
+      .then(data=>{
+        if(data)location.reload(true)
+      })
+      .catch(error => {
+        // Handle any error that occurred during the request
+        console.error(error);
+      });
+  })
+
+
+deleteButtons.forEach(deleteButton=>{
+  deleteButton.addEventListener('click',function () {
+    index=deleteButton.attributes[1].value
+    modalBg.style.display="block"
+    deleteModal.style.display="block"
+
+  })
+  // deleteButton.addEventListener('click',function(){
+  //  let index=deleteButton.attributes[1].value
+
+  //  handleDelete(index)
+  // })
+})
+
+cancelModalBtn.addEventListener('click',function () {
+  modalBg.style.display="none"
+    deleteModal.style.display="none"
+})
+
+deleteModalBtn.addEventListener('click',function () {
+   handleDelete(index)
+})
+
+function handleDelete(index){
+  fetch('/delete-address', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ index:index}) 
+      })
+      .then(response => response.json())
+      .then(data=>{
+        if(data)location.reload(true)
+      })
+      .catch(error => {
+        // Handle any error that occurred during the request
+        console.error(error);
+      });
+}
+</script>
+

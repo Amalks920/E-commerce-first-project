@@ -164,6 +164,28 @@
 
   let imageCount = 0;
 
+
+  function validateFiles(input) {
+    const files = input.files;
+    
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        console.log(file)
+        const fileType = file.type;
+
+        // Check if the file type is an image (you can add more image types as needed)
+        if (fileType.startsWith('image/')) {
+            // File is an image
+            console.log(`File ${file.name} is an image.`);
+            return true
+        } else {
+            // File is not an image
+            console.log(`File ${file.name} is not an image.`);
+            return false
+        }
+    }
+}
+
   productForm.addEventListener('submit',function(event){
     let isValid=true;
       // Reset previous error messages
@@ -194,6 +216,11 @@
       if (isNaN(stockInput.value) || parseInt(stockInput.value) < 0) {
           isValid = false;
           stockInput.classList.add('is-invalid');
+      }
+
+      if(!validateFiles(imagesInput)){
+        isValid = false;
+        imagesInput.classList.add('is-invalid');
       }
       
       if (imagesInput.files.length === 0) {

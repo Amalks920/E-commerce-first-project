@@ -2,12 +2,14 @@ const expressAsyncHandler = require("express-async-handler")
 const sharp = require('sharp');
 const Category=require('../model/categoryModal');
 const categoryModal = require("../model/categoryModal");
+const url = require("url");
+
 
 const addCategory=expressAsyncHandler(async(req,res,next)=>{
   try {
     const allCategory=await categoryModal.find({})
     console.log(allCategory)
-    res.render('admin/add-category',{layout:'./layout/adminLayout.ejs',data:allCategory})
+    res.render('admin/add-category',{layout:'./layout/adminLayout.ejs',data:allCategory,req:req})
   } catch (error) {
     console.log(error)
   }
@@ -42,20 +44,28 @@ const addCategoryPost=async (req, res) => {
     try {
       // Check if the category already exists
       const existingCategory = await Category.findOne({ productCategory });
+      console.log(existingCategory)
       if (existingCategory) {
-        return res.status(400).json({ message: "Category already exists" });
+        return res.redirect(
+          url.format({
+            pathname: "/admin/add-category",
+            query: {
+              err: "category already exists",
+            },
+          })
+        );
       }
 
       // Save the new category to the database
       const category = await Category.create(data);
       if (category) {
         const allCategories = await Category.find(); // Fetch all categories from the database
-        res.redirect("/admin/category/view-category");
+        return res.redirect("/admin/category/view-category");
       }
       // res.status(201).json({ message: 'Category added successfully' });
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Internal server error" });
+      console.error(err.message);
+      res.status(500).json({ message: err.status });
     }
   }
 

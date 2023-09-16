@@ -5,6 +5,39 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+   <script type="application/x-javascript">
+	addEventListener("load", function () {
+		setTimeout(hideURLbar, 0);
+	}, false);
+
+	function hideURLbar() {
+		window.scrollTo(0, 1);
+	}
+</script>
+
+<!---->
+<link href="/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+	<link rel="stylesheet" href="/css/shop.css" type="text/css" media="screen" property="" />
+	<link href="/css/style7.css" rel="stylesheet" type="text/css" media="all" />
+	<link rel="stylesheet" href="/css/flexslider.css" type="text/css" media="screen" />
+	<link href="/css/easy-responsive-tabs.css" rel='stylesheet' type='text/css' />
+	<link rel="stylesheet" type="text/css" href="/css/checkout.css">
+
+	<link href="/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+
+	<!-- Owl-carousel-CSS -->
+	<link rel="stylesheet" type="text/css" href="/css/jquery-ui1.css">
+	<link href="/css/style.css" rel="stylesheet" type="text/css" media="all" />
+	<!-- font-awesome-icons -->
+	<link href="/css/font-awesome.css" rel="stylesheet">
+	<!-- //font-awesome-icons -->
+	<link href="//fonts.googleapis.com/css?family=Montserrat:100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800"
+	    rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800" rel="stylesheet">
+
+<!---->
+
+
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
 	
@@ -24,8 +57,8 @@
 	<link rel="stylesheet" href="/css/homepage/flexslider.css">
 
 	<!-- Owl Carousel -->
-	<link rel="stylesheet" href="/css/owl.carousel.min.css">
-	<link rel="stylesheet" href="/css/owl.theme.default.min.css">
+	<link rel="stylesheet" href="/css/homepage/owl.carousel.min.css">
+	<link rel="stylesheet" href="/css/homepage/owl.theme.default.min.css">
 	
 	<!-- Date Picker -->
 	<link rel="stylesheet" href="/css/homepage/bootstrap-datepicker.css">
@@ -35,9 +68,26 @@
 	<!-- Theme style  -->
 	<link rel="stylesheet" href="/css/homepage/style.css">
 
+
+
+	
+
 	</head>
 	<body>
-        <div id="page">
+		<div id="modalbg" style="border: 2px solid red; position: absolute;width: 100vw;z-index: 5;background-color: black;opacity:0.2 ;display: none;height: 100%;">
+
+		</div>
+
+		<div id="delete-modal" style="background-color: white;opacity: 1; width: 800px;height: 400px;margin-top: 250px;margin-left: 650px;position: fixed;z-index: 6;display: none;">
+			<h2 style="text-align: center;margin-top: 50px;">Do You Want to Delete Address?</h2>
+			<span style="display: flex;justify-content: center;gap: 15px;margin-top: 100px;">
+				<button id="deletebtn" style="width: 100px;height: 40px;background-color: red;color: white;">Delete</button>
+				<button id="cancelbtn" style="width: 100px;height: 40px;background-color: blue;color: white;">Cancel</button>
+			</span>
+		</div>
+	   
+
+        <div id="page" id="page" >
             <div class="colorlib-loader"></div>
 
 
@@ -60,7 +110,8 @@
 					<div class="row">
 						<div class="col-sm-12 text-left menu-1">
 							<ul>
-								<li class="active"><a href="">Home</a></li>
+								<li onmouseover="this.style.color='#0078d4';"><a href="/home">Home</a></li>
+								<li><a href="/search-page">Shop</a></li>
 								<li class="has-dropdown">
 									<a href="men.html">Men</a>
 									<ul class="dropdown">
@@ -74,6 +125,7 @@
 								<li><a href="">Women</a></li>
 								<li><a href="">About</a></li>
 								<li><a href="">Contact</a></li>
+								<li><a href="/user-dashboard">User Dashboard</a></li>
 								<% if(!isLoggedIn){ %>
 
 								
@@ -81,7 +133,7 @@
 								<% }else{ %>
 									<li><a href="/logout">Logout</a></li>
 								<% } %>
-								<li class="cart"><a href="cart.html"><i class="icon-shopping-cart"></i> Cart [0]</a></li>
+								<li class="cart"><a  href="/get-cart"><i class="icon-shopping-cart"></i> Cart </a></li>
 							</ul>
 						</div>
 					</div>
@@ -216,6 +268,101 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
      <!-- Main -->
      <script src="/js/homepage/main.js"></script>
  
+
+
+
+	 <script src="/js/minicart.js"></script>
+	 <!-- /nav -->
+	<script src="/js/modernizr-2.6.2.min.js"></script>
+	<script src="/js/classie.js"></script>
+	<script src="/js/demo1.js"></script>
+	<!-- //nav -->
+
+
+	<!--search-bar-->
+	<script src="/js/search.js"></script>
+	<!--//search-bar-->
+		<!--Image Zoom-->
+	<script src="/js/imagezoom.js"></script>
+	<!-- script for responsive tabs -->
+	<script src="/js/easy-responsive-tabs.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#horizontalTab').easyResponsiveTabs({
+				type: 'default', //Types: default, vertical, accordion           
+				width: 'auto', //auto or any width like 600px
+				fit: true, // 100% fit in a container
+				closed: 'accordion', // Start closed if in accordion view
+				activate: function (event) { // Callback function if tab is switched
+					var $tab = $(this);
+					var $info = $('#tabInfo');
+					var $name = $('span', $info);
+					$name.text($tab.text());
+					$info.show();
+				}
+			});
+			$('#verticalTab').easyResponsiveTabs({
+				type: 'vertical',
+				width: 'auto',
+				fit: true
+			});
+		});
+	</script>
+
+
+	<!-- price range (top products) -->
+	<script src="/js/jquery-ui.js"></script>
+	
+	<script>
+		//<![CDATA[ 
+		$(window).load(function () {
+			$("#slider-range").slider({
+				range: true,
+				min: 0,
+				max: 9000,
+				values: [50, 6000],
+				slide: function (event, ui) {
+					$("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+				}
+			});
+			$("#amount").val("$" + $("#slider-range").slider("values", 0) + " - $" + $("#slider-range").slider("values", 1));
+
+		}); //]]>
+	</script>
+	<!-- //price range (top products) -->
+	<!-- FlexSlider -->
+	<script src="/js/jquery.flexslider.js"></script>
+	<script>
+		// Can also be used with $(document).ready()
+		$(window).load(function () {
+			$('.flexslider').flexslider({
+				animation: "slide",
+				controlNav: "thumbnails"
+			});
+		});
+	</script>
+
+		<!-- start-smoth-scrolling -->
+		<script type="text/javascript" src="/js/move-top.js"></script>
+		<script type="text/javascript" src="/js/easing.js"></script>
+		<script type="text/javascript">
+			jQuery(document).ready(function ($) {
+				$(".scroll").click(function (event) {
+					event.preventDefault();
+					$('html,body').animate({
+						scrollTop: $(this.hash).offset().top
+					}, 1000);
+				});
+			});
+		</script>
+		<!-- //end-smoth-scrolling -->
+		<script type="text/javascript" src="/js/bootstrap-3.1.1.min.js"></script>
+	
+
+	 
      </body>
  </html>
  
+ <script>
+
+ </script>

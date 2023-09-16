@@ -1,13 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const upload = require("../config/multer");
-const { getAdminHome, adminLogin, getAdminLogin, adminLogout, getAdminOtpLogin, adminOtpLoginPost, getAdminVerifyOtpLogin, verifyOtpAdminPost } = require('../controller/authCtrl')
+const { getAdminHome, adminLogin, getAdminLogin, adminLogout, getAdminOtpLogin, 
+    adminOtpLoginPost, getAdminVerifyOtpLogin, verifyOtpAdminPost,getAdminForgotPassword, adminForgotPasswordPost, getAdminChangePassword, adminChangePasswordPost } = require('../controller/authCtrl')
 const { adminAuthorizationMiddleware } = require('../middlewares/authorizationMiddleware')
 const { addCoupon, addCouponPost, viewCouponAdmin } = require('../controller/couponCtrl');
 const { setCacheControl } = require('../middlewares/cacheControllMiddleware');
 const { addCategory, addCategoryPost, viewCategory } = require('../controller/categoryCtrl');
 const { getViewProducts, getEditProduct, editProductPost, deleteImage } = require("../controller/productCtrl");
 const { getViewUsers, blockUser } = require('../controller/userCtrl')
+const {viewOrdersAdmin,editOrder}=require('../controller/orderCtrl')
 
 
 
@@ -17,7 +19,10 @@ router.get('/admin-otp-login', setCacheControl, getAdminOtpLogin)
 router.post('/admin-otp-login', setCacheControl, adminOtpLoginPost)
 router.get('/verify-otp-login', setCacheControl, getAdminVerifyOtpLogin)
 router.post('/verify-otp-login', setCacheControl, verifyOtpAdminPost)
-
+router.get('/forgot-password',setCacheControl,getAdminForgotPassword)
+router.post('/forgot-password',setCacheControl,adminForgotPasswordPost)
+router.get('/change-password',setCacheControl,getAdminChangePassword)
+router.post('/change-password',setCacheControl,adminChangePasswordPost)
 router.get('/admin-home', setCacheControl, adminAuthorizationMiddleware, getAdminHome)
 
 
@@ -34,14 +39,18 @@ router.put('/block-user/:id', setCacheControl, adminAuthorizationMiddleware, blo
 router.post('/remove-images', setCacheControl, adminAuthorizationMiddleware, deleteImage)
 
 
+router.get('/view-orders',setCacheControl,adminAuthorizationMiddleware,viewOrdersAdmin);
 
+router.put("/edit-order-status",adminAuthorizationMiddleware,editOrder);
 
+router.get('/add-coupon',setCacheControl,adminAuthorizationMiddleware,addCoupon)
+router.post('/add-coupon',setCacheControl,adminAuthorizationMiddleware,addCouponPost)
 
+router.get('/view-coupon',setCacheControl,adminAuthorizationMiddleware,viewCouponAdmin)
 
 
 module.exports = router
 
 
-// router.get('/add-coupon',setCacheControl,addCoupon)
-// router.post('/add-coupon',setCacheControl,addCouponPost)
-// router.get('/view-coupon',setCacheControl,viewCouponAdmin)
+
+

@@ -8,10 +8,11 @@ const getCart=async(req,res,next)=>{
     const userId = req.session.user._id;
     const coupon = req.query;
     const cart = await cartModal
-      .findOne({ user: userId })
+    .findOne({ user: userId })
       .populate({ path: "products.product" });
-    res.render("user/cart", {layout:'./layout/userLayout.ejs', cart, category, coupon });
+    res.render("user/product-cart", {layout:'./layout/homeLayout.ejs', cart, category, coupon,isLoggedIn:true });
     console.log(cart.products);
+    console.log(cart)
   } catch (error) {
     console.log(error.message);
   }
@@ -19,7 +20,10 @@ const getCart=async(req,res,next)=>{
 
 const addToCartPost=async (req, res) => {
     const userId = req.session.user._id;
-    const { productId, quantity } = req.body;
+    console.log(userId)
+    let { productId, quantity } = req.body;
+    quantity=Number(quantity)
+    console.log('req.body')
     console.log(req.body);
     
     try {
@@ -28,17 +32,20 @@ const addToCartPost=async (req, res) => {
 
       if (cart == null) {
         cart = await cartModal.create({ user: userId });
+        
       }
+
       if (cart.products.length === 0) {
+        
         cart.products.push({ product: productId, quantity });
-        res.status(200).json({ success: true });
+        //return res.status(200).json({ success: true });
       } else {
         let i;
         for (i = 0; i < cart.products.length; i++) {
+          console.log('cart.products cart.products cart.products')
+          console.log(cart.products)
           if (cart.products[i].product == productId) {
-            cart.products[i].quantity += Number(quantity);
-            res.status(200).json({ success: true });
-
+             cart.products[i].quantity += Number(quantity);
             break;
           }
         }
@@ -46,10 +53,13 @@ const addToCartPost=async (req, res) => {
         console.log(i);
         if (i === cart.products.length) {
           cart.products.push({ product: productId, quantity });
-          res.status(200).json({ success: true });
+          console.log(cart)
+          
         }
       }
-      cart.save();
+      await cart.save();
+      console.log(cart)
+      return res.status(200).json({ success: true });
     
     } catch (error) {
       console.error(error.message);
@@ -93,10 +103,12 @@ const addToCartPost=async (req, res) => {
 
   const removeFromCart=async (req, res) => {
     try {
-      const { cartId, productId } = req.params;
+     
+      const { cartId, productId } = req.body;
+      console.log(req.body)
 
       // Find the cartlist document by ID
-      const cart = await cartlist.findById(cartId);
+      const cart = await cartModal.findById(cartId);
 
       if (!cart) {
         return res.status(404).json({ error: "Cart not found" });
@@ -116,7 +128,7 @@ const addToCartPost=async (req, res) => {
 
       // Save the updated cartlist document
       const updatedCart = await cart.save();
-      res.redirect("/shoppingcart");
+      res.redirect("/get-cart");
       // Respond with the updated cart or a success message
     } catch (error) {
       console.error("Error deleting product from cart:", error);
