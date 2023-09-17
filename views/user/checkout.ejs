@@ -17,7 +17,7 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
   <% }) %>
 </div>
 
-<% console.log(coupons) %>
+
 
 <div class="ads-grid_shop">
   <% console.log('checkout address') %>
@@ -107,28 +107,29 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
         <div
           class="col-md-6 address_form"
           style=" display: flex;background-color: aliceblue; margin-bottom: 30px;">
-          <% if(address){ %>
+          <% if(address?.length!=0){ %>
 
          
           <div style="background-color: aliceblue; width: 50%;padding: 20px;">
+            <div>
             <h2 style="text-align: left">Address</h2>
             <h4>
-              Address <span style="color: black"> : </span><%=address[0].address
+              Address <span style="color: black"> : </span><%=address[0]?.address
               -%>
             </h4>
             <h4>
-              city <span style="color: black"> : </span> <%=address[0].city-%>
+              city <span style="color: black"> : </span> <%=address[0]?.city-%>
             </h4>
             <h4>
-              state <span style="color: black"> : </span> <%=address[0].state-%>
+              state <span style="color: black"> : </span> <%=address[0]?.state-%>
             </h4>
             <h4>
               Mobile Number
-              <span style="color: black"> : </span><%=address[0].mobileNumber-%>
+              <span style="color: black"> : </span><%=address[0]?.mobileNumber-%>
             </h4>
             <h4>
               Pincode
-              <span style="color: black"> : </span> <%=address[0].pincode -%>
+              <span style="color: black"> : </span> <%=address[0]?.pincode -%>
             </h4>
             <a href="/user-dashboard"
               ><button
@@ -141,10 +142,12 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
                 Change Address
               </button></a
             >
+            </div>
           </div>
           <% }else{ %>
-            <a href="/user-dashboard">Add Address</a>
+            <a href="/user-dashboard" style="margin: 100px;border: 1px solid black;margin-top: 250px;color: blue;">Add Address</a>
             <% } %>
+
           <div style="margin-left: 20px; margin-top: 175px;background-color: aliceblue;" class="placeorder">
             <p id="paymentErr" style="color: red;display: none;">select any payment Method</p>
             <div>
@@ -154,6 +157,10 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
             <div>
               <input class="placeorder" id="payment" type="radio" value="ONLINE" name="payment" />
               <label for="">Online Payment</label>
+            </div>
+            <div>
+              <input class="placeorder" id="payment" type="radio" value="WALLET" name="payment" />
+              <label for="">Wallet</label>
             </div>
             <button   id="place-order" class="submit check_out placeorder" style="margin-bottom: 20px;">
               Place Order
@@ -168,12 +175,59 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
                     </div> -->
         </div>
 
+
+
+
         <div class="clearfix"></div>
 
         <div class="clearfix"></div>
       </div>
     </div>
   </div>
+    <% console.log(wallet) %>
+          <!--  -->
+          <div class="ads-grid_shop" style="max-width: 50%;margin-left: 500px;">
+            <div class="shop_inner_inf">
+                <div class="privacy about">
+                    <h3>Pay<span>ment</span></h3>
+                    <!--/tabs-->
+                    <div class="responsive_tabs" style="border: 1px solid gainsboro;">
+                        <div id="horizontalTab" style="border: 1px solid gainsboro;">
+                            <ul class="resp-tabs-list" >
+                                <li>Pay Using Wallet</li>
+                           
+                            </ul>
+                            <div class="resp-tabs-container" >
+                           
+
+                                <div class="tab1" style="display: flex;">
+                                  <p id="wallet-err" style="color: red;display: none;">Insufficent Balance</p>
+                                  <div>
+                                  <label for="wallet-balance" style="font-weight: bold;">Wallet Balance</label>
+                                  <span><h1 id="payment" data-id="<%=wallet?.balance?.amount%>" class="wallet-balance">₹ <%=wallet?.balance?.amount %></h1></span>
+                                </div>
+                                
+                                <div>
+                                  <button id="wallet-btn" style="background-color: black;color: white;padding: 10px; font: bold;">Pay Using Wallet</button>
+                                </div>
+                                    
+                                  </div>
+                              </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--//tabs-->
+                </div>
+        
+            </div>
+            <!-- //payment -->
+        
+            <div class="clearfix"></div>
+        </div>
+          <!--  -->
+
+
   <!-- //top products -->
   <div class="mid_slider_w3lsagile">
     <div class="col-md-3 mid_slider_text">
@@ -394,7 +448,11 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
   const qty=document.querySelector('#qty');
   const insufficentQtyErr=document.querySelectorAll('#insufficent-stock')
   const paymentErr=document.querySelector('#paymentErr')
+  const walletBtn=document.querySelector('#wallet-btn')
+  const walletBalanceEl=document.querySelector('.wallet-balance')
+  const walletErr=document.querySelector('#wallet-err');
 
+  walletBalance=walletBalanceEl.getAttribute('data-id')
   let paymentMode;
 
   let totalAmountAfterCoupon=priceAfterCoupon.textContent
@@ -404,17 +462,36 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
       if(this.checked) paymentErr.style.display="none"
       if (this.checked && paymentMethod.value === "COD") {
         paymentMode = "COD";
-      } else {
+      } else if(this.checked && paymentMethod.value==="ONLINE") {
         paymentMode = "ONLINE";
       }
     });
   });
+
+
+  //If user Select wallet option
+  //place order after checking wallet 
+  //Throw error if Balance is insufficent 
+  walletBtn.addEventListener('click',function (event) {
+    paymentMode='WALLET'
+    if(Number(walletBalance)<Number(priceAfterCoupon.textContent)){
+        walletErr.style.display="block"
+    }
+    
+    console.log(event)
+    event.preventDefault()
+    // placeOrder()
+  })
 
   placeOrderBtn.addEventListener("click", function (event) {
     if(!paymentMode){
       paymentErr.style.display='block'
       event.preventDefault()
     }
+    placeOrder()
+  });
+
+  function placeOrder () {
     fetch("/place-order", {
       method: "POST",
       headers: {
@@ -452,7 +529,10 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
 
       })
       .catch((error) => console.log(error));
-  });
+  }
+
+
+
 
   addCoupon.addEventListener('click',function () {
     modalBg.style.display="block"

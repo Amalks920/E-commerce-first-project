@@ -123,8 +123,8 @@ const placeOrder = async (req, res, next) => {
         .json({ success: true, url: `/razor-pay?oid=${order._id}` });
     }
 
-    // await cartModal.deleteOne({user:req.session.user._id})
-    // res.status(200).json({ response: order });
+    await cartModal.deleteOne({user:req.session.user._id})
+     res.status(200).json({ response: order });
   } catch (error) {
     console.log(error);
   }

@@ -7,6 +7,7 @@ const MailGen = require("mailgen");
 const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
 const userSchema = require("../model/userSchema");
+const walletModal = require("../model/walletModal");
 
 
 
@@ -32,6 +33,7 @@ const createUser = expressAsycnHandler(async (req, res) => {
       if (!user.username || !user.email || !user.password)
         return res.status(401).json({ err: "something missing" });
 
+      await walletModal.create({user_id:user?._id})
       res.redirect("/loginOrSignup");
     } catch (error) {
       console.log("db error");

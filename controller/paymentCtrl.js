@@ -36,6 +36,16 @@ const getPaymentPage=async (req, res) => {
     } else res.status(400).json({ success: false });
   }
 
+const payment=async (req,res,next) => {
+  try {
+    res.render('user/payment.ejs',
+    {layout:'./layout/homeLayout.ejs',isLoggedIn:true})
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports={
-    getPaymentPage,checkPayment
+    getPaymentPage,checkPayment,
+    payment
 }

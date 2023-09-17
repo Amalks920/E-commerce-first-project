@@ -10,6 +10,18 @@
   </span>
 </div>
 
+<div id="modalBgDeleteProd" style="border: 2px solid red; position: absolute;width: 100vw;z-index: 5;background-color: black;opacity:0.2 ;display: none;height: 100%;">
+
+</div>
+
+<div id="cancel-product-modal" style="background-color: white;opacity: 1; width: 800px;height: 400px;margin-top: 200px;margin-left: 650px;position: fixed;z-index: 6;display: none;">
+  <h2 style="text-align: center;margin-top: 50px;">Do You Want to Cancel Order?</h2>
+  <span style="display: flex;justify-content: center;gap: 15px;margin-top: 100px;">
+    <button id="cancleBtnProduct" style="width: 100px;height: 40px;background-color: red;color: white;">Cancel</button>
+    <button id="exitBtnProduct" style="width: 100px;height: 40px;background-color: blue;color: white;">Exit</button>
+  </span>
+</div>
+
 
 <div class="ads-grid_shop">
     <div class="shop_inner_inf">
@@ -28,6 +40,7 @@
                 <th>Quality</th>
                 <th>Product Name</th>
   
+                <th>Price</th>
                 <th>Price</th>
                
               </tr>
@@ -54,10 +67,11 @@
                 <td class="invert"><h3><%=item.productId.productname %></h3></td>
   
                 <td class="invert"><h3>₹ <%=item.productId.price %></h3></td>
-                <!-- <td class="invert">
+                <td class="invert">
                   <div class="rem">
-                    
-                </td> -->
+                  </div>
+                  <button id="product-cancel" style="background-color: red;color: white;">Cancel</button> 
+                </td>
               </tr>
             <% }) %>
             
@@ -144,3 +158,5 @@
       .catch((error) => console.error(error));
     }
   </script>
+
+  <script src="/javascript/orderDetails.js"></script>

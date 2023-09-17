@@ -54,7 +54,7 @@ const {
   cancelOrder,
   editOrder,
 } = require("../controller/orderCtrl");
-const { getPaymentPage, checkPayment } = require("../controller/paymentCtrl");
+const { getPaymentPage, checkPayment, payment } = require("../controller/paymentCtrl");
 
 router.get("/", setCacheControl, getHomePageNotLoggedIn);
 
@@ -185,6 +185,12 @@ router.post(
   setCacheControl,
   authorizationMiddleware,
   checkPayment
+)
+
+
+router.get(
+  '/payment-page',
+  payment
 )
 
 
