@@ -31,7 +31,10 @@ const getPaymentPage=async (req, res) => {
         { "paymentData.id": razorpayOrderId },
         { orderStatus: "placed" }
       );
-      await cartModal.findOneAndUpdate({ user: userId }, { products: [] });
+      
+      await cartModal.deleteOne({ user: req.session.user._id });
+
+      // await cartModal.findOneAndUpdate({ user: userId }, { products: [] });
       res.status(200).json({ success: true });
     } else res.status(400).json({ success: false });
   }

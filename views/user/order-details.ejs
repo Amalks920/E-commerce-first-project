@@ -15,9 +15,9 @@
 </div>
 
 <div id="cancel-product-modal" style="background-color: white;opacity: 1; width: 800px;height: 400px;margin-top: 200px;margin-left: 650px;position: fixed;z-index: 6;display: none;">
-  <h2 style="text-align: center;margin-top: 50px;">Do You Want to Cancel Order?</h2>
+  <h2 style="text-align: center;margin-top: 50px;">Do You Want to Cancel the Product?</h2>
   <span style="display: flex;justify-content: center;gap: 15px;margin-top: 100px;">
-    <button id="cancleBtnProduct" style="width: 100px;height: 40px;background-color: red;color: white;">Cancel</button>
+    <button id="cancelBtnProduct" style="width: 100px;height: 40px;background-color: red;color: white;">Cancel</button>
     <button id="exitBtnProduct" style="width: 100px;height: 40px;background-color: blue;color: white;">Exit</button>
   </span>
 </div>
@@ -48,8 +48,10 @@
             </thead>
             <tbody>
             <% orders.items.forEach((item,index)=>{ %>
-                <% console.log(orders._id) %>
+               
                 <input type="text" value="<%=orders._id -%>" name="" id="orderId" hidden>
+                <input type="text" value="<%=item._id -%>" name="" id="productId" hidden>
+
               <tr class="rem1">
                 <td class="invert"><h3><%=index+1 -%></h3></td>
                 <td class="invert-image">
@@ -61,16 +63,27 @@
                       style="width: 250px"
                   /></a>
                 </td>
-                <td class="invert">
+                <!-- <td class="invert">
                 <h3> <%=item.quantity %></h3>
-                </td>
+                </td> -->
+
+                <td class="invert">
+									<div class="quantity">
+										<div class="quantity-select">
+											<div class="entry value-minus" data-id="<%=item.quantity %>">&nbsp;</div>
+											<div class="entry value"><span><%=item.quantity %></span></div>
+											<div class="entry value-plus active" data-id="<%=item.quantity %>">&nbsp;</div>
+										</div>
+									</div>
+								</td>
+
                 <td class="invert"><h3><%=item.productId.productname %></h3></td>
   
                 <td class="invert"><h3>₹ <%=item.productId.price %></h3></td>
                 <td class="invert">
                   <div class="rem">
                   </div>
-                  <button id="product-cancel" style="background-color: red;color: white;">Cancel</button> 
+                  <button id="product-cancel" data-id="<%=item?.productId._id %>" style="background-color: red;color: white;">Cancel</button> 
                 </td>
               </tr>
             <% }) %>
@@ -103,60 +116,7 @@
     <!-- //newsletter-->
   </div>
 
-  <script>
-    const cancelBtn=document.querySelector('#cancel-btn')
-    const orderId=document.querySelector('#orderId').value;
-    
-    // modal
-    const modalBg=document.querySelector('#modalbgo')
-    const deleteModal=document.querySelector('#delete-modalo')
-    const deleteModalBtn=document.querySelector('#deletebtno')
-    const cancelModalBtn=document.querySelector('#cancelbtno')
-   
-    cancelBtn.addEventListener('click',function () {
-      modalBg.style.display='block';
-      deleteModal.style.display='block';
-     
-    })
 
-    cancelModalBtn.addEventListener('click', function () {
-      modalBg.style.display='none';
-      deleteModal.style.display='none';
-      
-    })
-
-    deleteModalBtn.addEventListener('click', function () {
-      handleOrderCancel()
-    })
-    
-
-    // cancelBtn.addEventListener('click',function () {
-    //     fetch(`/cancel-order/${orderId}`, {
-    //   method: "GET",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //    window.location='http://localhost:5000/view-orders'
-    //   })
-    //   .catch((error) => console.error(error));
-    // })
-
-    function handleOrderCancel(){
-      fetch(`/cancel-order/${orderId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-       window.location='http://localhost:5000/view-orders'
-      })
-      .catch((error) => console.error(error));
-    }
-  </script>
+ 
 
   <script src="/javascript/orderDetails.js"></script>

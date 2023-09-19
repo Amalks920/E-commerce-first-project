@@ -13,6 +13,7 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
     Minimum Amount : <span id="minimumAmount" class="coupon-details"> <%=coupon.minimumAmount %></span>
     Expiry : <sapn id="expirationDate" class="coupon-details"> <%=coupon.expirationDate %></span>
       <input type="text" id="discountType" value="<%=coupon?.discountType %>">
+      <input type="text" id="couponId" value="<%=coupon?._id %>" hidden>
   </div>
   <% }) %>
 </div>
@@ -107,7 +108,8 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
         <div
           class="col-md-6 address_form"
           style=" display: flex;background-color: aliceblue; margin-bottom: 30px;">
-          <% if(address?.length!=0){ %>
+          
+          <% if(address?.length!=0 && address){ %>
 
          
           <div style="background-color: aliceblue; width: 50%;padding: 20px;">
@@ -204,7 +206,7 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
                                   <p id="wallet-err" style="color: red;display: none;">Insufficent Balance</p>
                                   <div>
                                   <label for="wallet-balance" style="font-weight: bold;">Wallet Balance</label>
-                                  <span><h1 id="payment" data-id="<%=wallet?.balance?.amount%>" class="wallet-balance">₹ <%=wallet?.balance?.amount %></h1></span>
+                                  <span>₹ <h1 id="payment" data-id="<%=wallet?.amount%>" class="wallet-balance"><%=wallet?.amount %></h1></span>
                                 </div>
                                 
                                 <div>
@@ -454,6 +456,7 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
 
   walletBalance=walletBalanceEl.getAttribute('data-id')
   let paymentMode;
+  let couponData
 
   let totalAmountAfterCoupon=priceAfterCoupon.textContent
  
@@ -474,13 +477,15 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
   //Throw error if Balance is insufficent 
   walletBtn.addEventListener('click',function (event) {
     paymentMode='WALLET'
+    console.log(walletBalance,priceAfterCoupon.textContent)
     if(Number(walletBalance)<Number(priceAfterCoupon.textContent)){
         walletErr.style.display="block"
+    }else{
+
     }
     
-    console.log(event)
-    event.preventDefault()
-    // placeOrder()
+    
+    placeOrder()
   })
 
   placeOrderBtn.addEventListener("click", function (event) {
@@ -497,7 +502,7 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ totalAmountAfterCoupon, paymentMode }),
+      body: JSON.stringify({ totalAmountAfterCoupon, paymentMode,couponId:couponData?.couponId }),
     })
       .then((response) => {
         //
@@ -546,7 +551,7 @@ const minimumAmount=item.querySelector('#minimumAmount');
 const expiryDate=item.querySelector('#expirationDate');
 const discountType=item.querySelector('#discountType')
 const selectBtn=item.querySelector('#select-btn');
-
+const couponId=item.querySelector('#couponId')
 
 
 couponData=JSON.parse(localStorage?.getItem('coupon'))
@@ -583,7 +588,8 @@ selectBtn.addEventListener('click',function () {
     discountAmount:discountAmount.textContent,
     expiryDate:expiryDate.textContent,
     minimumAmount:minimumAmount.textContent,
-    discountType:discountType?.value
+    discountType:discountType?.value,
+    couponId:couponId.value
   }
   if(Number(minimumAmount.textContent>totalAmount)){
     return alert('minimum Amount in Your cart should be '+minimumAmount.textContent)

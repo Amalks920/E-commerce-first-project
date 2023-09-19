@@ -15,6 +15,7 @@
         <div class="card-body">
             <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5">
                 <% data.forEach((product)=>{ %>
+                    <a href="">
                 <div class="col">
                     <div class="card card-product-grid">
                         <a href="#" class="img-wrap"> <img src="/images/uploads/<%=product?.images[0]%>" alt="Product"> </a>
@@ -28,6 +29,7 @@
                         </div>
                     </div> <!-- card-product  end// -->
                 </div> <!-- col.// -->
+            </a>
                <% }) %>
             </div> <!-- row.// -->
         </div> <!-- card-body end// -->

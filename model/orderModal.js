@@ -22,6 +22,12 @@ const orderSchema = new mongoose.Schema({
 				required: true,
 				min: 0,
 			},
+			status:{
+				type: String,
+				enum: ['pending','Delivered','placed','Cancelled'],
+				default: 'pending',
+			},
+			
 		},
 	],
 	orderStatus: {
@@ -50,14 +56,14 @@ const orderSchema = new mongoose.Schema({
 		ref:'Address'
 	},
 
-	// coupon: {
-	// 	type: mongoose.Schema.ObjectId,
-	// 	ref: 'Coupon',
-	//   },
-	//   discountAmount: {
-	// 	type: Number,
-	// 	default: 0,
-	//   },
+	coupon: {
+		type: mongoose.Schema.ObjectId,
+		ref: 'Coupon',
+	  },
+	  discountAmount: {
+		type: Number,
+		default: 0,
+	  },
 	//   finalPrice: {
 	// 	type: Number,
 	// 	required: true,

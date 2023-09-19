@@ -9,7 +9,8 @@ const { setCacheControl } = require('../middlewares/cacheControllMiddleware');
 const { addCategory, addCategoryPost, viewCategory } = require('../controller/categoryCtrl');
 const { getViewProducts, getEditProduct, editProductPost, deleteImage } = require("../controller/productCtrl");
 const { getViewUsers, blockUser } = require('../controller/userCtrl')
-const {viewOrdersAdmin,editOrder}=require('../controller/orderCtrl')
+const {viewOrdersAdmin,editOrder, getOrderProducts, cancelOrder}=require('../controller/orderCtrl');
+const { set } = require("lodash");
 
 
 
@@ -40,8 +41,9 @@ router.post('/remove-images', setCacheControl, adminAuthorizationMiddleware, del
 
 
 router.get('/view-orders',setCacheControl,adminAuthorizationMiddleware,viewOrdersAdmin);
+router.get('/order-products/:id',setCacheControl,adminAuthorizationMiddleware,getOrderProducts)
 
-router.put("/edit-order-status",adminAuthorizationMiddleware,editOrder);
+router.post("/edit-order-status/:id",adminAuthorizationMiddleware,cancelOrder);
 
 router.get('/add-coupon',setCacheControl,adminAuthorizationMiddleware,addCoupon)
 router.post('/add-coupon',setCacheControl,adminAuthorizationMiddleware,addCouponPost)

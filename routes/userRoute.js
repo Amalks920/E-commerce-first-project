@@ -141,7 +141,7 @@ router.post(
 
 router.get("/order-page", setCacheControl, authorizationMiddleware, orderPage);
 
-router.get(
+router.post(
   "/cancel-order/:id",
   setCacheControl,
   authorizationMiddleware,

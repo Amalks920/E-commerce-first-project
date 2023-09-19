@@ -16,6 +16,7 @@ const checkout = async (req, res, next) => {
     const selectedAddress = address?.address?.filter((address) => {
       return address?.isSelected === true;
     });
+    console.log(selectedAddress)
     console.log(selectedAddress);
     res.render("user/checkout.ejs", {
       layout: "./layout/homeLayout.ejs",

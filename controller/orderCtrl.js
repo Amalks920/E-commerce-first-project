@@ -4,6 +4,8 @@ const orderModal = require("../model/orderModal");
 const productModal = require("../model/productModal");
 const razorpay = require("../config/razorpay");
 const Razorpay = require("razorpay");
+const walletModal=require('../model/walletModal');
+const { disconnect } = require("mongoose");
 
 const placeOrder = async (req, res, next) => {
   const userId = req.session.user._id;
@@ -55,6 +57,8 @@ const placeOrder = async (req, res, next) => {
     const orderProducts = cart[0].items;
     let grandTotal = req.body.totalAmountAfterCoupon;
     let paymentMode = req.body.paymentMode;
+    let coupon=req?.body?.couponId;
+
 
     // selectedAddress=Object.assign({},selectedAddress)
     const order = await orderModal.create({
@@ -63,6 +67,7 @@ const placeOrder = async (req, res, next) => {
       totalAmount: grandTotal,
       paymentMode: paymentMode,
       address: address._id,
+      coupon:coupon
     });
 
     let errorMessages = [];
@@ -118,13 +123,14 @@ const placeOrder = async (req, res, next) => {
       order.paymentData = razorpay_order;
       await order.save();
 
+      await cartModal.deleteOne({ user: req.session.user._id });
       return res
         .status(200)
         .json({ success: true, url: `/razor-pay?oid=${order._id}` });
     }
 
-    await cartModal.deleteOne({user:req.session.user._id})
-     res.status(200).json({ response: order });
+    await cartModal.deleteOne({ user: req.session.user._id });
+    res.status(200).json({ response: order });
   } catch (error) {
     console.log(error);
   }
@@ -144,12 +150,16 @@ const orderPage = async (req, res, next) => {
 const viewOrders = async (req, res, next) => {
   try {
     // const allOrders = (await orderModal.find({ user: req.session.user._id }))
-
-    const allOrders = await orderModal.aggregate([
+    console.log(req.session.user._id)
+    let allOrders = await orderModal.aggregate([
       {
+      
+         
+          
+  
         $match: {
           orderStatus: {
-            $nin: ['Delivered', 'Cancelled'], // Use $nin (not in) to exclude specific statuses
+            $nin: ["Delivered", "Cancelled"], // Use $nin (not in) to exclude specific statuses
           },
         },
       },
@@ -159,6 +169,11 @@ const viewOrders = async (req, res, next) => {
         },
       },
     ]);
+   console.log(allOrders)
+
+   allOrders=allOrders.filter((order,index)=>{
+      return order.user==req.session.user._id
+   })
 
     res.render("user/view-orders", {
       layout: "./layout/homeLayout.ejs",
@@ -172,10 +187,13 @@ const viewOrders = async (req, res, next) => {
 
 const orderDetails = async (req, res, next) => {
   try {
-    const orders = await orderModal
+    let orders = await orderModal
       .findById(req.params.id)
       .populate("items.productId")
       .populate("address");
+     orders.items= orders?.items.filter((item,index)=>{
+        return item.status!="Cancelled"
+      })
     res.render("user/order-details.ejs", {
       layout: "./layout/homeLayout.ejs",
       isLoggedIn: true,
@@ -186,11 +204,85 @@ const orderDetails = async (req, res, next) => {
   }
 };
 
+const getOrderProducts=async (req,res,next) => {
+  console.log("req.params.id")
+  console.log(req.params.id)
+  try {
+    const order=await orderModal.findById(req.params.id).populate('items.productId')
+    .populate('user').populate('address')
+    console.log(order)
+    res.render('admin/order-product',{layout:'./layout/adminLayout.ejs'
+    ,isLoggedIn:true,order:order,req:req})
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const cancelOrder = async (req, res, next) => {
   try {
-    const updatedOrder = await orderModal.findByIdAndUpdate(req.params.id, {
-      orderStatus: "Cancelled",
+    let orderStatus=req.body.status
+    console.log(req.params, req.query);
+    console.log(req.query.productId)
+
+    const order=await orderModal.findById(req.params.id)
+    if (!order) {
+      throw new Error('Order not found');
+    }
+
+
+    if(req?.query?.productId){
+    const itemToUpdate = order.items.find(item => item.productId.equals(req.query.productId));
+    
+
+    if (!itemToUpdate) {
+      throw new Error('Item not found in the order');
+    }
+
+   
+
+    if(orderStatus==="Cancelled"){
+      const order=await orderModal.findById(req.params.id).populate('coupon');
+      discountAmount=order.coupon.discountAmount
+      let cancelledQty=itemToUpdate.quantity-req.body.qty
+      if(itemToUpdate?.quantity-req?.body?.qty!=0){
+        itemToUpdate.quantity=req.body.qty;
+        order.totalAmount=(itemToUpdate.price*req.body.qty)-(discountAmount/req.body.qty)
+
+        if(order?.paymentMode==="ONLINE" || "WALLET"){
+        let walletAmountAdd=(cancelledQty*itemToUpdate.price)-(discountAmount/cancelledQty)
+        console.log(walletAmountAdd)
+        
+        
+        const wallet = await walletModal.updateOne(
+          { user_id: req.session.user._id },
+          { $inc: { amount: walletAmountAdd } }
+        );
+        }
+
+      }else{
+        itemToUpdate.status = orderStatus;
+      }
+
+      
+    }
+
+  }else{
+
+    order.items.forEach(item => {
+      item.status = orderStatus;
     });
+
+    await orderModal.findByIdAndUpdate(req.params.id, {
+        orderStatus: orderStatus,
+       });
+
+  }
+    await order.save();
+
+
+    // const updatedOrder = await orderModal.findByIdAndUpdate(req.params.id, {
+    //   orderStatus: "Cancelled",
+    // });
     res.status(200).json({ msg: "success" });
   } catch (error) {
     console.log(error);
@@ -199,12 +291,12 @@ const cancelOrder = async (req, res, next) => {
 
 const viewOrdersAdmin = async (req, res, next) => {
   try {
-    const ITEMS_PER_PAGE=5;
+    const ITEMS_PER_PAGE = 5;
     const orders = await orderModal.aggregate([
       {
         $match: {
           orderStatus: {
-            $nin: ['Delivered', 'Cancelled'], // Use $nin (not in) to exclude specific statuses
+            $nin: ["Delivered", "Cancelled"], // Use $nin (not in) to exclude specific statuses
           },
         },
       },
@@ -232,7 +324,21 @@ const viewOrdersAdmin = async (req, res, next) => {
       },
     ]);
 
-    console.log(Math.ceil(orders.length / 5));
+    // const orders2 = await orderModal.find({}).populate('items.productId').populate('user').populate('address')
+    // console.log("orders2")
+    // console.log(orders2)
+    // console.log('orders2')
+
+
+
+  //  const order2=await  orderModal.findById(req?.params?.id) // Replace 'orderId' with the actual order ID you want to query
+  // .select('items.productId items.quantity items.status paymentMode')
+  // .populate('items.productId', 'productname description price') // Replace with the fields you want to populate
+  // .exec()
+
+
+
+   // console.log(Math.ceil(orders.length / 5));
 
     res.render("admin/view-orders", {
       layout: "./layout/adminLayout.ejs",
@@ -257,7 +363,7 @@ const editOrder = async (req, res, next) => {
 };
 
 module.exports = {
-  placeOrder,
+  placeOrder,getOrderProducts,
   orderPage,
   viewOrders,
   editOrder,

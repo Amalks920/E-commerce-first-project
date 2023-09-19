@@ -7,7 +7,7 @@ const walletSchema = new mongoose.Schema({
     ref:'User',
     required: true,
   },
-  balance: {
+ 
     amount: {
       type: Number,
       required: true,
@@ -19,7 +19,7 @@ const walletSchema = new mongoose.Schema({
         required: true,
       },
       
-  },
+ 
   transactions: [
     {
     //   transaction_id: {
