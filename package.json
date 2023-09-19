@@ -28,7 +28,7 @@
     "nodemailer": "^6.9.4",
     "otp-generator": "^4.0.1",
     "razorpay": "^2.9.2",
-    "sharp": "^0.32.5",
+    "sharp": "^0.32.6",
     "twilio": "^4.13.0",
     "two-step-auth": "^1.1.2"
   },

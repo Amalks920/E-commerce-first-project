@@ -1,0 +1,105 @@
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title"> Add Banners </h2>
+            
+        </div>
+        <div>
+            <input type="text" placeholder="Search Categories" class="form-control bg-white">
+        </div>
+    </div>
+    
+
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <form id="bannerForm" action="/admin/add-banner" method="post" enctype="multipart/form-data">
+                        <p style="color: red;" id="err"></p>
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Banner Name</label>
+                            <input   type="text" id="bannername" name="bannername"  placeholder="Type here" class="form-control input" id="category-name" />
+                        </div>
+
+
+                        <div class="mb-4">
+                            <label for="bannername" class="form-label ">Image</label>
+
+                            <input type="file"  name="images" placeholder="Type here" class="form-control input" id="product_name" multiple/>
+                        </div>
+
+
+                        <!-- <div class="mb-4">
+                            <label class="form-label">Description</label>
+                            <textarea  id="description" type="text" placeholder="Type here"  name="categoryDescription" class="form-control input"></textarea>
+                        </div> -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Edit category</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-9">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                   
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>images</th>
+                                </tr>
+                            </thead>
+                           
+                            <tbody>
+                                
+                                <tr>
+                                    <td class="text-center">
+                                       1
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><img src="" width="30" style="position: absolute;" alt=""></td>
+                                </tr>
+                            
+                            </tbody>
+                            
+                        </table>
+                    </div>
+                </div> <!-- .col// -->
+            </div> <!-- .row // -->
+        </div> <!-- card body .// -->
+    </div> <!-- card .// -->
+   
+</section> <!-- content-main end// -->
+
+<script>
+    const bannerForm = document.getElementById('bannerForm');
+    const bannerNameInput = document.getElementById('bannername');
+    const imagesInput = document.querySelector('input[type="file"]');
+    const submitButton = document.querySelector('button[type="submit"]');
+
+    bannerForm.addEventListener('submit', function (event) {
+        let isValid = true;
+
+        // Reset previous error messages
+        bannerNameInput.classList.remove('is-invalid');
+        imagesInput.classList.remove('is-invalid');
+
+        // Perform validation for each field
+        if (bannerNameInput.value.trim() === '') {
+            isValid = false;
+            bannerNameInput.classList.add('is-invalid');
+        }
+
+        if (imagesInput.files.length === 0) {
+            isValid = false;
+            imagesInput.classList.add('is-invalid');
+        }
+
+        if (!isValid) {
+            event.preventDefault(); // Prevent form submission if validation fails
+        }
+    });
+</script>

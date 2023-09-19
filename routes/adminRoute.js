@@ -11,6 +11,7 @@ const { getViewProducts, getEditProduct, editProductPost, deleteImage } = requir
 const { getViewUsers, blockUser } = require('../controller/userCtrl')
 const {viewOrdersAdmin,editOrder, getOrderProducts, cancelOrder}=require('../controller/orderCtrl');
 const { set } = require("lodash");
+const { getBannerManagementPage, addBannerPost } = require("../controller/bannerCtrl");
 
 
 
@@ -50,6 +51,9 @@ router.post('/add-coupon',setCacheControl,adminAuthorizationMiddleware,addCoupon
 
 router.get('/view-coupon',setCacheControl,adminAuthorizationMiddleware,viewCouponAdmin)
 
+//banner
+router.get('/banner-management',getBannerManagementPage)
+router.post('/add-banner',upload.array("images", 10),addBannerPost)
 
 module.exports = router
 

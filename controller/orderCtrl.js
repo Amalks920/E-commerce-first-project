@@ -129,6 +129,13 @@ const placeOrder = async (req, res, next) => {
         .json({ success: true, url: `/razor-pay?oid=${order._id}` });
     }
 
+    if(paymentMode==="WALLET"){
+      const wallet = await walletModal.updateOne(
+        { user_id: req.session.user._id },
+        { $inc: { amount: -order.totalAmount } }
+      );
+    }
+
     await cartModal.deleteOne({ user: req.session.user._id });
     res.status(200).json({ response: order });
   } catch (error) {
@@ -225,6 +232,7 @@ const cancelOrder = async (req, res, next) => {
     console.log(req.query.productId)
 
     const order=await orderModal.findById(req.params.id)
+    
     if (!order) {
       throw new Error('Order not found');
     }
@@ -242,14 +250,55 @@ const cancelOrder = async (req, res, next) => {
 
     if(orderStatus==="Cancelled"){
       const order=await orderModal.findById(req.params.id).populate('coupon');
-      discountAmount=order.coupon.discountAmount
-      let cancelledQty=itemToUpdate.quantity-req.body.qty
-      if(itemToUpdate?.quantity-req?.body?.qty!=0){
-        itemToUpdate.quantity=req.body.qty;
-        order.totalAmount=(itemToUpdate.price*req.body.qty)-(discountAmount/req.body.qty)
 
-        if(order?.paymentMode==="ONLINE" || "WALLET"){
-        let walletAmountAdd=(cancelledQty*itemToUpdate.price)-(discountAmount/cancelledQty)
+      // If Coupon Applied ot Order
+
+      let totalAmount
+
+     let discountAmount=order?.coupon?.discountAmount
+      
+      if(!discountAmount) discountAmount=0;
+
+      let cancelledQty=itemToUpdate.quantity-req.body.qty
+      
+      console.log(cancelledQty)
+      console.log(req.body.qty)
+      if(req?.body?.qty!=0){
+        
+
+        if(order?.coupon){
+          console.log("("+itemToUpdate.price +"*"+itemToUpdate.quantity+"-"+cancelledQty+"*"+itemToUpdate.price+")-("+discountAmount+"/"+req.body.qty+")")
+          totalAmount=(Number(itemToUpdate.price)*Number(itemToUpdate.quantity)-Number(cancelledQty)*Number(itemToUpdate.price))
+                      -((discountAmount/req.body.qty))
+        //  totalAmount=(itemToUpdate.price*req.body.qty)-(discountAmount/req.body.qty)
+        }else{
+          totalAmount=Number(itemToUpdate.price)*Number(itemToUpdate.quantity)-Number(cancelledQty)*Number(itemToUpdate.price)
+        }
+        itemToUpdate.quantity=req.body.qty;
+       const updated=await orderModal.updateOne({_id:order._id},{$set:{totalAmount:Number(totalAmount)}})
+        console.log(updated)
+
+        // if(order?.paymentMode==="ONLINE" || "WALLET"){
+        // let walletAmountAdd=(cancelledQty*itemToUpdate.price)-(discountAmount/cancelledQty)
+        // console.log(walletAmountAdd)
+        
+        
+        // const wallet = await walletModal.updateOne(
+        //   { user_id: req.session.user._id },
+        //   { $inc: { amount: walletAmountAdd } }
+        // );
+        // }
+
+      }else{
+        itemToUpdate.status = orderStatus;
+      }
+
+      let walletAmountAdd
+
+      if(order?.paymentMode==="ONLINE" || "WALLET"){
+        
+        if(order?.coupon) walletAmountAdd=(cancelledQty*itemToUpdate.price)-(discountAmount/cancelledQty)
+        else walletAmountAdd=(cancelledQty*itemToUpdate.price)
         console.log(walletAmountAdd)
         
         
@@ -258,10 +307,6 @@ const cancelOrder = async (req, res, next) => {
           { $inc: { amount: walletAmountAdd } }
         );
         }
-
-      }else{
-        itemToUpdate.status = orderStatus;
-      }
 
       
     }
