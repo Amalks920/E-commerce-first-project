@@ -1,9 +1,11 @@
 const expressAsyncHandler = require("express-async-handler");
 const sharp = require('sharp');
 const moment = require("moment");
+const { body, validationResult } = require('express-validator');
 const Product=require('../model/productModal');
 const categoryModal = require("../model/categoryModal");
 const productModal = require("../model/productModal");
+const offerModal=require('../model/offerModal');
 
 
 
@@ -14,39 +16,89 @@ const getProduct=expressAsyncHandler(async(req,res,next)=>{
 const getAddProduct=expressAsyncHandler(async(req,res,next)=>{
   try {
     const category = await categoryModal.find();
-    res.render('admin/add-products',{layout:'./layout/adminLayout',data:category})
+    const productOffers = await offerModal.find({ offerType: 'Product' });
+    res.render('admin/add-products',{layout:'./layout/adminLayout',data:category,productOffers:productOffers})
 
   } catch (error) {
-    
+    console.log(error)
   }
 })
 
 
-const addProduct=expressAsyncHandler(async (req, res) => {
+// const addProduct=expressAsyncHandler(async (req, res) => {
+//     let product = req.body;
+//     const images = [];
+//     console.log(req.body,req.file)
+//     if (req.files.length > 0) {
+//     for (let file of req.files) {
+//       const imageName = `cropped_${file.filename}`;
+//       await sharp(file.path)
+//           .resize(920, 920, { fit: "cover" })
+//           .toFile(`./public/images/uploads/${imageName}`);
+
+//       images.push(imageName);
+//       }
+//       product.images = images;    
+//     } else {
+//       return res.status(400).json({ success: false, message: 'Please choose product image files' });
+//     }
+
+//     try {console.log(product)
+//     await Product.create(product);
+//     res.redirect("/admin/product/add-product");
+//     } catch (error) {
+//       console.log(error.message);
+//     }
+//   },)
+
+  const addProduct = expressAsyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+  
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, errors: errors.array() });
+    }
+  
     let product = req.body;
     const images = [];
-    console.log(req.body,req.file)
+  
     if (req.files.length > 0) {
-    for (let file of req.files) {
-      const imageName = `cropped_${file.filename}`;
-      await sharp(file.path)
-          .resize(920, 920, { fit: "cover" })
+      for (let file of req.files) {
+        const imageName = `cropped_${file.filename}`;
+        await sharp(file.path)
+          .resize(920, 920, { fit: 'cover' })
           .toFile(`./public/images/uploads/${imageName}`);
-
-      images.push(imageName);
+  
+        images.push(imageName);
       }
-      product.images = images;    
+      product.images = images;
     } else {
-      return res.status(400).json({ success: false, message: 'Please choose product image files' });
+      return res
+        .status(400)
+        .json({ success: false, message: 'Please choose product image files' });
     }
 
-    try {console.log(product)
-    await Product.create(product);
-    res.redirect("/admin/product/add-product");
+    //check for offfer
+    if(req.body.offer){
+      const productOffer=await offerModal.findById(req.body.offer)
+      console.log("productOffer");
+      if(productOffer.discountType==="Fixed"){
+        req.body.offerPrice=req.body.price-productOffer.discountAmount
+      }else if(productOffer.discountType==="Percentage"){
+        req.body.offerPrice=req.body.price-(req.body.price*(productOffer.discountAmount/100))
+      }
+    }
+    
+  
+    try {
+      await Product.create(product);
+      res.redirect('/admin/product/add-product');
     } catch (error) {
       console.log(error.message);
     }
-  },)
+  });
+  
+ 
+  
 
 const getViewProducts=expressAsyncHandler(async(req,res,next)=>{
 

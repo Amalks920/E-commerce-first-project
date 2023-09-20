@@ -22,9 +22,14 @@
       
         <div class="col-md-8 single-right-left simpleCart_shelfItem">
             <h3><%=data?.productname -%></h3>
+            <% if(data.offerPrice){ %>
+                <p><span class="item_price">₹<%=data?.offerPrice -%></span>
+           <% }else{ %>
             <p><span class="item_price">₹<%=data?.price -%></span>
                 <del></del>
             </p>
+           <% } %>
+
 
             <p><%=data?.description-%></p>
             <div class="rating1">

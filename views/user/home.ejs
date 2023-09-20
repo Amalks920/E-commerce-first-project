@@ -113,7 +113,14 @@
 							</a>
 							<div class="desc">
 								<h2><a href="#"><%=product.productname-%></a></h2>
+								<% if(product.offerPrice===0){ %>
 								<span class="price">₹<%=product.price-%></span>
+								
+								<% }else{ %>
+									<span class="price">₹<%=product.offerPrice-%></span>
+									<span class="price" style="text-decoration: line-through;color: red;">₹<%=product.price-%></span>
+
+								<% } %>
 								<% if(product.stock===0){ %>
 									<h2 style="color: red;">Out of Stock</h2>
 								<% } %>

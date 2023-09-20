@@ -64,7 +64,13 @@
        
           <div class="one-eight text-center">
             <div class="display-tc">
-              ₹<span class="price"> <%=product?.product?.price -%></span>
+              <% if(product?.product?.offerPrice===0){ %>
+                ₹<span class="price"> <%=product?.product?.price -%></span>
+
+             <%  }else{ %>
+              ₹<span class="price"> <%=product?.product?.offerPrice -%></span>
+
+             <% } %>
             </div>
           </div>
 
@@ -102,6 +108,8 @@
           </div>
 
           <div class="one-eight text-center">
+
+            <% if(product?.product?.offerPrice===0){ %>
             <div class="display-tc">
               ₹
               <span class="total-price"
@@ -109,6 +117,15 @@
               >
               
             </div>
+            <%  }else{ %>
+              <div class="display-tc">
+                ₹
+                <span class="total-price"
+                  ><%=product?.quantity*product?.product?.offerPrice-%></span
+                >
+                
+              </div>
+              <%  } %>
           </div>
 
           <div class="one-eight text-center">

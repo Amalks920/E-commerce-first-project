@@ -26,6 +26,11 @@ const productSchema = new mongoose.Schema({
 		required: [true, 'Please enter product price'],
 		min: 0,
 	},
+	offerPrice:{
+		type:Number,
+		default:0
+	},
+
 	stock: {
 		type: Number,
 		required: [true, 'Please enter product stock'],
@@ -70,6 +75,11 @@ const productSchema = new mongoose.Schema({
 		enum: ['Listed', 'Delisted', 'draft'],
 		required: true,
         default:'Listed'
+	},
+	offer:{
+		type:mongoose.Schema.ObjectId,
+		ref:"Offer",
+		default:null
 	}
 	
 });

@@ -11,9 +11,20 @@ const getAddOffers=async(req,res,next)=>{
     }
 }
 
+const getEditOffers=async(req,res,next)=>{
+  try {
+    const offerId=req.params.offerId;
+    const offer=await offerModal.findById(offerId)
+      res.render('admin/edit-offers',{layout:'./layout/adminLayout.ejs',offer})
+  } catch (error) {
+      console.log(error)
+  }
+}
+
 const viewOffers=async(req,res,next)=>{
     try {
-        res.render('admin/view-offers',{layout:'./layout/adminLayout.ejs'})
+        const offers=await offerModal.find({})
+        res.render('admin/view-offers',{layout:'./layout/adminLayout.ejs',offers:offers})
     } catch (error) {
         console.log(error)
     }
@@ -80,15 +91,25 @@ const addOffer=async(req,res,next)=>{
         });
         
         res.redirect('/admin/view-offers');
-      } catch (error) {
+      } catch (error) {offertitle
         console.log(error);
         res.status(500).send('Internal Server Error');
-      }
+      }offertitle
     }
 
+const editOffer=async(req,res,next)=>{
+  const offerId=req.params.offerId
+  try {
+    await offerModal.updateOne({_id:offerId},req.body)
+    res.redirect('/admin/view-offers')
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 
 module.exports={
     getAddOffers,viewOffers,
-    addOffer
+    addOffer,editOffer,
+    getEditOffers
 }

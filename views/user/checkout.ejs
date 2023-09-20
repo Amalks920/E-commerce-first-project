@@ -68,7 +68,12 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
               </td>
               <td class="invert"><%=product?.product?.productname -%></td>
 
-              <td class="invert"><%=product?.product?.price -%></td>
+              <%if(product?.product?.offerPrice===0){ %>
+                <td class="invert"><%=product?.product?.price -%></td>
+              <% }else{ %>
+                <td class="invert"><%=product?.product?.offerPrice -%></td>
+
+              <% } %>
               <td class="invert">
                 <div class="rem">
                   <div class="close1"></div>
@@ -86,19 +91,40 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
             <% cart?.products.forEach((product,index)=>{ %>
             <li>
               Product<%=index+1 %> <i>-</i>
-              <span>₹<%=product?.product?.price -%> </span>
+              
+              <%if(product?.product?.offerPrice===0){ %>
+                <span>₹<%=product?.product?.price -%> </span>
+              <% }else{ %>
+                <span>₹<%=product?.product?.offerPrice -%> </span>
+              <% } %>
+              
             </li>
             <% })%>
             <li>Total Service Charges <i>-</i> <span>₹00.00</span></li>
 
             <li>
               Total <i>-</i>
-              <span id="total-amount">
-                <% var total = cart?.products.map((product) => { 
-                return product.product.price * product.quantity; }).reduce(
-                function (total, acc) { return Number(total) + Number(acc); }, 0); %>
-                 <%= total %>
-              </span>
+              
+                <span id="total-amount">
+                  <% 
+                  var total = cart?.products.map((product) => { 
+                    if (product?.product?.offerPrice === 0) {
+                      return product.product.price * product.quantity;
+                    } else {
+                      return product.product.offerPrice * product.quantity;
+                    }
+                  }).reduce(function (total, acc) { 
+                    return Number(total) + Number(acc); 
+                  }, 0); 
+                  %>
+                  
+                  <%= total %>
+
+                </span> 
+              
+                
+
+
             </li>
             <li id="price-after-coupon-el">
               Price After Coupon  <span id="priceAfterCoupon"><%=total %></span>
@@ -480,12 +506,13 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
     console.log(walletBalance,priceAfterCoupon.textContent)
     if(Number(walletBalance)<Number(priceAfterCoupon.textContent)){
         walletErr.style.display="block"
+        event.preventDefault()
     }else{
-
+      placeOrder()
     }
     
     
-    placeOrder()
+   
   })
 
   placeOrderBtn.addEventListener("click", function (event) {

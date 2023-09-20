@@ -13,7 +13,7 @@ const {viewOrdersAdmin,editOrder, getOrderProducts, cancelOrder}=require('../con
 const { set } = require("lodash");
 const { getBannerManagementPage, addBannerPost } = require("../controller/bannerCtrl");
 
-const {getAddOffers, viewOffers, addOffer}=require('../controller/offerCtrl')
+const {getAddOffers, viewOffers, addOffer, getEditOffers, editOffer}=require('../controller/offerCtrl')
 
 
 
@@ -64,6 +64,8 @@ router.post('/add-banner',upload.array("images", 10),addBannerPost)
 router.get('/add-offers',getAddOffers)
 router.get('/view-offers',viewOffers)
 router.post('/add-offer',addOffer)
+router.get('/edit-offer/:offerId',getEditOffers)
+router.post('/edit-offer/:offerId',editOffer)
 
 
 module.exports = router

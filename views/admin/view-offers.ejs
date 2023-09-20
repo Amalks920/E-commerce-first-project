@@ -20,16 +20,26 @@
                             </div>
                         </a>
                     </div>
-                    <div class="col-lg-2 col-sm-2 col-4 col-price"> <h4>Offer Description</h4> </div>
+
+                    <div class="col-lg-2 col-sm-2 col-4 col-price"> <h4>Offer Discount</h4> </div>
+
+                    <div class="col-lg-2 col-sm-2 col-4 col-status">
+                        <h4>Offer Type</h4>
+                    </div>
+
+                    <div class="col-lg-2 col-sm-2 col-4 col-status">
+                        <h4>Discount Type</h4>
+                    </div>
                     <div class="col-lg-2 col-sm-2 col-4 col-status">
                         <h4>Expiry</h4>
                     </div>
 
-
                 </div> <!-- row .// -->
             </article> <!-- itemlist  .// -->
         
+            <% offers.forEach((offer,index)=>{ %>
 
+           
              <article id="table-body" data-id="" class="itemlist">
                 <div  class="row align-items-center">
 
@@ -37,29 +47,43 @@
                         <a class="itemside" href="#">
 
                             <div class="info">
-                                <input type="text">
+                                <p><%=offer?.offertitle %></p>
                                 <!-- <h6 class="mb-0"></h6> -->
                             </div>
                         </a>
                     </div>
-                    <div class="col-lg-2 col-sm-2 col-4 col-price"> <input type="text"> </div>
+                    
+                    <div class="col-lg-2 col-sm-2 col-8 flex-grow-1 col-name">
+                        <a class="itemside" href="#">
+
+                            <div class="info">
+                                <p><%=offer?.discountAmount %></p>
+                                <!-- <h6 class="mb-0"></h6> -->
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-sm-2 col-4 col-price"><%=offer?.offerType %></div>
+
                     <div class="col-lg-2 col-sm-2 col-4 col-status">
-                        <input type="text">
+                        <%=offer?.discountType %>
                     </div>
 
                     <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                        <a href="" class="btn btn-sm font-sm rounded btn-brand">
+                     <p><%=offer?.expirationDate %></p>
+                    </div>
+                    <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                        <a href="/admin/edit-offer/<%=offer?._id %>" data-id="<%=offer?._id %>" class="btn btn-sm font-sm rounded btn-brand">
                             <i class="material-icons md-edit"></i> Edit
                         </a>
                         <input type="text" value="" name="" id="catId" hidden>
-                        <a href="#" id="delete" data-id="" class="btn btn-sm font-sm btn-light rounded">
+                        <a href="/admin/delete-offer/<%=offer?._id %>" id="delete" data-id="<%=offer?._id %>" class="btn btn-sm font-sm btn-light rounded">
                             <i class="material-icons md-delete_forever"></i> Delete
                         </a>
                     </div>
                 </div> <!-- row .// -->
             </article> <!-- itemlist  .// -->
             
-
+            <% }) %>
           
         </div> <!-- card-body end// -->
     </div> <!-- card end// -->

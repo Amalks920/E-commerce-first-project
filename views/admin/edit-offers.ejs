@@ -1,7 +1,9 @@
 <section class="content-main">
+    <%console.log("offer")%>
+    <%console.log(offer)%>
     <form
       id="offerForm"
-      action="/admin/add-offer"
+      action="/admin/edit-offer/<%=offer._id %>"
       method="post"
       enctype="application/x-www-form-urlencoded">
       <div class="row">
@@ -27,7 +29,7 @@
                 <input
                   type="text"
                   name="offertitle"
-                  value="<%=offer?.offertitle %>"
+                  value="offer.offertitle"
                   placeholder="Type here"
                   class="form-control"
                   id="offerName" />
@@ -36,11 +38,10 @@
                 <label class="form-label">Full description</label>
                 <textarea
                 id="description"
-                  value="<%=offer?.offerDescription %>"
                   name="offerdescription"
                   placeholder="Type here"
                   class="form-control"
-                  rows="4"></textarea>
+                  rows="4"><%=offer.offerdescription %></textarea>
               </div>
               <div class="row">
                 <div class="col-lg-4">
@@ -50,6 +51,7 @@
                       <input
                         placeholder="$"
                         id="discount"
+                        value="<%=offer.discountAmount %>"
                         name="discountAmount"
                         type="number"
                         class="form-control" />
@@ -63,12 +65,12 @@
               <div class="row">
                 <div class="col-lg-4">
                   <div class="mb-4">
-                    <label  class="form-label">Discount Amount / Precentge</label>
+                    <label  class="form-label">Expiration Date</label>
                     <div class="row gx-2">
                       <input
                         placeholder="$"
-                        id=""
                         value="<%=offer.expirationDate.toISOString().substr(0, 10) %>"
+                        id=""
                         name="expirationDate"
                         type="date"
                         class="form-control" />
@@ -94,10 +96,11 @@
                     <div class="col-sm-6 mb-3">
                       <label class="form-label">Offer Type</label>
                       <select id="offerType" name="offerType" class="form-select">
-                      <option value="1" disabled >Choose Offer Type</option>
+                      <option value="1" disabled selected>Choose Offer Type</option>
                       <option value="Category" <% if (offer.offerType === "Category") { %> selected <% } %> >Category</option>
                       <option value="Product" <% if (offer.offerType === "Product") { %> selected <% } %> >Product</option>
 
+                       
                       
                       </select>
                     </div>
@@ -117,8 +120,9 @@
                   <label class="form-label">Discount Type</label>
                   <select id="discountType" name="discountType" class="form-select">
                   <option value="1" disabled selected>Choose Category</option>
-                  <option value="Fixed"  >Fixed</option>
-                  <option value="Percentage">Percentage</option>
+                  <option value="Fixed" <% if (offer.discountType === "Fixed") { %> selected <% } %> >Fixed</option>
+                  <option value="Percentage" <% if (offer.discountType === "Percentage") { %> selected <% } %> >Percentage</option>
+
                     
                     </option>
                    
@@ -246,127 +250,3 @@
         }
         
     })
-  
-    // cropSubmitBtn.addEventListener("click", () => {
-    //   imageCropContainer.style.display = "none";
-    // });
-  
-    // imagesInput.addEventListener("change", () => {
-    //   const files = imageInput.files;
-    //   console.log(files[0])
-    //   if (imageCount < 3) {
-    //     const reader = new FileReader();
-  
-    //     reader.onload = function (event) {
-    //       const img = document.createElement("img");
-    //       img.src = event.target.result;
-    //       img.alt = "Image " + (imageCount + 1);
-  
-         
-  
-    //       imageContainer.appendChild(img);
-    //       imageCount++;
-  
-    //       // Clear the input field after selecting an image
-    //       imagesInput.value = "";
-    //     };
-    //     if (files.length > 0) {
-    //       reader.readAsDataURL(files[0]);
-    //     }
-    //   } else {
-    //     alert("You can upload a maximum of three images.");
-    //     // Clear the input field to prevent further selection
-    //     imagesInput.value = "";
-    //   }
-    // });
-  
-    // imageContainer.addEventListener('click',(event)=>{
-    //   if(event.target.tagName==="IMG"){
-    //     cropImg(event.target)
-       
-    //     crpBtn.style.display="block"
-    //   }
-    // })
-  
-    // images.forEach(image=>{
-    //   console.log(image)
-    //   image.addEventListener('click',()=>{
-    //     console.log(image)
-    //   })
-    // })
-  
-    // img.addEventListener("click", function () {
-            // console.log(img)
-            //call function to create a modal
-          //  imageCropModal(img.src);
-       //   });
-  
-  
-    function imageCropModal(img) {
-      // cropContainer.src = imgSrc;
-      // console.log(crop)
-      // const newImg=document.createElement('img')
-      // newImg.src=img.src
-      // newImg.id="crpImg"
-      // console.log(imageCropContainer.removeChild(imageCropContainer.lastChild))
-      // imageCropContainer.style.display = "block";
-      // imageCropContainer.appendChild(img)
-      cropImg(img);
-    }
-  
-    // Reset previous error messages
-    // productNameInput.classList.remove("is-invalid");
-    // productCategorySelect.classList.remove("is-invalid");
-    // descriptionInput.classList.remove("is-invalid");
-    // mrpInput.classList.remove("is-invalid");
-    // priceInput.classList.remove("is-invalid");
-    // stockInput.classList.remove("is-invalid");
-    // imagesInput.classList.remove("is-invalid");
-  
-    // productForm.addEventListener("submit", function (event) {
-    //   let isValid = true;
-  
-      // Perform validation for each field
-      // if (productNameInput.value.trim() === "") {
-      //   isValid = false;
-      //   productNameInput.classList.add("is-invalid");
-      // }
-  
-      // if (productCategorySelect.value === '1') {
-      //     isValid = false;
-      //     productCategorySelect.classList.add('is-invalid');
-      // }
-  
-  
-      
-  
-      // if (descriptionInput.value.trim() === "") {
-      //   isValid = false;
-      //   descriptionInput.classList.add("is-invalid");
-      // }
-  
-      // if (isNaN(mrpInput.value) || parseFloat(mrpInput.value) <= 0) {
-      //   isValid = false;
-      //   mrpInput.classList.add("is-invalid");
-      // }
-  
-      // if (isNaN(priceInput.value) || parseFloat(priceInput.value) <= 0) {
-      //   isValid = false;
-      //   priceInput.classList.add("is-invalid");
-      // }
-  
-      // if (isNaN(stockInput.value) || parseInt(stockInput.value) < 0) {
-      //   isValid = false;
-      //   stockInput.classList.add("is-invalid");
-      // }
-  
-      // if (imagesInput.files.length === 0) {
-      //   isValid = false;
-      //   imagesInput.classList.add("is-invalid");
-      // }
-  
-      // if (!isValid) {
-      //   event.preventDefault(); // Prevent form submission if validation fails
-      // }
-    // });
-  </script>

@@ -30,6 +30,7 @@ const placeOrder = async (req, res, next) => {
             productId: "$products.product",
             quantity: "$products.quantity",
             price: { $arrayElemAt: ["$productDetails.price", 0] }, // Access the price field
+            offerPrice: { $arrayElemAt: ["$productDetails.offerPrice", 0] },
           },
         },
       },
@@ -240,8 +241,19 @@ const cancelOrder = async (req, res, next) => {
 
     if(req?.query?.productId){
     const itemToUpdate = order.items.find(item => item.productId.equals(req.query.productId));
-    
+    let price
+    console.log(itemToUpdate)
+    console.log("itemToUpdate")
 
+    let productId=itemToUpdate.productId;
+    const product=await productModal.findById(productId)
+
+    if(product.offerPrice===0){
+      price=itemToUpdate.price
+    }else{
+      price=product.offerPrice
+    } 
+    // if(itemToUpdate.offerPrice!=0) itemToUpdate.price=itemToUpdate.offerPrice
     if (!itemToUpdate) {
       throw new Error('Item not found in the order');
     }
@@ -267,12 +279,11 @@ const cancelOrder = async (req, res, next) => {
         
 
         if(order?.coupon){
-          console.log("("+itemToUpdate.price +"*"+itemToUpdate.quantity+"-"+cancelledQty+"*"+itemToUpdate.price+")-("+discountAmount+"/"+req.body.qty+")")
-          totalAmount=(Number(itemToUpdate.price)*Number(itemToUpdate.quantity)-Number(cancelledQty)*Number(itemToUpdate.price))
+          totalAmount=(Number(price)*Number(itemToUpdate.quantity)-Number(cancelledQty)*Number(price))
                       -((discountAmount/req.body.qty))
         //  totalAmount=(itemToUpdate.price*req.body.qty)-(discountAmount/req.body.qty)
         }else{
-          totalAmount=Number(itemToUpdate.price)*Number(itemToUpdate.quantity)-Number(cancelledQty)*Number(itemToUpdate.price)
+          totalAmount=Number(price)*Number(itemToUpdate.quantity)-Number(cancelledQty)*Number(price)
         }
         itemToUpdate.quantity=req.body.qty;
        const updated=await orderModal.updateOne({_id:order._id},{$set:{totalAmount:Number(totalAmount)}})
@@ -291,14 +302,16 @@ const cancelOrder = async (req, res, next) => {
 
       }else{
         itemToUpdate.status = orderStatus;
+        await orderModal.updateOne({_id:order._id},{orderStatus:orderStatus})
+
       }
 
       let walletAmountAdd
 
-      if(order?.paymentMode==="ONLINE" || "WALLET"){
+      if(order?.paymentMode==="ONLINE" || order?.paymentMode=== "WALLET"){
         
-        if(order?.coupon) walletAmountAdd=(cancelledQty*itemToUpdate.price)-(discountAmount/cancelledQty)
-        else walletAmountAdd=(cancelledQty*itemToUpdate.price)
+        if(order?.coupon) walletAmountAdd=(cancelledQty*price)-(discountAmount/cancelledQty)
+        else walletAmountAdd=(cancelledQty*price)
         console.log(walletAmountAdd)
         
         
