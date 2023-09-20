@@ -13,6 +13,11 @@ const bannerSchema = new mongoose.Schema({
 		type: String,
        
 	},
+	offer:{
+		type: mongoose.Schema.ObjectId,
+		ref: 'Offer',
+	},
+
 	isActive: {
 		type: Boolean,
 		default: true,

@@ -247,11 +247,15 @@ const cancelOrder = async (req, res, next) => {
 
     let productId=itemToUpdate.productId;
     const product=await productModal.findById(productId)
-
+    
     if(product.offerPrice===0){
       price=itemToUpdate.price
+      console.log(price)
+      console.log('price')
     }else{
       price=product.offerPrice
+      console.log(price)
+      console.log('offerprice')
     } 
     // if(itemToUpdate.offerPrice!=0) itemToUpdate.price=itemToUpdate.offerPrice
     if (!itemToUpdate) {

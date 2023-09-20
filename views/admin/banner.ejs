@@ -22,6 +22,26 @@
                             <input   type="text" id="bannername" name="bannername"  placeholder="Type here" class="form-control input" id="category-name" />
                         </div>
 
+                        <div class="card mb-4">
+                            <div class="card-header">
+                              <h4>Product Offers</h4>
+                            </div>
+                            <div class="card-body">
+                  
+                              <div class="row gx-2">
+                                <div class="col-sm-6 mb-3">
+                                  <label class="form-label">Product Offer</label>
+                                  <select name="offer" class="form-select">
+                                  <option value="1" disabled selected>Choose Category Offer</option>
+                                  <% productOffers.forEach((offer,index)=>{ %>
+                                    <option value="<%=offer._id %>"><%=offer.offertitle %></option>
+                                 <% }) %>
+                                  
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
                         <div class="mb-4">
                             <label for="bannername" class="form-label ">Image</label>

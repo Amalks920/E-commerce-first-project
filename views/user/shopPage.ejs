@@ -85,11 +85,20 @@
             <div class="col-lg-4 mb-4 text-center">
                 <div class="product-entry border">
                     <a href="/product-page/<%=product?._id -%>" class="prod-img">
-                        <img src="images/uploads/<%=product?.images[0] -%>" class="img-fluid" alt="Free html5 bootstrap 4 template">
+                        <img src="/images/uploads/<%=product?.images[0] -%>" class="img-fluid" alt="Free html5 bootstrap 4 template">
                     </a>
                     <div class="desc">
                         <h2><a href="#"><%=product?.productname -%></a></h2>
-                        <span class="price">₹<%=product?.price -%></span>
+                        
+                        <% if(product.offerPrice===0){ %>
+                            <span class="price">₹<%=product.price-%></span>
+                            
+                            <% }else{ %>
+                                <span class="price">₹<%=product.offerPrice-%></span>
+                                <span class="price" style="text-decoration: line-through;color: red;">₹<%=product.price-%></span>
+
+                            <% } %>
+                            
                         <% if(product.stock===0){ %>
                             <h2 style="color: red;">Out of Stock</h2>
                         <% } %>

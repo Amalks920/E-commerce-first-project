@@ -13,7 +13,7 @@ const {viewOrdersAdmin,editOrder, getOrderProducts, cancelOrder}=require('../con
 const { set } = require("lodash");
 const { getBannerManagementPage, addBannerPost } = require("../controller/bannerCtrl");
 
-const {getAddOffers, viewOffers, addOffer, getEditOffers, editOffer}=require('../controller/offerCtrl')
+const {getAddOffers, viewOffers, addOffer, getEditOffers, editOffer, viewOfferProducts, removeOffer}=require('../controller/offerCtrl')
 
 
 
@@ -59,13 +59,16 @@ router.post('/add-banner',upload.array("images", 10),addBannerPost)
 
 
 
+
 // Offers
 
-router.get('/add-offers',getAddOffers)
-router.get('/view-offers',viewOffers)
-router.post('/add-offer',addOffer)
-router.get('/edit-offer/:offerId',getEditOffers)
-router.post('/edit-offer/:offerId',editOffer)
+router.get('/add-offers',setCacheControl,adminAuthorizationMiddleware,getAddOffers)
+router.get('/view-offers',setCacheControl,adminAuthorizationMiddleware,viewOffers)
+router.post('/add-offer',setCacheControl,adminAuthorizationMiddleware,addOffer)
+router.get('/edit-offer/:offerId',setCacheControl,adminAuthorizationMiddleware,getEditOffers)
+router.post('/edit-offer/:offerId',setCacheControl,adminAuthorizationMiddleware,editOffer)
+router.get('/view-offer-products/:offerId',setCacheControl,adminAuthorizationMiddleware,viewOfferProducts)
+router.post('/remove-offer/:productId',setCacheControl,adminAuthorizationMiddleware,removeOffer)
 
 
 module.exports = router

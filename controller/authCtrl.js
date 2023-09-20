@@ -8,6 +8,7 @@ const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
 const userSchema = require("../model/userSchema");
 const walletModal = require("../model/walletModal");
+const bannerModal=require('../model/bannerModal')
 
 
 
@@ -186,6 +187,9 @@ const getHomePage = expressAsycnHandler(async (req, res, next) => {
   try {
     const products = await productModal.find({ status: { $ne: "Delisted" } });
     const category = await categoryModal.find({});
+    const banner=await bannerModal.find({}).populate('offer');
+    console.log(banner)
+
     const productCountByCategory = await productModal.aggregate([
       {
         $group: {
@@ -201,6 +205,7 @@ const getHomePage = expressAsycnHandler(async (req, res, next) => {
       products: products,
       category,
       productCountByCategory,
+      banner
     });
   } catch (error) {
     console.log(error.message);

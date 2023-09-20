@@ -1,16 +1,18 @@
 const bannerModal=require('../model/bannerModal'); 
 const sharp = require('sharp');
+const offerModal = require('../model/offerModal');
 
 const getBannerManagementPage=async(req,res,next)=>{
     try {
-        res.render('admin/banner',{layout:'./layout/adminLayout.ejs'})
+        const productOffers=await offerModal.find({})
+        res.render('admin/banner',{layout:'./layout/adminLayout.ejs',productOffers:productOffers})
     } catch (error) {
         console.log(error)
     }
 }
 
 const addBannerPost= async (req, res) => {
-    const { bannername } = req.body;
+    const { bannername,offer } = req.body;
     let images = req.files[0].filename
             let imageName = `cropped_${images}`;
       await sharp(`./public/images/uploads/${images}`)
@@ -19,7 +21,7 @@ const addBannerPost= async (req, res) => {
       images=imageName  
     try {
       
-      const banner = await bannerModal.create({bannername,images});
+      const banner = await bannerModal.create({bannername,images,offer});
       if (banner) {
         const allBanners = await bannerModal.find(); 
         res.redirect("/admin/banner-management");

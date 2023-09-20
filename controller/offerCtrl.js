@@ -1,6 +1,7 @@
 const offerModal = require("../model/offerModal")
 const { validationResult } = require('express-validator');
 const validator = require('validator');
+const productModal = require("../model/productModal");
 
 
 const getAddOffers=async(req,res,next)=>{
@@ -107,9 +108,70 @@ const editOffer=async(req,res,next)=>{
   }
 }
 
+const viewOfferProducts=async(req,res,next)=>{
+  try {
+    const offerId=req.params.offerId
+    const offerType=req.query.offertype
+    let products
+    if(offerType==="Product"){
+      products=await productModal.find({offer:offerId});
+      console.log(products)
+    }
+
+    res.render('admin/view-offer-products',
+    {layout:'./layout/adminLayout.ejs',products:products,req:req})
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const removeOffer=async (req,res,next)=>{
+
+  const productId=req.params.productId;
+  const offertype=req.query.offertype;
+
+  try {
+
+    if(offertype==="Product"){
+     await productModal.updateOne({_id:productId},
+      {
+        $set:{
+          offer:null
+        },
+        $set:{
+          offerPrice:0
+        }
+      }
+      )
+     res.redirect('/admin/view-offers')
+    }
+    
+  } catch (error) {
+      console.log(error)
+  }
+}
+
+const showOfferProducts=async (req,res,next)=>{
+  try {
+    const offerId=req.params.offerId;
+    const offertype=req.query.offertype
+    const products=await productModal.find({offer:offerId})
+    if(offertype==='Product'){
+      res.render('user/shopPage.ejs',
+      {layout:'./layout/homeLayout.ejs',products:products,
+      isLoggedIn:true
+    })
+    }
+      
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 
 module.exports={
     getAddOffers,viewOffers,
     addOffer,editOffer,
-    getEditOffers
+    getEditOffers,viewOfferProducts,
+    removeOffer,showOfferProducts
 }

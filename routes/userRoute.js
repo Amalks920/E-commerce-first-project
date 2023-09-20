@@ -55,6 +55,7 @@ const {
   editOrder,
 } = require("../controller/orderCtrl");
 const { getPaymentPage, checkPayment, payment } = require("../controller/paymentCtrl");
+const { showOfferProducts } = require("../controller/offerCtrl");
 
 router.get("/", setCacheControl, getHomePageNotLoggedIn);
 
@@ -192,6 +193,9 @@ router.get(
   '/payment-page',
   payment
 )
+
+
+router.get('/show-offer-products/:offerId',setCacheControl,authorizationMiddleware,showOfferProducts)
 
 
 

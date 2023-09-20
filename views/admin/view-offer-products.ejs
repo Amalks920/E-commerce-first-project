@@ -1,7 +1,7 @@
 <section class="content-main">
     <div class="content-header">
         <div>
-            <h2 class="content-title card-title">Edit Offers</h2>
+            <h2 class="content-title card-title">Products Having Offers</h2>
            
         </div>
 
@@ -16,7 +16,7 @@
                         <a class="itemside" href="#">
 
                             <div class="info">
-                                <h4 class="mb-0">Offer Name</h4>
+                                <h4 class="mb-0">Product Name</h4>
                             </div>
                         </a>
                     </div>
@@ -37,8 +37,11 @@
                 </div> <!-- row .// -->
             </article> <!-- itemlist  .// -->
         
-            <% offers.forEach((offer,index)=>{ %>
+           
 
+            <% products.forEach((product,index)=>{ %>
+
+           
            
              <article id="table-body" data-id="" class="itemlist">
                 <div  class="row align-items-center">
@@ -47,8 +50,7 @@
                         <a class="itemside" href="#">
 
                             <div class="info">
-                               <a href="/admin/view-offer-products/<%=offer._id%>?offertype=<%=offer.offerType %>">
-                               <p><%=offer?.offertitle %></p> </a>
+                                <p><%=index+1 %></p>
                                 <!-- <h6 class="mb-0"></h6> -->
                             </div>
                         </a>
@@ -58,32 +60,36 @@
                         <a class="itemside" href="#">
 
                             <div class="info">
-                                <p><%=offer?.discountAmount %></p>
+                                <p><%=product.productname %></p>
                                 <!-- <h6 class="mb-0"></h6> -->
                             </div>
                         </a>
                     </div>
-                    <div class="col-lg-2 col-sm-2 col-4 col-price"><%=offer?.offerType %></div>
+                    <div class="col-lg-2 col-sm-2 col-4 col-price"></div>
 
                     <div class="col-lg-2 col-sm-2 col-4 col-status">
-                        <%=offer?.discountType %>
+                       
                     </div>
 
                     <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                     <p><%=offer?.expirationDate %></p>
+                     <p></p>
                     </div>
                     <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                        <a href="/admin/edit-offer/<%=offer?._id %>" data-id="<%=offer?._id %>" class="btn btn-sm font-sm rounded btn-brand">
-                            <i class="material-icons md-edit"></i> Edit
+                        <a href="" data-id="" class="btn btn-sm font-sm rounded btn-brand" style="display: none;">
+                            <i class="material-icons md-edit" ></i> Edit
                         </a>
                         <input type="text" value="" name="" id="catId" hidden>
-                        <a href="/admin/delete-offer/<%=offer?._id %>" id="delete" data-id="<%=offer?._id %>" class="btn btn-sm font-sm btn-light rounded">
-                            <i class="material-icons md-delete_forever"></i> Delete
-                        </a>
+                        <form action="/admin/remove-offer/<%=product._id%>?offertype=<%=req.query.offertype %>"
+                         method="post" enctype="application/x-www-form-urlencoded">
+
+                        <button type="submit" id="delete" class="btn btn-sm font-sm btn-light rounded">
+                            <i class="material-icons md-delete_forever"></i> Remove Offer
+                        </button>
+                    </form>
                     </div>
                 </div> <!-- row .// -->
             </article> <!-- itemlist  .// -->
-            
+
             <% }) %>
           
         </div> <!-- card-body end// -->

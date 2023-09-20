@@ -128,9 +128,13 @@ const getProductPage=expressAsyncHandler(async(req,res,next)=>{
 
 const getEditProduct=async(req,res,next)=>{
   try {
+    const productOffers = await offerModal.find({ offerType: 'Product' });
     const category = await categoryModal.find();
     const product=await productModal.findById(req.params.id)
-    res.render('admin/edit-product',{layout:'./layout/adminLayout',data:category,product:product})
+
+    res.render('admin/edit-product',{layout:'./layout/adminLayout',
+    data:category,product:product,productOffers:productOffers})
+
   } catch (error) {
     console.log(error)
   }
@@ -181,6 +185,20 @@ const editProductPost=async (req, res,next) => {
          } else {
        await productModal.findByIdAndUpdate(id, { $set: { ...product, status: 'Listed' } });
         }
+
+    //check for offfer
+    if(req.body.offer){
+      const productOffer=await offerModal.findById(req.body.offer)
+      
+      if(productOffer.discountType==="Fixed"){
+        req.body.offerPrice=req.body.price-productOffer.discountAmount
+        await productModal.updateOne({_id:id},{offerPrice:req.body.offerPrice})
+      }else if(productOffer.discountType==="Percentage"){
+        req.body.offerPrice=req.body.price-(req.body.price*(productOffer.discountAmount/100))
+        await productModal.updateOne({_id:id},{offerPrice:req.body.offerPrice})
+      }
+    }
+
         res.redirect('/admin/view-products');
       } catch (error) {
         console.log(error.message);
