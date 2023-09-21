@@ -72,7 +72,7 @@
 										<div class="quantity-select">
 											<div class="entry value-minus" data-id="<%=item.quantity %>">&nbsp;</div>
 											<div class="entry value"><span><%=item.quantity %></span></div>
-											<div class="entry value-plus active" data-id="<%=item.quantity %>">&nbsp;</div>
+											<div class="entry value-plus active" style="display: none;" data-id="<%=item.quantity %>">&nbsp;</div>
 										</div>
 									</div>
 								</td>
@@ -83,7 +83,7 @@
                 <td class="invert">
                   <div class="rem">
                   </div>
-                  <button id="product-cancel" data-id="<%=item?.productId._id %>" style="background-color: red;color: white;">Cancel</button> 
+                  <button id="product-cancel" data-id="<%=item?.productId._id %>" style="background-color: red;color: white;">Update</button> 
                 </td>
               </tr>
             <% }) %>

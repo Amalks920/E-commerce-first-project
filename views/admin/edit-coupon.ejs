@@ -1,0 +1,125 @@
+<section class="content-main">
+    <form id="submit-form" action="/admin/edit-coupon/<%=data._id %>" method="post">
+  
+    <div class="row" style="margin-left: 450px; margin-top: 100px;">
+      <div class="col-9">
+        <div class="content-header">
+          <h2 class="content-title" style="margin-left: 200px;">Edit Coupon</h2>
+
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>Basic</h4>
+          </div>
+          <div class="card-body">
+              <div class="mb-4">
+                <label for="product_name" class="form-label">Enter Promocode</label>
+                <input
+                  value="<%=data.code %>"
+                  type="text"
+                  name="code"
+                  id="code"
+                  placeholder="Type here"
+                  class="form-control"
+                      />
+              </div>
+
+
+
+              <div class="mb-4">
+                <label class="form-label">Choose Discount Type</label>
+                <select id="discountType" name="discountType" class="form-select">
+                    <option  value="">Choose Discount Type</option>
+                    <option value="Percentage" <% if (data.discountType === "Percentage") { %> selected <% } %>>Percentage Amount</option>
+                    <option value="Fixed" <% if (data.discountType === "Fixed") { %> selected <% } %>>Fixed Amount</option>
+                  </select>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label">Code Description</label>
+                <textarea
+                type="text"
+                value=""
+                  name="description"
+                  id="description"
+                  placeholder="Type here"
+                  class="form-control"
+                  rows="4"><%=data.description %></textarea>
+              </div>
+
+
+
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="mb-4">
+                    <label class="form-label">Discount Amount</label>
+                    <div class="row gx-2">
+                      <input
+                        placeholder="discount amount"
+                        value="<%=data.discountAmount %>"
+                        name="discountAmount"
+                        id="discountAmount"
+                        type="number"
+                        class="form-control" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="mb-4">
+                    <label class="form-label">Minimum Amount</label>
+                    <div class="row gx-2">
+                      <input
+                        placeholder="$"
+                        value="<%=data.minimumAmount %>"
+                        name="minimumAmount"
+                        id="minimumAmount"
+                        type="number"
+                        class="form-control" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="mb-4">
+                    <label class="form-label">Maximum Redemption</label>
+                    <div class="row gx-2">
+                      <input
+                        placeholder="max redemptions"
+                        value="<%=data.maxRedemptions %>"
+                        name="maxRedemptions"
+                        id="maxRedemptions"
+                        type="number"
+                        class="form-control" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="mb-4">
+                    <label class="form-label">Expiration date</label>
+                    <div class="row gx-2">
+                      <input
+                        placeholder="max redemptions"
+                        name="expirationDate"
+                        value="<%=data.expirationDate.toISOString().substr(0, 10) %>"
+                        id="expirationDate"
+                        type="date"
+                        class="form-control" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button id="submit" style="background-color: green; color: white; border-radius: 5px; margin-left: 220px;">Add Coupon</button>
+          
+          </div>
+        </div>
+        <!-- card end// -->
+      </div>
+
+    </div>
+  
+  </form>
+  </section>
+ 
+  <script src="/javascript/addCouponValidations.js">

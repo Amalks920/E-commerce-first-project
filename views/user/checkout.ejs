@@ -1,19 +1,44 @@
 <div id="couponModal" style="position: absolute;background-color: white;
 width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
-  <h1 style="text-align: center;margin-top: 10px;">Coupons</h1>
+  <h1 style="text-align: center;margin-top: 10px;color: black;">Coupons</h1>
   <button id="close">close</button>
   <% coupons.forEach((coupon,index)=>{ %>
     
   
-  <div id="coupon" style="border: 1px solid black;margin: 10px;padding: 5px;">
+  <div id="coupon" style="margin: 10px;padding: 5px;width: 200px;">
     <button id="select-btn" style="margin-left: 250px;width: 100px;background-color: black;color: white;font-weight: bold;">Add</button>
+    <!-- <div style="display: flex; gap: 5;">
+      <div style="text-align: left;padding: 20px;" >
+        
+          <p >Code </p>
+      
+        
+        <p>Description </p>
+        <p>Discount Amount </p>
+        <p>Minimum Amount </p>
+     
+      </div>
+      <div>
+       
+        <p><span style="font-weight: bold;">:</span> <span id="coupon-code" class="coupon-details"><%=coupon.code %> </span></p>
+        <p><span style="font-weight: bold;">:</span><span  id="description" class="coupon-details"> <%=coupon.descripiton %></span> </p>
+        <p><span style="font-weight: bold;">:</span><span id="discountAmount" class="coupon-details"> <%=coupon.discountAmount %></span> </p>
+        <p><span style="font-weight: bold;">:</span><span id="minimumAmount" class="coupon-details"> <%=coupon.minimumAmount %></span> </p>
+
+      </div>
+    </div>
+    <input type="text" id="discountType" value="<%=coupon?.discountType %>">
+    <input type="text" id="couponId" value="<%=coupon?._id %>" hidden> -->
+    
     Code : <span id="coupon-code" class="coupon-details"> <%=coupon.code %></span>
     Description : <span id="description" class="coupon-details">  <%=coupon.descripiton %></span>
     Discount Amount :<span id="discountAmount" class="coupon-details"> <%=coupon.discountAmount %></span>
     Minimum Amount : <span id="minimumAmount" class="coupon-details"> <%=coupon.minimumAmount %></span>
     Expiry : <sapn id="expirationDate" class="coupon-details"> <%=coupon.expirationDate %></span>
-      <input type="text" id="discountType" value="<%=coupon?.discountType %>">
+      Expiry : <sapn id="" class=""> <%=coupon.discountType %></span>
+      <input type="text" id="discountType" value="<%=coupon?.discountType %>" hidden>
       <input type="text" id="couponId" value="<%=coupon?._id %>" hidden>
+
   </div>
   <% }) %>
 </div>
@@ -193,8 +218,9 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
             <button   id="place-order" class="submit check_out placeorder" style="margin-bottom: 20px;">
               Place Order
             </button>
+            
+            
             <div id="add-coupon"  style="color: blue;cursor: pointer;">Apply Coupon?</div>
-
 
           </div>
       
@@ -212,7 +238,7 @@ width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll;">
       </div>
     </div>
   </div>
-    <% console.log(wallet) %>
+    
           <!--  -->
           <div class="ads-grid_shop" style="max-width: 50%;margin-left: 500px;">
             <div class="shop_inner_inf">

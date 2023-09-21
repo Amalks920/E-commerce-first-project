@@ -11,7 +11,7 @@ const checkout = async (req, res, next) => {
     const cart = await cartModal.findOne({ user: req.session.user._id })
                     .populate({ path: "products.product" });
 
-    const coupons=await couponModal.find({})
+    const coupons=await couponModal.find({maxRedemptions:{$gt:0}})
 
     const selectedAddress = address?.address?.filter((address) => {
       return address?.isSelected === true;

@@ -22,6 +22,7 @@ const {
   forgotPasswordPost,
   changePassword,
   changePasswordPost,
+  get404Err,
 } = require("../controller/authCtrl");
 
 const {
@@ -197,6 +198,7 @@ router.get(
 
 router.get('/show-offer-products/:offerId',setCacheControl,authorizationMiddleware,showOfferProducts)
 
+router.get('/404',get404Err)
 
 
 module.exports = router;

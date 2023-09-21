@@ -4,9 +4,9 @@ const upload = require("../config/multer");
 const { getAdminHome, adminLogin, getAdminLogin, adminLogout, getAdminOtpLogin, 
     adminOtpLoginPost, getAdminVerifyOtpLogin, verifyOtpAdminPost,getAdminForgotPassword, adminForgotPasswordPost, getAdminChangePassword, adminChangePasswordPost } = require('../controller/authCtrl')
 const { adminAuthorizationMiddleware } = require('../middlewares/authorizationMiddleware')
-const { addCoupon, addCouponPost, viewCouponAdmin } = require('../controller/couponCtrl');
+const { addCoupon, addCouponPost, viewCouponAdmin, getEditCoupon, editCoupon, deleteCoupon } = require('../controller/couponCtrl');
 const { setCacheControl } = require('../middlewares/cacheControllMiddleware');
-const { addCategory, addCategoryPost, viewCategory } = require('../controller/categoryCtrl');
+const { addCategory, addCategoryPost, viewCategory, deleteCategory } = require('../controller/categoryCtrl');
 const { getViewProducts, getEditProduct, editProductPost, deleteImage } = require("../controller/productCtrl");
 const { getViewUsers, blockUser } = require('../controller/userCtrl')
 const {viewOrdersAdmin,editOrder, getOrderProducts, cancelOrder}=require('../controller/orderCtrl');
@@ -50,12 +50,16 @@ router.post("/edit-order-status/:id",adminAuthorizationMiddleware,cancelOrder);
 
 router.get('/add-coupon',setCacheControl,adminAuthorizationMiddleware,addCoupon)
 router.post('/add-coupon',setCacheControl,adminAuthorizationMiddleware,addCouponPost)
+router.get('/edit-coupon/:id',setCacheControl,adminAuthorizationMiddleware,getEditCoupon)
+router.post('/edit-coupon/:couponId',setCacheControl,adminAuthorizationMiddleware,editCoupon)
+router.get('/delete-coupon/:couponId',setCacheControl,adminAuthorizationMiddleware,deleteCoupon)
+
 
 router.get('/view-coupon',setCacheControl,adminAuthorizationMiddleware,viewCouponAdmin)
 
 //banner
-router.get('/banner-management',getBannerManagementPage)
-router.post('/add-banner',upload.array("images", 10),addBannerPost)
+router.get('/banner-management',setCacheControl,adminAuthorizationMiddleware,getBannerManagementPage)
+router.post('/add-banner',upload.array("images", 10),setCacheControl,adminAuthorizationMiddleware,addBannerPost)
 
 
 

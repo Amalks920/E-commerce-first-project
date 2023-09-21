@@ -6,6 +6,7 @@ const razorpay = require("../config/razorpay");
 const Razorpay = require("razorpay");
 const walletModal=require('../model/walletModal');
 const { disconnect } = require("mongoose");
+const couponModal = require("../model/couponModal");
 
 const placeOrder = async (req, res, next) => {
   const userId = req.session.user._id;
@@ -136,7 +137,7 @@ const placeOrder = async (req, res, next) => {
         { $inc: { amount: -order.totalAmount } }
       );
     }
-
+    await couponModal.updateOne({_id:coupon},{$inc:{maxRedemptions:-1}})
     await cartModal.deleteOne({ user: req.session.user._id });
     res.status(200).json({ response: order });
   } catch (error) {
@@ -228,11 +229,10 @@ const getOrderProducts=async (req,res,next) => {
 
 const cancelOrder = async (req, res, next) => {
   try {
-    let orderStatus=req.body.status
-    console.log(req.params, req.query);
-    console.log(req.query.productId)
+    let orderStatus=req?.body?.status
+    let userId=req.body.user
 
-    const order=await orderModal.findById(req.params.id)
+    const order=await orderModal.findById(req?.params?.id)
     
     if (!order) {
       throw new Error('Order not found');
@@ -242,8 +242,6 @@ const cancelOrder = async (req, res, next) => {
     if(req?.query?.productId){
     const itemToUpdate = order.items.find(item => item.productId.equals(req.query.productId));
     let price
-    console.log(itemToUpdate)
-    console.log("itemToUpdate")
 
     let productId=itemToUpdate.productId;
     const product=await productModal.findById(productId)
@@ -269,29 +267,37 @@ const cancelOrder = async (req, res, next) => {
 
       // If Coupon Applied ot Order
 
-      let totalAmount
+      let totalAmount=0
 
      let discountAmount=order?.coupon?.discountAmount
       
       if(!discountAmount) discountAmount=0;
 
       let cancelledQty=itemToUpdate.quantity-req.body.qty
-      
-      console.log(cancelledQty)
-      console.log(req.body.qty)
+    
+      const notCancelledArr=order.items.filter((item,index)=>{
+        return item.status!="Cancelled"
+      })
+
+
+
       if(req?.body?.qty!=0){
         
 
         if(order?.coupon){
-          totalAmount=(Number(price)*Number(itemToUpdate.quantity)-Number(cancelledQty)*Number(price))
+          totalAmount=( Number(cancelledQty)*Number(price))
                       -((discountAmount/req.body.qty))
         //  totalAmount=(itemToUpdate.price*req.body.qty)-(discountAmount/req.body.qty)
-        }else{
-          totalAmount=Number(price)*Number(itemToUpdate.quantity)-Number(cancelledQty)*Number(price)
+        }else {
+
+          totalAmount=Number(cancelledQty)*Number(price)
         }
         itemToUpdate.quantity=req.body.qty;
-       const updated=await orderModal.updateOne({_id:order._id},{$set:{totalAmount:Number(totalAmount)}})
+       const updated=await orderModal.updateOne({_id:order._id},{$inc:{totalAmount:-Number(totalAmount)}})
         console.log(updated)
+
+
+
 
         // if(order?.paymentMode==="ONLINE" || "WALLET"){
         // let walletAmountAdd=(cancelledQty*itemToUpdate.price)-(discountAmount/cancelledQty)
@@ -304,9 +310,28 @@ const cancelOrder = async (req, res, next) => {
         // );
         // }
 
-      }else{
+      }else if(notCancelledArr.length===1){
         itemToUpdate.status = orderStatus;
         await orderModal.updateOne({_id:order._id},{orderStatus:orderStatus})
+
+      }else{
+      itemToUpdate.status="Cancelled";
+      
+      if(order?.coupon){
+        console.log(price)
+        console.log(price)
+        console.log(price)
+        totalAmount=(Number(cancelledQty)*Number(price))
+                    -((discountAmount/order.items.length))
+      //  totalAmount=(itemToUpdate.price*req.body.qty)-(discountAmount/req.body.qty)
+      }else {
+
+        totalAmount=Number(cancelledQty)*Number(price)
+      }
+      itemToUpdate.quantity=req.body.qty;
+     const updated=await orderModal.updateOne({_id:order._id},{$inc:{totalAmount:-Number(totalAmount)}})
+      console.log(updated)
+       
 
       }
 
@@ -314,7 +339,7 @@ const cancelOrder = async (req, res, next) => {
 
       if(order?.paymentMode==="ONLINE" || order?.paymentMode=== "WALLET"){
         
-        if(order?.coupon) walletAmountAdd=(cancelledQty*price)-(discountAmount/cancelledQty)
+        if(order?.coupon) walletAmountAdd=(cancelledQty*price)-(discountAmount/order.items.length)
         else walletAmountAdd=(cancelledQty*price)
         console.log(walletAmountAdd)
         
@@ -334,6 +359,17 @@ const cancelOrder = async (req, res, next) => {
       item.status = orderStatus;
     });
 
+    if(orderStatus==="Cancelled"){
+    if(order.paymentMode==="ONLINE" || order.paymentMode==="WALLET"){
+      console.log(userId)
+      const wallet = await walletModal.updateOne(
+      
+        { user_id: userId },
+        { $inc: { amount: order.totalAmount } }
+      );
+    }
+
+    }
     await orderModal.findByIdAndUpdate(req.params.id, {
         orderStatus: orderStatus,
        });
@@ -373,7 +409,9 @@ const viewOrdersAdmin = async (req, res, next) => {
       {
         $project: {
           user: { $arrayElemAt: ["$user.username", 0] },
+          user: { $arrayElemAt: ["$user._id", 0] },
           orderStatus: 1,
+          paymentMode:1,
           totalAmount: 1,
           isPaid: 1,
           productcount: { $size: "$items" },

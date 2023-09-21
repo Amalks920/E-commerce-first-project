@@ -208,7 +208,7 @@ const getHomePage = expressAsycnHandler(async (req, res, next) => {
       banner
     });
   } catch (error) {
-    console.log(error.message);
+    res.redirect('/user/404')
   }
 });
 
@@ -550,7 +550,7 @@ const adminOtpLoginPost = async (req, res, next) => {
         })
         .catch((error) => {
           console.log(error.message);
-          return res.json({ error });
+          
         });
     } else {
       
@@ -564,7 +564,7 @@ const adminOtpLoginPost = async (req, res, next) => {
       );
     }
   } catch (error) {
-    console.log(error);
+    res.redirect('/user/404')
   }
 };
 
@@ -584,7 +584,9 @@ const getAdminVerifyOtpLogin = async (req, res, next) => {
       layout: "./layout/adminLoginLayout.ejs",
       req: req,
     });
-  } catch (error) {}
+  } catch (error) {
+    res.redirect('/user/404')
+  }
 };
 
 const verifyOtpAdminPost = async (req, res, next) => {
@@ -603,7 +605,7 @@ const verifyOtpAdminPost = async (req, res, next) => {
       );
     }
   } catch (error) {
-    console.log(error);
+    res.redirect('/user/404')
   }
 };
 
@@ -622,7 +624,9 @@ const getVerifyOtp = async (req, res, next) => {
     console.log("otp otp otp ");
     console.log(req.session);
     res.render("user/verifyOtp", { layout: "./layout/signupLogin", req: req });
-  } catch (error) {}
+  } catch (error) {
+    res.redirect('/user/404')
+  }
 };
 
 const verifyOtpPost = async (req, res, next) => {
@@ -643,7 +647,7 @@ const verifyOtpPost = async (req, res, next) => {
       );
     }
   } catch (error) {
-    console.log(error);
+    res.redirect('/user/404')
   }
 };
 
@@ -652,7 +656,7 @@ const logout = async (req, res) => {
     delete req.session.user;
     res.redirect("/loginOrSignup");
   } catch (error) {
-    console.log(error.message);
+    res.redirect('/user/404')
   }
 };
 
@@ -661,9 +665,13 @@ const adminLogout = async (req, res) => {
     delete req.session.admin;
     res.redirect("/admin/admin-login");
   } catch (error) {
-    console.log(error.message);
+    res.redirect('/user/404')
   }
 };
+
+const get404Err=async (req,res)=>{
+  res.render('user/404.ejs',{layout:'./layout/homeLayout.ejs',isLoggedIn:true})
+}
 
 module.exports = {
   adminLogin,
@@ -687,5 +695,6 @@ module.exports = {
   verifyOtpPost,
   changePasswordPost,
   getAdminForgotPassword,adminForgotPasswordPost,
-  getAdminChangePassword,adminChangePasswordPost
+  getAdminChangePassword,adminChangePasswordPost,
+  get404Err
 };

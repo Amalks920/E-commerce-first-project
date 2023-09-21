@@ -51,9 +51,44 @@ const viewCouponAdmin=async(req,res,next) => {
         console.log(error)
     }
 }
+
+const getEditCoupon=async (req,res,next)=>{
+    try {
+        const coupon=await couponModal.findById(req.params.id);
+
+        res.render('admin/edit-coupon',{layout:'./layout/adminLayout.ejs',data:coupon}) 
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const editCoupon=async (req,res,next)=>{
+    const couponId=req.params.couponId
+    try {
+      await couponModal.updateOne({_id:couponId},req.body)
+      res.redirect('/admin/view-coupon')
+    } catch (error) {
+      console.log(error)
+    }
+}
+
+const deleteCoupon=async (req,res,next)=>{
+    try {
+        let couponId=req.params.couponId
+        await couponModal.findByIdAndDelete(couponId)
+        res.redirect('/admin/view-coupon')
+      } catch (error) {
+        console.log(error)
+      }
+
+}
+
 module.exports={
     getCoupon,
     addCoupon,
     addCouponPost,
-    viewCouponAdmin
+    viewCouponAdmin,
+    getEditCoupon,editCoupon,
+    deleteCoupon
 }
