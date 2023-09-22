@@ -67,21 +67,24 @@
                                    
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Description</th>
+                                    <th>image</th>
                                     <th>images</th>
                                 </tr>
                             </thead>
                            
                             <tbody>
-                                
+                                <% banner?.forEach((banner,index)=>{ %>
+
+                               
                                 <tr>
+                                    <td><%=index+1 %></td>
                                     <td class="text-center">
-                                       1
+                                    <%=banner?.bannername %>
                                     </td>
+                                    <td><img src="/images/uploads/<%=banner.images %>" alt="" width="50"></td>
                                     <td></td>
-                                    <td></td>
-                                    <td><img src="" width="30" style="position: absolute;" alt=""></td>
                                 </tr>
+                                <% }) %>
                             
                             </tbody>
                             

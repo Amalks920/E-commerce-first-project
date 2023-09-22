@@ -43,6 +43,9 @@ const addCouponPost=async(req, res,next) => {
     }
   }
 
+
+  
+
 const viewCouponAdmin=async(req,res,next) => {
     try {
         const coupon=await couponModal.find({})

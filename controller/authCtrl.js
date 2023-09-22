@@ -219,6 +219,7 @@ const getHomePageNotLoggedIn = expressAsycnHandler(async (req, res, next) => {
   try {
     const products = await productModal.find({ status: { $ne: "Delisted" } });
     const category = await categoryModal.find({});
+    const banner=await bannerModal.find({}).populate('offer');
     const productCountByCategory = await productModal.aggregate([
       {
         $group: {
@@ -234,11 +235,13 @@ const getHomePageNotLoggedIn = expressAsycnHandler(async (req, res, next) => {
       products: products,
       category,
       productCountByCategory,
+      banner:banner
     });
   } catch (error) {
     console.log(error.message);
   }
 });
+
 
 const getAdminHome = expressAsycnHandler(async (req, res, next) => {
   res.render("admin/admin-home", { layout: "./layout/adminLayout" });

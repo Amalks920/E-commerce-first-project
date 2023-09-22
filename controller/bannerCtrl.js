@@ -4,8 +4,9 @@ const offerModal = require('../model/offerModal');
 
 const getBannerManagementPage=async(req,res,next)=>{
     try {
+        const banners=await bannerModal.find({});
         const productOffers=await offerModal.find({})
-        res.render('admin/banner',{layout:'./layout/adminLayout.ejs',productOffers:productOffers})
+        res.render('admin/banner',{layout:'./layout/adminLayout.ejs',productOffers:productOffers,banner:banners})
     } catch (error) {
         console.log(error)
     }
