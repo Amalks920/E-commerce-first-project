@@ -62,7 +62,7 @@
           method="post"
           enctype="application/x-www-form-urlencoded">
          
-          <div class="row">
+          <div class="row" >
             <div class="col-9" style="background-color: white;">
               <div class="content-header" style="background-color: white;">
                 <h2 class="content-title" >Add Your Address</h2>
@@ -70,14 +70,15 @@
               </div>
             </div>
       
-            <div class="col-lg-6">
-              <div class="card mb-4">
+            <div class="col-lg-6" >
+              <div class="card mb-4" style="background-color: rgb(233, 226, 226);box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                 <div class="card-header">
                   <h4>Basic</h4>
                 </div>
                 <div class="card-body">
                   <div class="mb-4">
                     <label for="product_name" class="form-label">City</label>
+                    <p id="cityerr" style="color: red;display: none;">invalid city</p>
                     <input
                       type="text"
                       name="city"
@@ -87,6 +88,8 @@
                   </div>
                   <div class="mb-4">
                     <label class="form-label">Address</label>
+                    <p id="addresserr" style="color: red;display: none;">invalid Address</p>
+
                     <textarea
                     id="address"
                     type="text"
@@ -98,6 +101,8 @@
 
                   <div class="mb-4">
                     <label for="product_name" class="form-label">state</label>
+                    <p id="staterr" style="color: red;display: none;">invalid state</p>
+
                     <input
                       type="text"
                       name="state"
@@ -107,6 +112,7 @@
                   </div>
                   <div class="mb-4">
                     <label for="product_name" class="form-label">Phone Number</label>
+                    <p id="mobileErr" style="color: red;display: none;">Inavalid Mobile Number</p>
                     <input
                       type="number"
                       name="mobileNumber"
@@ -138,7 +144,7 @@
 
 
           </div>
-          <button id="submit" type="submit" style="margin-left: 270px;width: 260px;height: 40px; color: white;background-color: black;">ADD</button>
+          <button id="submit" type="submit" style="margin-left: 270px;width: 260px;height: 40px; color: white;background-color: black;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">ADD</button>
 
         </form>
       </section>
@@ -154,7 +160,7 @@
             <% addresses?.address?.forEach((address,index)=>{ %>
 
           
-            <div class="address" style="margin: 10px;padding: 20px;background-color: azure;">
+            <div class="address" style="margin: 10px;padding: 20px;background-color: rgb(233, 226, 226);box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                 <input type="radio" id="address1" name="address" value="123 Main St, City, Country" <% if(address?.isSelected){ %>
                  checked
                <% } %> >
@@ -176,7 +182,7 @@
             <!-- Add more address options as needed -->
         </div>
     
-        <button id="selectedAddressButton" style="margin-left: 220px;background-color: blue; padding: 10px;color: white;">Select Address</button>
+        <button id="selectedAddressButton" style="margin-left: 220px;background-color: black; padding: 10px;color: white;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); margin-top: 50px;">Select Address</button>
         </div>
 
 
@@ -188,118 +194,5 @@
 </div>
 
 
-<script>
-  // Get all radio buttons by name
-  const radioButtons = document.getElementsByName("address");
-  const deleteButtons=document.querySelectorAll('#delete-address');
-  const addressButton=document.getElementById('selectedAddressButton');
-  const modalBg=document.querySelector('#modalbg')
-  const deleteModal=document.querySelector('#delete-modal')
-  const deleteModalBtn=document.querySelector('#deletebtn')
-  const cancelModalBtn=document.querySelector('#cancelbtn')
-  const inputs=document.querySelectorAll('.input')
-   const addressForm=document.querySelector('#address-form');
-
-   
-  
-
- 
-
-addressForm.addEventListener('submit', function (event) {
-  let isValid=true
-  inputs.forEach((input,index)=>{
-   
-   if(input.value===""){
-    
-     isValid=false
-   }
- })
-  console.log('dsfkjjjjjjj')
-  if(!isValid){
-    event.preventDefault()
-}
-})
-
-
-  // addressForm.addEventListener('submit',function (event) {
-  //   event.preventDefault()
-  // })
-
-
-  let addressIndex
-  let index
-  // Add an event listener to each radio button
-  radioButtons.forEach((radioButton,index) => {
-    console.log("radioButton")
-    console.log(radioButton)
-      radioButton.addEventListener("change", function () {
-          if (this.checked) {
-           addressIndex=index-1
-          console.log(addressIndex)
-          }
-      });
-  });
-
-
-
-  addressButton.addEventListener('click',function () {
-    fetch('/select-address', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ index:addressIndex}) 
-      })
-      .then(response => response.json())
-      .then(data=>{
-        if(data)location.reload(true)
-      })
-      .catch(error => {
-        // Handle any error that occurred during the request
-        console.error(error);
-      });
-  })
-
-
-deleteButtons.forEach(deleteButton=>{
-  deleteButton.addEventListener('click',function () {
-    index=deleteButton.attributes[1].value
-    modalBg.style.display="block"
-    deleteModal.style.display="block"
-
-  })
-  // deleteButton.addEventListener('click',function(){
-  //  let index=deleteButton.attributes[1].value
-
-  //  handleDelete(index)
-  // })
-})
-
-cancelModalBtn.addEventListener('click',function () {
-  modalBg.style.display="none"
-    deleteModal.style.display="none"
-})
-
-deleteModalBtn.addEventListener('click',function () {
-   handleDelete(index)
-})
-
-function handleDelete(index){
-  fetch('/delete-address', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ index:index}) 
-      })
-      .then(response => response.json())
-      .then(data=>{
-        if(data)location.reload(true)
-      })
-      .catch(error => {
-        // Handle any error that occurred during the request
-        console.error(error);
-      });
-}
-</script>
+<script src="/js/addOrViewAddress.js"></script>
 

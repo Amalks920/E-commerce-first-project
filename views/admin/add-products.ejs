@@ -42,6 +42,7 @@
               <label for="product_name" class="form-label">Product title</label>
               <input
                 type="text"
+                maxlength="10"
                 name="productname"
                 placeholder="Type here"
                 class="form-control"
@@ -51,6 +52,7 @@
               <label class="form-label">Full description</label>
               <textarea
               id="description"
+              maxlength="30"
                 name="description"
                 placeholder="Type here"
                 class="form-control"
@@ -63,6 +65,8 @@
                   <div class="row gx-2">
                     <input
                       placeholder="$"
+                      min="1"
+                      minlength="1"
                       id="price"
                       name="price"
                       type="number"
@@ -75,6 +79,7 @@
                   <div class="row gx-2">
                     <input
                       placeholder="stock"
+                      min="1"
                       id="stock"
                       name="stock"
                       type="number"
@@ -245,9 +250,13 @@
           descriptionInput.classList.add('is-invalid');
       }
 
-      if (isNaN(stockInput.value) || parseInt(stockInput.value) < 0) {
+      if (isNaN(stockInput.value) || parseInt(stockInput.value) < 0 || priceInput.value.trim()==='') {
           isValid = false;
           stockInput.classList.add('is-invalid');
+      }
+      if (isNaN(priceInput.value) || parseInt(priceInput.value) < 0 || priceInput.value.trim()==='') {
+          isValid = false;
+          priceInput.classList.add('is-invalid');
       }
 
       if(!validateFiles(imagesInput)){

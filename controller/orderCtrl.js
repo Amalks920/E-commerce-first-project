@@ -49,7 +49,7 @@ const placeOrder = async (req, res, next) => {
       },
     ]);
 
-    console.log(cart[0].items);
+  console.log(cart)
 
     const address = await addressModal.findOne({ user: userId });
     // let selectedAddress=address.address.filter((address,index)=>{
