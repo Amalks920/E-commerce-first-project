@@ -190,21 +190,20 @@ const getHomePage = expressAsycnHandler(async (req, res, next) => {
     const banner=await bannerModal.find({}).populate('offer');
     console.log(banner)
 
-    const productCountByCategory = await productModal.aggregate([
-      {
-        $group: {
-          _id: "$productCategory", // Group products by category
-          productCount: { $sum: 1 }, // Calculate the count of products in each group
-        },
-      },
-    ]);
+    // const productCountByCategory = await productModal.aggregate([
+    //   {
+    //     $group: {
+    //       _id: "$productCategory", // Group products by category
+    //       productCount: { $sum: 1 }, // Calculate the count of products in each group
+    //     },
+    //   },
+    // ]);
 
     res.render("user/home", {
       layout: "./layout/homeLayout.ejs",
       isLoggedIn: true,
       products: products,
       category,
-      productCountByCategory,
       banner
     });
   } catch (error) {
@@ -349,7 +348,7 @@ const getForgotPassword=async (req,res,next) => {
     return res.redirect('/home')
   }
   try {
-    res.render('user/forgot-password',{layout:'./layout/signupLogin'})
+    res.render('user/forgot-password',{layout:'./layout/signupLogin',req:req})
   } catch (error) {
     console.log(error)
   }

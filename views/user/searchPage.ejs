@@ -284,8 +284,10 @@
 							<ul class="pagination justify-content-start">
 
 						
-									   
-								<li class="page-item active" ><a class="page-link" >1</a></li>
+									<% for(var i=0;i<NO_OF_PAGES;i++){ %>
+										<li class="page-item " ><a class="page-link" href="/search-page/?page=<%=i %>" ><%=i+1 %></a></li>
+
+									<% } %>   
 						
 								
 				

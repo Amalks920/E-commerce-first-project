@@ -51,7 +51,6 @@ addressForm.addEventListener('submit', function (event) {
   if(!isValid){
     event.preventDefault()
 }
-event.preventDefault()
 })
 
 
@@ -141,7 +140,7 @@ function handleDelete(index){
 // REGEXP VALIDATIONS
 
 function validateAddress(value){
-  const regexpPattern=/^[A-Za-z' -]{3,10}$/
+  const regexpPattern=/^[A-Za-z' -]{3,50}$/
 
 
   return regexpPattern.test(value)
