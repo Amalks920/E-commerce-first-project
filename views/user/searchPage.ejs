@@ -275,11 +275,21 @@
 
 
 
-
 										<!-- //mens -->
 										<div class="clearfix"></div>
 
 							</div>
+
+
+							<ul class="pagination justify-content-start">
+
+						
+									   
+								<li class="page-item active" ><a class="page-link" >1</a></li>
+						
+								
+				
+							</ul>
 
 							<!-- //product-sec1 -->
 							<div class="col-md-6 shop_left shp">
@@ -523,4 +533,23 @@
 						location.reload(true)
 					
 				}
+			</script>
+
+
+			<script>
+				const pageItems=document.querySelectorAll('.page-item')
+				pageItems.forEach(function(pageItem,index){
+
+				pageItem.addEventListener('click', function () {
+				let currentUrl=window.location.href
+
+				let parsedUrl=new URL(currentUrl)
+				const queryParams=parsedUrl.searchParams;
+
+				const params=queryParams.get('page')
+				console.log(params)
+
+				})
+				})
+
 			</script>

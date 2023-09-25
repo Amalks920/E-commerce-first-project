@@ -1,26 +1,42 @@
-const { filter } = require("lodash");
+
 const categoryModal = require("../model/categoryModal");
 const productModal = require("../model/productModal");
 
 const searchPage=async(req,res,next)=>{
+  let NO_OF_PRODUCTS;
   let sort=req?.query?.sort;
   let categories=req?.query?.category?.split(',')
   let search=req?.query?.search
+  let PAGE=req?.params?.page
   // const finalElements = categories.slice(0, -1);
   // console.log(categories)
           const category=await categoryModal.find({})
-        const productCountByCategory = await productModal.aggregate([
-            {
-              $group: {
-                _id: "$productCategory", // Group products by category
-                productCount: { $sum: 1 }, // Calculate the count of products in each group
-              },
-            },
-          ]);
+          
+          const allProducts=await productModal.find({status:{$ne:"Delisted"}})
+          NO_OF_PRODUCTS=allProducts.length;
+        // const productCountByCategory = await productModal.aggregate([
+        //     {
+        //       $group: {
+        //         _id: "$productCategory", 
+        //         productCount: { $sum: 1 }, 
+        //       },
+              
+        //     },
+        //     {
+        //       $limit: 9,
+        //   }
+        //   ]);
+          
     try {
         let products
         if(!categories){
-          products=await productModal.find({})
+          console.log('! cat ====>')
+          products=await productModal.aggregate([
+            {
+              $limit:9
+            }
+          ])
+          console.log(products.length)
           categories=[]
         }else if(categories){
           products=await  productModal.aggregate([
@@ -36,6 +52,9 @@ const searchPage=async(req,res,next)=>{
               $match: {
                 'category.productCategory': { $in: categories }
               }
+            },
+            {
+                $limit: 9,
             }
           ]) 
         }
@@ -58,7 +77,7 @@ const searchPage=async(req,res,next)=>{
 
          req.session.filteredProducts=products
 
-
+        
 
         res.render('user/searchPage',{layout:'./layout/homeLayout',
             products:req.session.filteredProducts,
@@ -91,9 +110,12 @@ const filteredProducts=async(req,res,next)=>{
         $match: {
           'category.productCategory': { $in: req.body.checkedValues }
         }
+      },
+      {
+        $limit: 9,
       }
     ])
-    console.log(filtered)
+    console.log(filtered.length)
    
     res.render('user/searchPage',{layout:'./layout/homeLayout',
     products:filtered,

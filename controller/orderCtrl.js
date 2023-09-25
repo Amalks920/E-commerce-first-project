@@ -389,7 +389,17 @@ const cancelOrder = async (req, res, next) => {
 
 const viewOrdersAdmin = async (req, res, next) => {
   try {
-    const ITEMS_PER_PAGE = 5;
+    
+    console.log(req.query.page)
+    const ITEMS_PER_PAGE = 4;
+    let ITEMS_TO_SKIP
+    if(req.query.page){ ITEMS_TO_SKIP=req.query.page*ITEMS_PER_PAGE }
+    else{ ITEMS_TO_SKIP=0 }
+    
+    const findOrders=await orderModal.find({orderStatus:{$nin:['Delivered','Cancelled']}})
+    const noOfDocuments=findOrders.length/ITEMS_PER_PAGE
+  
+    
     const orders = await orderModal.aggregate([
       {
         $match: {
@@ -422,6 +432,12 @@ const viewOrdersAdmin = async (req, res, next) => {
           _id: -1,
         },
       },
+      {
+        $skip:ITEMS_TO_SKIP
+      },
+      {
+        $limit:ITEMS_PER_PAGE
+      }
     ]);
 
     // const orders2 = await orderModal.find({}).populate('items.productId').populate('user').populate('address')
@@ -443,6 +459,7 @@ const viewOrdersAdmin = async (req, res, next) => {
     res.render("admin/view-orders", {
       layout: "./layout/adminLayout.ejs",
       orders: orders,
+      documentsNo:noOfDocuments
     });
   } catch (error) {
     console.log(error);
