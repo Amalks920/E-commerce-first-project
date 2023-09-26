@@ -8,7 +8,8 @@ const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
 const userSchema = require("../model/userSchema");
 const walletModal = require("../model/walletModal");
-const bannerModal=require('../model/bannerModal')
+const bannerModal=require('../model/bannerModal');
+const { findProducts } = require("../helper/userHelper");
 
 
 
@@ -99,7 +100,7 @@ const userLogin = expressAsycnHandler(async (req, res, next) => {
       req.session.user = data;
 
       //send response to client side
-      res.redirect("/home");
+      res.redirect("/home?page=0");
     } else {
       //if user doesn't exist send error
       res.redirect(
@@ -185,10 +186,20 @@ const getAdminOtpLogin = expressAsycnHandler(async (req, res, next) => {
 
 const getHomePage = expressAsycnHandler(async (req, res, next) => {
   try {
-    const products = await productModal.find({ status: { $ne: "Delisted" } });
+        // for pagination
+        const PAGE_LIMIT=9;
+        const pageNo=req.query.page;
+        const ITEMS_TO_BE_SKIPPED=PAGE_LIMIT*pageNo
+
+        const allProducts=await findProducts()
+        const NO_OF_ITEMS_PER_PAGE=Math.floor(allProducts.length)/PAGE_LIMIT;
+
+        const products = await productModal
+        .find({ status: { $ne: "Delisted" } })
+        .skip(ITEMS_TO_BE_SKIPPED*pageNo)
+        .limit(PAGE_LIMIT);
     const category = await categoryModal.find({});
     const banner=await bannerModal.find({}).populate('offer');
-    console.log(banner)
 
     // const productCountByCategory = await productModal.aggregate([
     //   {
@@ -204,7 +215,8 @@ const getHomePage = expressAsycnHandler(async (req, res, next) => {
       isLoggedIn: true,
       products: products,
       category,
-      banner
+      banner,
+      NO_OF_ITEMS_PER_PAGE
     });
   } catch (error) {
     res.redirect('/user/404')

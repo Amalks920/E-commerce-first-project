@@ -114,9 +114,9 @@
 
 				 
 					<div class="col-lg-4 mb-4 text-center">
-						<div class="product-entry border">
-							<a href="/product-page/<%=product._id-%>" class="prod-img">
-								<img src="/images/uploads/<%=product.images[0]-%>" class="img-fluid" alt="Free html5 bootstrap 4 template">
+						<div class="product-entry border"  style="margin: 5px;" >
+							<a href="/product-page/<%=product._id-%>" class="prod-img" >
+								<img src="/images/uploads/<%=product.images[0]-%>" class="img-fluid" style="object-fit: cover;" alt="Free html5 bootstrap 4 template">
 							</a>
 							<div class="desc">
 								<h2><a href="#"><%=product.productname-%></a></h2>
@@ -138,6 +138,19 @@
 					<%	}) %>
 			
 				</div>
+
+				<ul class="pagination justify-content-start">
+
+						
+					<% for(var i=0;i<NO_OF_ITEMS_PER_PAGE;i++){ %>
+
+					
+						<li class="page-item " ><a class="page-link" href="/home?page=<%=i %>" ><%=i+1 %></a></li>
+
+						<% } %>
+				
+
+			</ul>
 
 				
 				<div class="row">

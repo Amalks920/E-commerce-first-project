@@ -78,8 +78,13 @@
 								</td>
 
                 <td class="invert"><h3><%=item.productId.productname %></h3></td>
-  
+                <% console.log(item.productId) %>
+                <% if(item?.productId?.offerPrice){ %>
+                  <td class="invert"><h3>₹ <%=item.productId.offerPrice %></h3></td> 
+              <%  }else{ %>
                 <td class="invert"><h3>₹ <%=item.productId.price %></h3></td>
+
+              <% } %>
                 <td class="invert">
                   <div class="rem">
                   </div>
