@@ -1,6 +1,14 @@
 
 <div class="colorlib-product">
     <div class="container-fluid">
+
+        <%if(orders.length===0){ %>
+            <div class="col-sm-8 text-center" style="margin: 5px; margin-left: 300px;height: 40vh;padding-top: 130px;">
+            <h1 style="position: fixed;left: 850px;">No Orders to Show</h1>
+            </div>
+            <% }else{ %>
+
+            
         <div class="row">
             <h1 style="text-align: center;">My Orders</h1>
             <% orders.forEach((order,index)=>{ %>
@@ -38,5 +46,7 @@
            
         
         </div>
+
+        <% } %>
     </div>
 </div>

@@ -61,6 +61,20 @@ const handleSignUpSubmit=(event)=>{
         event.preventDefault();
         return;
       }
+      if (rePasswordInput.value === "") {
+        passwordError.textContent = "Password cannot be blank";
+        event.preventDefault();
+        return;
+      }
+
+
+      if(passwordInput.value.trim()!=rePasswordInput.value.trim()){
+        console.log('bothlsdkjf')
+        passwordError.textContent = "Both Passwords should be equal";
+        event.preventDefault();
+        return 
+      }
+
       if (validatePassword(passwordInput.value)) {
         // Email is valid
         passwordError.textContent = ""; // Clear the error message

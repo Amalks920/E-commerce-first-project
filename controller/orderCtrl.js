@@ -4,7 +4,7 @@ const orderModal = require("../model/orderModal");
 const productModal = require("../model/productModal");
 const razorpay = require("../config/razorpay");
 const Razorpay = require("razorpay");
-const walletModal=require('../model/walletModal');
+const walletModal = require("../model/walletModal");
 const { disconnect } = require("mongoose");
 const couponModal = require("../model/couponModal");
 
@@ -49,7 +49,7 @@ const placeOrder = async (req, res, next) => {
       },
     ]);
 
-  console.log(cart)
+    console.log(cart);
 
     const address = await addressModal.findOne({ user: userId });
     // let selectedAddress=address.address.filter((address,index)=>{
@@ -59,8 +59,7 @@ const placeOrder = async (req, res, next) => {
     const orderProducts = cart[0].items;
     let grandTotal = req.body.totalAmountAfterCoupon;
     let paymentMode = req.body.paymentMode;
-    let coupon=req?.body?.couponId;
-
+    let coupon = req?.body?.couponId;
 
     // selectedAddress=Object.assign({},selectedAddress)
     const order = await orderModal.create({
@@ -69,7 +68,7 @@ const placeOrder = async (req, res, next) => {
       totalAmount: grandTotal,
       paymentMode: paymentMode,
       address: address._id,
-      coupon:coupon
+      coupon: coupon,
     });
 
     let errorMessages = [];
@@ -131,13 +130,16 @@ const placeOrder = async (req, res, next) => {
         .json({ success: true, url: `/razor-pay?oid=${order._id}` });
     }
 
-    if(paymentMode==="WALLET"){
+    if (paymentMode === "WALLET") {
       const wallet = await walletModal.updateOne(
         { user_id: req.session.user._id },
         { $inc: { amount: -order.totalAmount } }
       );
     }
-    await couponModal.updateOne({_id:coupon},{$inc:{maxRedemptions:-1}})
+    await couponModal.updateOne(
+      { _id: coupon },
+      { $inc: { maxRedemptions: -1 } }
+    );
     await cartModal.deleteOne({ user: req.session.user._id });
     res.status(200).json({ response: order });
   } catch (error) {
@@ -159,13 +161,9 @@ const orderPage = async (req, res, next) => {
 const viewOrders = async (req, res, next) => {
   try {
     // const allOrders = (await orderModal.find({ user: req.session.user._id }))
-    console.log(req.session.user._id)
+    console.log(req.session.user._id);
     let allOrders = await orderModal.aggregate([
       {
-      
-         
-          
-  
         $match: {
           orderStatus: {
             $nin: ["Delivered", "Cancelled"], // Use $nin (not in) to exclude specific statuses
@@ -178,11 +176,11 @@ const viewOrders = async (req, res, next) => {
         },
       },
     ]);
-   console.log(allOrders)
+    console.log(allOrders);
 
-   allOrders=allOrders.filter((order,index)=>{
-      return order.user==req.session.user._id
-   })
+    allOrders = allOrders.filter((order, index) => {
+      return order.user == req.session.user._id;
+    });
 
     res.render("user/view-orders", {
       layout: "./layout/homeLayout.ejs",
@@ -200,9 +198,9 @@ const orderDetails = async (req, res, next) => {
       .findById(req.params.id)
       .populate("items.productId")
       .populate("address");
-     orders.items= orders?.items.filter((item,index)=>{
-        return item.status!="Cancelled"
-      })
+    orders.items = orders?.items.filter((item, index) => {
+      return item.status != "Cancelled";
+    });
     res.render("user/order-details.ejs", {
       layout: "./layout/homeLayout.ejs",
       isLoggedIn: true,
@@ -213,170 +211,171 @@ const orderDetails = async (req, res, next) => {
   }
 };
 
-const getOrderProducts=async (req,res,next) => {
-  console.log("req.params.id")
-  console.log(req.params.id)
+const getOrderProducts = async (req, res, next) => {
+  console.log("req.params.id");
+  console.log(req.params.id);
   try {
-    const order=await orderModal.findById(req.params.id).populate('items.productId')
-    .populate('user').populate('address')
-    console.log(order)
-    res.render('admin/order-product',{layout:'./layout/adminLayout.ejs'
-    ,isLoggedIn:true,order:order,req:req})
+    const order = await orderModal
+      .findById(req.params.id)
+      .populate("items.productId")
+      .populate("user")
+      .populate("address");
+    console.log(order);
+    res.render("admin/order-product", {
+      layout: "./layout/adminLayout.ejs",
+      isLoggedIn: true,
+      order: order,
+      req: req,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 const cancelOrder = async (req, res, next) => {
   try {
-    let orderStatus=req?.body?.status
-    let userId=req.body.user
+    let orderStatus = req?.body?.status;
+    let userId = req.body.user;
+    console.log(req.query.productId)
 
-    const order=await orderModal.findById(req?.params?.id)
-    
+    const order = await orderModal.findById(req?.params?.id);
+
     if (!order) {
-      throw new Error('Order not found');
+      throw new Error("Order not found");
     }
 
-
-    if(req?.query?.productId){
-    const itemToUpdate = order.items.find(item => item.productId.equals(req.query.productId));
-    let price
-
-    let productId=itemToUpdate.productId;
-    const product=await productModal.findById(productId)
-    
-    if(product.offerPrice===0){
-      price=itemToUpdate.price
-      console.log(price)
-      console.log('price')
-    }else{
-      price=product.offerPrice
-      console.log(price)
-      console.log('offerprice')
-    } 
-    // if(itemToUpdate.offerPrice!=0) itemToUpdate.price=itemToUpdate.offerPrice
-    if (!itemToUpdate) {
-      throw new Error('Item not found in the order');
-    }
-
-   
-
-    if(orderStatus==="Cancelled"){
-      const order=await orderModal.findById(req.params.id).populate('coupon');
-
-      // If Coupon Applied ot Order
-
-      let totalAmount=0
-
-     let discountAmount=order?.coupon?.discountAmount
-      
-      if(!discountAmount) discountAmount=0;
-
-      let cancelledQty=itemToUpdate.quantity-req.body.qty
-    
-      const notCancelledArr=order.items.filter((item,index)=>{
-        return item.status!="Cancelled"
-      })
-
-
-
-      if(req?.body?.qty!=0){
-        
-
-        if(order?.coupon){
-          totalAmount=( Number(cancelledQty)*Number(price))
-                      -((discountAmount/req.body.qty))
-        //  totalAmount=(itemToUpdate.price*req.body.qty)-(discountAmount/req.body.qty)
-        }else {
-
-          totalAmount=Number(cancelledQty)*Number(price)
-        }
-        itemToUpdate.quantity=req.body.qty;
-       const updated=await orderModal.updateOne({_id:order._id},{$inc:{totalAmount:-Number(totalAmount)}})
-        console.log(updated)
-
-
-
-
-        // if(order?.paymentMode==="ONLINE" || "WALLET"){
-        // let walletAmountAdd=(cancelledQty*itemToUpdate.price)-(discountAmount/cancelledQty)
-        // console.log(walletAmountAdd)
-        
-        
-        // const wallet = await walletModal.updateOne(
-        //   { user_id: req.session.user._id },
-        //   { $inc: { amount: walletAmountAdd } }
-        // );
-        // }
-
-      }else if(notCancelledArr.length===1){
-        itemToUpdate.status = orderStatus;
-        await orderModal.updateOne({_id:order._id},{orderStatus:orderStatus})
-
-      }else{
-      itemToUpdate.status="Cancelled";
-      
-      if(order?.coupon){
-        console.log(price)
-        console.log(price)
-        console.log(price)
-        totalAmount=(Number(cancelledQty)*Number(price))
-                    -((discountAmount/order.items.length))
-      //  totalAmount=(itemToUpdate.price*req.body.qty)-(discountAmount/req.body.qty)
-      }else {
-
-        totalAmount=Number(cancelledQty)*Number(price)
-      }
-      itemToUpdate.quantity=req.body.qty;
-     const updated=await orderModal.updateOne({_id:order._id},{$inc:{totalAmount:-Number(totalAmount)}})
-      console.log(updated)
-       
-
-      }
-
-      let walletAmountAdd
-
-      if(order?.paymentMode==="ONLINE" || order?.paymentMode=== "WALLET"){
-        
-        if(order?.coupon) walletAmountAdd=(cancelledQty*price)-(discountAmount/order.items.length)
-        else walletAmountAdd=(cancelledQty*price)
-        console.log(walletAmountAdd)
-        
-        
-        const wallet = await walletModal.updateOne(
-          { user_id: req.session.user._id },
-          { $inc: { amount: walletAmountAdd } }
-        );
-        }
-
-      
-    }
-
-  }else{
-
-    order.items.forEach(item => {
-      item.status = orderStatus;
-    });
-
-    if(orderStatus==="Cancelled"){
-    if(order.paymentMode==="ONLINE" || order.paymentMode==="WALLET"){
-      console.log(userId)
-      const wallet = await walletModal.updateOne(
-      
-        { user_id: userId },
-        { $inc: { amount: order.totalAmount } }
+    if (req?.query?.productId) {
+      const itemToUpdate = order.items.find((item) =>
+        item.productId.equals(req.query.productId)
       );
-    }
+      let price;
 
-    }
-    await orderModal.findByIdAndUpdate(req.params.id, {
+      let productId = itemToUpdate?.productId;
+      const product = await productModal.findById(productId);
+
+      if (product.offerPrice === 0) {
+        price = itemToUpdate.price;
+        console.log(price);
+        console.log("price");
+      } else {
+        price = product.offerPrice;
+        console.log(price);
+        console.log("offerprice");
+      }
+      // if(itemToUpdate.offerPrice!=0) itemToUpdate.price=itemToUpdate.offerPrice
+      if (!itemToUpdate) {
+        throw new Error("Item not found in the order");
+      }
+
+      if (orderStatus === "Cancelled") {
+        const order = await orderModal
+          .findById(req.params.id)
+          .populate("coupon");
+
+        // If Coupon Applied ot Order
+
+        let totalAmount = 0;
+
+        let discountAmount = order?.coupon?.discountAmount;
+
+        if (!discountAmount) discountAmount = 0;
+
+        let cancelledQty = itemToUpdate.quantity - req.body.qty;
+
+        const notCancelledArr = order.items.filter((item, index) => {
+          return item.status != "Cancelled";
+        });
+
+        if (req?.body?.qty != 0) {
+          if (order?.coupon) {
+            totalAmount =
+              Number(cancelledQty) * Number(price) -
+              discountAmount / req.body.qty;
+            //  totalAmount=(itemToUpdate.price*req.body.qty)-(discountAmount/req.body.qty)
+          } else {
+            totalAmount = Number(cancelledQty) * Number(price);
+          }
+          itemToUpdate.quantity = req.body.qty;
+          const updated = await orderModal.updateOne(
+            { _id: order._id },
+            { $inc: { totalAmount: -Number(totalAmount) } }
+          );
+          console.log(updated);
+
+          // if(order?.paymentMode==="ONLINE" || "WALLET"){
+          // let walletAmountAdd=(cancelledQty*itemToUpdate.price)-(discountAmount/cancelledQty)
+          // console.log(walletAmountAdd)
+
+          // const wallet = await walletModal.updateOne(
+          //   { user_id: req.session.user._id },
+          //   { $inc: { amount: walletAmountAdd } }
+          // );
+          // }
+        } else if (notCancelledArr.length === 1) {
+          itemToUpdate.status = orderStatus;
+          await orderModal.updateOne(
+            { _id: order._id },
+            { orderStatus: orderStatus }
+          );
+        } else {
+          itemToUpdate.status = "Cancelled";
+
+          if (order?.coupon) {
+            console.log(price);
+            console.log(price);
+            console.log(price);
+            totalAmount =
+              Number(cancelledQty) * Number(price) -
+              discountAmount / order.items.length;
+            //  totalAmount=(itemToUpdate.price*req.body.qty)-(discountAmount/req.body.qty)
+          } else {
+            totalAmount = Number(cancelledQty) * Number(price);
+          }
+          itemToUpdate.quantity = req.body.qty;
+          const updated = await orderModal.updateOne(
+            { _id: order._id },
+            { $inc: { totalAmount: -Number(totalAmount) } }
+          );
+          console.log(updated);
+        }
+
+        let walletAmountAdd;
+
+        if (
+          order?.paymentMode === "ONLINE" ||
+          order?.paymentMode === "WALLET"
+        ) {
+          if (order?.coupon)
+            walletAmountAdd =
+              cancelledQty * price - discountAmount / order.items.length;
+          else walletAmountAdd = cancelledQty * price;
+          console.log(walletAmountAdd);
+
+          const wallet = await walletModal.updateOne(
+            { user_id: req.session.user._id },
+            { $inc: { amount: walletAmountAdd } }
+          );
+        }
+      }
+    } else {
+      order.items.forEach((item) => {
+        item.status = orderStatus;
+      });
+
+      if (orderStatus === "Cancelled") {
+        if (order.paymentMode === "ONLINE" || order.paymentMode === "WALLET") {
+          console.log(userId);
+          const wallet = await walletModal.updateOne(
+            { user_id: userId },
+            { $inc: { amount: order.totalAmount } }
+          );
+        }
+      }
+      await orderModal.findByIdAndUpdate(req.params.id, {
         orderStatus: orderStatus,
-       });
-
-  }
+      });
+    }
     await order.save();
-
 
     // const updatedOrder = await orderModal.findByIdAndUpdate(req.params.id, {
     //   orderStatus: "Cancelled",
@@ -389,17 +388,20 @@ const cancelOrder = async (req, res, next) => {
 
 const viewOrdersAdmin = async (req, res, next) => {
   try {
-    
-    console.log(req.query.page)
+    console.log(req.query.page);
     const ITEMS_PER_PAGE = 4;
-    let ITEMS_TO_SKIP
-    if(req.query.page){ ITEMS_TO_SKIP=req.query.page*ITEMS_PER_PAGE }
-    else{ ITEMS_TO_SKIP=0 }
-    
-    const findOrders=await orderModal.find({orderStatus:{$nin:['Delivered','Cancelled']}})
-    const noOfDocuments=findOrders.length/ITEMS_PER_PAGE
-  
-    
+    let ITEMS_TO_SKIP;
+    if (req.query.page) {
+      ITEMS_TO_SKIP = req.query.page * ITEMS_PER_PAGE;
+    } else {
+      ITEMS_TO_SKIP = 0;
+    }
+
+    const findOrders = await orderModal.find({
+      orderStatus: { $nin: ["Delivered", "Cancelled"] },
+    });
+    const noOfDocuments = findOrders.length / ITEMS_PER_PAGE;
+
     const orders = await orderModal.aggregate([
       {
         $match: {
@@ -421,7 +423,7 @@ const viewOrdersAdmin = async (req, res, next) => {
           user: { $arrayElemAt: ["$user.username", 0] },
           user: { $arrayElemAt: ["$user._id", 0] },
           orderStatus: 1,
-          paymentMode:1,
+          paymentMode: 1,
           totalAmount: 1,
           isPaid: 1,
           productcount: { $size: "$items" },
@@ -433,11 +435,11 @@ const viewOrdersAdmin = async (req, res, next) => {
         },
       },
       {
-        $skip:ITEMS_TO_SKIP
+        $skip: ITEMS_TO_SKIP,
       },
       {
-        $limit:ITEMS_PER_PAGE
-      }
+        $limit: ITEMS_PER_PAGE,
+      },
     ]);
 
     // const orders2 = await orderModal.find({}).populate('items.productId').populate('user').populate('address')
@@ -445,21 +447,17 @@ const viewOrdersAdmin = async (req, res, next) => {
     // console.log(orders2)
     // console.log('orders2')
 
+    //  const order2=await  orderModal.findById(req?.params?.id) // Replace 'orderId' with the actual order ID you want to query
+    // .select('items.productId items.quantity items.status paymentMode')
+    // .populate('items.productId', 'productname description price') // Replace with the fields you want to populate
+    // .exec()
 
-
-  //  const order2=await  orderModal.findById(req?.params?.id) // Replace 'orderId' with the actual order ID you want to query
-  // .select('items.productId items.quantity items.status paymentMode')
-  // .populate('items.productId', 'productname description price') // Replace with the fields you want to populate
-  // .exec()
-
-
-
-   // console.log(Math.ceil(orders.length / 5));
+    // console.log(Math.ceil(orders.length / 5));
 
     res.render("admin/view-orders", {
       layout: "./layout/adminLayout.ejs",
       orders: orders,
-      documentsNo:noOfDocuments
+      documentsNo: noOfDocuments,
     });
   } catch (error) {
     console.log(error);
@@ -480,7 +478,8 @@ const editOrder = async (req, res, next) => {
 };
 
 module.exports = {
-  placeOrder,getOrderProducts,
+  placeOrder,
+  getOrderProducts,
   orderPage,
   viewOrders,
   editOrder,

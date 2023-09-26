@@ -2,11 +2,13 @@ const productCancelBtns = document.querySelectorAll("#product-cancel");
 const cancelProductModel = document.querySelector("#cancel-product-modal");
 const exitProductBtn = document.querySelector("#exitBtnProduct");
 const cancelProductBtn = document.querySelector("#cancelBtnProduct");
+const cancellAllBtn=document.querySelector('#cancel-btn')
 const modal = document.querySelector("#modalBgDeleteProd");
 const orderId=document.querySelector('#orderId').value;
 const minusBtns=document.querySelectorAll('.value-minus')
 const plusBtns=document.querySelectorAll('.value-plus')
 const qtyValue=document.querySelectorAll('.value')
+const userId=document.querySelector('#userId').value;
 console.log(qtyValue[0].textContent)
 console.log(orderId)
 let productId
@@ -60,10 +62,42 @@ minusBtns.forEach(function (minusBtn,index) {
 })
 
 plusBtns.forEach(function (plusBtn,index) {
-  console.log(qtyValue)
+
   plusBtn.addEventListener('click',function (){
     if( Number(qtyValue[index].textContent)<10){
       qtyValue[index].textContent=Number(qtyValue[index].textContent)+1
     }
   })
 })
+
+
+cancellAllBtn.addEventListener('click',function () {
+  console.log(orderId)
+  cancellAllOrders(orderId)
+})
+
+
+function cancellAllOrders (orderId) {
+  fetch(`/cancel-order/${orderId}`,
+  {
+      method:'POST',
+      headers: {
+       'Content-Type': 'application/json',
+        // You may need to include other headers like authorization tokens here
+      },
+      body: JSON.stringify({
+      status:"Cancelled",
+      user:userId
+  }) 
+  }
+  
+       )
+  .then(response=>{response.json()})
+  .then(data=>{
+      
+      location.reload(true)
+      console.log(data)
+  })
+  .catch(error=>console.log(error))
+ 
+} 

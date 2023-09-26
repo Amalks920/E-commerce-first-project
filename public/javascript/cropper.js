@@ -1,4 +1,6 @@
 
+let fileListArray=[]
+
 function cropImg(crpImg,btn){
 
 // const crpImg=document.getElementById("crpImg")
@@ -10,6 +12,8 @@ const cropper=new Cropper(crpImg,{
     minContainerWidth:400,
     minContainerHeight:200
 })
+
+
 
 btn.addEventListener('click',function(){
     const newImage=cropper.getCroppedCanvas().toDataURL('image/png')
@@ -34,16 +38,17 @@ const imageFile = new File([blob], 'image.png', { type: 'image/png' }); // Adjus
 
 console.log(imageFile)
 
+
 ////////////////////////////////////
 // Assuming you have an existing FileList called 'fileList'
-const fileListArray = Array.from(fileList); // Convert FileList to an array
+// const fileListArray = Array.from(fileList); // Convert FileList to an array
 
 // Find the index of the file you want to remove (e.g., remove the first image)
-const fileToRemoveIndex = 0;
+// const fileToRemoveIndex = 0;
 
-if (fileToRemoveIndex >= 0 && fileToRemoveIndex < fileListArray.length) {
-  fileListArray.splice(fileToRemoveIndex, 1); // Remove the file at the specified index
-}
+// if (fileToRemoveIndex >= 0 && fileToRemoveIndex < fileListArray.length) {
+//   fileListArray.splice(fileToRemoveIndex, 1); // Remove the file at the specified index
+// }
 
 // Create a new File object for the new image (e.g., 'newImageFile' is the new image File)
 
@@ -52,8 +57,9 @@ if (fileToRemoveIndex >= 0 && fileToRemoveIndex < fileListArray.length) {
 fileListArray.push(imageFile);
 
 // Create a new FileList from the updated array
-const updatedFileList = new FileList(fileListArray);
 
+// const updatedFileList = new FileList(fileListArray);
+console.log(fileListArray)
 // Now, 'updatedFileList' contains the updated set of files
 
 

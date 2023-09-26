@@ -48,7 +48,7 @@
             </thead>
             <tbody>
             <% orders.items.forEach((item,index)=>{ %>
-               
+               <input value="<%=orders.user %>" name="userId" id="userId" type="text" hidden>
                 <input type="text" value="<%=orders._id -%>" name="" id="orderId" hidden>
                 <input type="text" value="<%=item._id -%>" name="" id="productId" hidden>
 
