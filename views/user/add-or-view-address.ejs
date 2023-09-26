@@ -18,20 +18,19 @@
 
 
 
- <% console.log("addresses from amalks") %>
-<% console.log(addresses) %>
+
 <div style="display: flex; height: fit-content;">
 
-<aside class="sidebar-left" style="width: 15%;height: 1000px; box-shadow: 50px;background-color: rgb(205, 205, 205);">
+<aside class="sidebar-left" style="width: 15%;height: 1000px; box-shadow: 50px;background-color: black;z-index: 2;margin-top: 20px;">
     <nav class="navbar navbar-inverse">
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="sidebar-menu">
-            <li class="treeview" style="background-color: rgb(247, 247, 247);">
+            <!-- <li class="treeview" style="background-color: rgb(5, 5, 5);">
               <a href="index.html">
               <i class="fa fa-dashboard"></i> <span>OverView</span>
               </a>
-            </li>
+            </li> -->
             <li class="treeview" style="background-color: rgb(247, 247, 247);margin-top: 5px;">
                 <a href="index.html">
                 <i class="fa fa-dashboard"></i> <span>Add Address</span>
@@ -54,7 +53,7 @@
     </nav>
   </aside>
 
-  <div style="width: 100%;"> 
+  <div style="width: 100%;margin-top: 100px;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;"> 
     <section class="content-main"style=" height: fit-content;">
         <form
           id="address-form"
@@ -71,13 +70,13 @@
             </div>
       
             <div class="col-lg-6" >
-              <div class="card mb-4" style="background-color: rgb(233, 226, 226);box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+              <div class="card mb-4" style="background-color: rgb(82, 79, 79);box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                 <div class="card-header">
                   <h4>Basic</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="color: white;">
                   <div class="mb-4">
-                    <label for="product_name" class="form-label">City</label>
+                    <label for="product_name" class="form-label" style="font-size: larger;">City</label>
                     <p id="cityerr" style="color: red;display: none;">invalid city</p>
                     <input
                       type="text"
@@ -87,7 +86,7 @@
                       id="city" />
                   </div>
                   <div class="mb-4">
-                    <label class="form-label">Address</label>
+                    <label class="form-label" style="font-size: larger;" >Address</label>
                     <p id="addresserr" style="color: red;display: none;">invalid Address</p>
 
                     <textarea
@@ -100,7 +99,7 @@
                   </div>
 
                   <div class="mb-4">
-                    <label for="product_name" class="form-label">state</label>
+                    <label for="product_name" class="form-label" style="font-size: larger;">state</label>
                     <p id="staterr" style="color: red;display: none;">invalid state</p>
 
                     <input
@@ -111,7 +110,7 @@
                       id="state" />
                   </div>
                   <div class="mb-4">
-                    <label for="product_name" class="form-label">Phone Number</label>
+                    <label for="product_name" class="form-label" style="font-size: larger;">Phone Number</label>
                     <p id="mobileErr" style="color: red;display: none;">Inavalid Mobile Number</p>
                     <input
                       type="number"
@@ -124,7 +123,7 @@
                   <div class="row">
                     <div class="col-lg-4">
                       <div class="mb-4">
-                        <label  class="form-label">Pincode</label>
+                        <label  class="form-label" style="font-size: larger;">Pincode</label>
                         <div class="row gx-2">
                           <input
                             placeholder="$"
@@ -160,7 +159,7 @@
             <% addresses?.address?.forEach((address,index)=>{ %>
 
           
-            <div class="address" style="margin: 10px;padding: 20px;background-color: rgb(233, 226, 226);box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+            <div class="address" style="margin: 10px;padding: 20px;background-color:rgb(82, 79, 79);box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);color: white;">
                 <input type="radio" id="address1" name="address" value="123 Main St, City, Country" <% if(address?.isSelected){ %>
                  checked
                <% } %> >
@@ -170,8 +169,8 @@
                   <p><%=address.state -%></p>
                   <p><%=address.mobileNumber -%></p>
                   <p><%=address.pincode -%></p>
-                  <button id="delete-address" data-id="<%=index -%>" style="margin-right: 15px;">DELETE</button>
-                  <button>EDIT</button>
+                  <button id="delete-address" data-id="<%=index -%>" style="margin-right: 15px;background-color: red;border: none;">DELETE</button>
+                  <button style="background-color: blue;border: none;">EDIT</button>
                 </div>
             </div>
 

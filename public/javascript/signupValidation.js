@@ -3,6 +3,7 @@ const userNameError=document.getElementById('usernameErr')
 const emailElement=document.getElementById('signupEmail')
 const emailErr=document.getElementById('emailErr')
 const passwordInput = document.getElementById("signupPassword")
+const rePasswordInput = document.getElementById("signupRePassword")
 const passwordError = document.getElementById("passwordErr")
 
 
