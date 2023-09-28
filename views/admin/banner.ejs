@@ -31,8 +31,8 @@
                               <div class="row gx-2">
                                 <div class="col-sm-6 mb-3">
                                   <label class="form-label">Product Offer</label>
-                                  <select name="offer" class="form-select">
-                                  <option value="1" disabled selected>Choose Category Offer</option>
+                                  <select name="offer" id="prod-offer" class="form-select">
+                                  <option id="default-cat" value="1" disabled selected>Choose Category Offer</option>
                                   <% productOffers.forEach((offer,index)=>{ %>
                                     <option value="<%=offer._id %>"><%=offer.offertitle %></option>
                                  <% }) %>
@@ -68,21 +68,23 @@
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>image</th>
-                                    <th>images</th>
+                                   
                                 </tr>
                             </thead>
                            
                             <tbody>
                                 <% banner?.forEach((banner,index)=>{ %>
 
-                               
+                                    
                                 <tr>
+                                    <a href="#">
                                     <td><%=index+1 %></td>
-                                    <td class="text-center">
+                                    <td class="" >
                                     <%=banner?.bannername %>
                                     </td>
                                     <td><img src="/images/uploads/<%=banner.images %>" alt="" width="50"></td>
-                                    <td></td>
+                                    <td><a href="/admin/edit-banner/<%=banner._id %>">Edit</a></td>
+                                </a>
                                 </tr>
                                 <% }) %>
                             
@@ -97,32 +99,4 @@
    
 </section> <!-- content-main end// -->
 
-<script>
-    const bannerForm = document.getElementById('bannerForm');
-    const bannerNameInput = document.getElementById('bannername');
-    const imagesInput = document.querySelector('input[type="file"]');
-    const submitButton = document.querySelector('button[type="submit"]');
-
-    bannerForm.addEventListener('submit', function (event) {
-        let isValid = true;
-
-        // Reset previous error messages
-        bannerNameInput.classList.remove('is-invalid');
-        imagesInput.classList.remove('is-invalid');
-
-        // Perform validation for each field
-        if (bannerNameInput.value.trim() === '') {
-            isValid = false;
-            bannerNameInput.classList.add('is-invalid');
-        }
-
-        if (imagesInput.files.length === 0) {
-            isValid = false;
-            imagesInput.classList.add('is-invalid');
-        }
-
-        if (!isValid) {
-            event.preventDefault(); // Prevent form submission if validation fails
-        }
-    });
-</script>
+<script src="/javascript/banner.js"></script>

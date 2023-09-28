@@ -1,6 +1,6 @@
 
-let fileListArray=[]
-
+// let fileListArray=[]
+let base64Array=[]
 function cropImg(crpImg,btn){
 
 // const crpImg=document.getElementById("crpImg")
@@ -15,28 +15,38 @@ const cropper=new Cropper(crpImg,{
 
 
 
-btn.addEventListener('click',function(){
-    const newImage=cropper.getCroppedCanvas().toDataURL('image/png')
+btn.addEventListener('click',async function(){
+    const newImage=cropper.getCroppedCanvas()
   
-    crpImg.src=newImage
+    crpImg.src=newImage.toDataURL('image/png')
    
+    const base64=newImage.toDataURL('image/png')
+   
+    
+  base64Array.push(base64)
+  console.log(base64Array)
+  localStorage.setItem('base64Images', JSON.stringify(base64Array));
 
-
-    const dataURL =newImage
+  //  const dataURL =newImage
 
 // Extract the base64 data from the data URL (remove the "data:image/png;base64," prefix)
-const base64Data = dataURL.replace(/^data:image\/(png|jpeg);base64,/, '');
+//const base64Data = dataURL.replace(/^data:image\/(png|jpeg);base64,/, '');
 
 // Convert the base64 data to a Uint8Array
-const uint8Array = new Uint8Array(atob(base64Data).split('').map(char => char.charCodeAt(0)));
+//const uint8Array = new Uint8Array(atob(base64Data).split('').map(char => char.charCodeAt(0)));
 
 // Create a Blob from the Uint8Array
-const blob = new Blob([uint8Array], { type: 'image/png' }); // Adjust 'type' as needed
+
+//const blob = new Blob([uint8Array], { type: 'image/png' }); // Adjust 'type' as needed
 
 // Create a File from the Blob (you can specify the file name as the second parameter)
-const imageFile = new File([blob], 'image.png', { type: 'image/png' }); // Adjust 'type' and 'name' as needed
 
-console.log(imageFile)
+//const imageFile = new File([blob], 'image.png', { type: 'image/png' }); // Adjust 'type' and 'name' as needed
+
+//console.log(imageFile)
+
+//imageToSent=document.querySelectorAll('#previewImg')
+
 
 
 ////////////////////////////////////
@@ -54,15 +64,18 @@ console.log(imageFile)
 
 
 // Add the new image file to the array
-fileListArray.push(imageFile);
+// fileListArray.push(imageFile);
+
 
 // Create a new FileList from the updated array
 
 // const updatedFileList = new FileList(fileListArray);
-console.log(fileListArray)
+
 // Now, 'updatedFileList' contains the updated set of files
 
 
+// imageToSent=fileListArray
+// console.log(imageToSent)
 
     cropper.destroy()
 })

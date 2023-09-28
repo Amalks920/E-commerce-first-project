@@ -161,7 +161,8 @@ const orderPage = async (req, res, next) => {
 const viewOrders = async (req, res, next) => {
   try {
     // const allOrders = (await orderModal.find({ user: req.session.user._id }))
-    console.log(req.session.user._id);
+    let ORDER_PER_PAGE=9;
+    
     let allOrders = await orderModal.aggregate([
       {
         $match: {

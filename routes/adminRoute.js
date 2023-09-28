@@ -11,7 +11,7 @@ const { getViewProducts, getEditProduct, editProductPost, deleteImage } = requir
 const { getViewUsers, blockUser } = require('../controller/userCtrl')
 const {viewOrdersAdmin,editOrder, getOrderProducts, cancelOrder}=require('../controller/orderCtrl');
 const { set } = require("lodash");
-const { getBannerManagementPage, addBannerPost } = require("../controller/bannerCtrl");
+const { getBannerManagementPage, addBannerPost, getEditBanner, editBanner } = require("../controller/bannerCtrl");
 
 const {getAddOffers, viewOffers, addOffer, getEditOffers, editOffer, viewOfferProducts, removeOffer}=require('../controller/offerCtrl');
 const { getSalesReport, salesReport, downloadReports, monthlyReport } = require("../controller/salesReportCtrl");
@@ -61,6 +61,8 @@ router.get('/view-coupon',setCacheControl,adminAuthorizationMiddleware,viewCoupo
 //banner
 router.get('/banner-management',setCacheControl,adminAuthorizationMiddleware,getBannerManagementPage)
 router.post('/add-banner',upload.array("images", 10),setCacheControl,adminAuthorizationMiddleware,addBannerPost)
+router.get('/edit-banner/:bannerId',setCacheControl,adminAuthorizationMiddleware,getEditBanner)
+router.post('/edit-banner/:bannerId',upload.array("images", 10),setCacheControl,adminAuthorizationMiddleware,editBanner)
 
 
 
@@ -78,9 +80,9 @@ router.post('/remove-offer/:productId',setCacheControl,adminAuthorizationMiddlew
 // sales report 
 
 // router.get('/sales-report',getSalesReport)
-router.get('/sales-report',salesReport)
-router.get('/reports/sales/download/:type',downloadReports);
-router.get("/monthly-report", monthlyReport)
+router.get('/sales-report',setCacheControl,adminAuthorizationMiddleware,salesReport)
+router.get('/reports/sales/download/:type',setCacheControl,adminAuthorizationMiddleware,downloadReports);
+router.get("/monthly-report",setCacheControl,adminAuthorizationMiddleware, monthlyReport)
 
 
 module.exports = router

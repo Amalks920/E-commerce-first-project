@@ -20,6 +20,8 @@ const salesReport=async (req, res, next) => {0
 
  let {from,to}=req.query
     
+    const ITEMS_PER_PAGE=9
+    const CURRENT_PAGE_NUMBER=req.query.pageno
 
     const today = moment().format('YYYY-MM-DD')
    
@@ -43,18 +45,22 @@ const salesReport=async (req, res, next) => {0
     if (from > to) [from, to] = [to, from]
    
     to += 'T23:59:59.999Z'
-   
+    const NO_OF_ORDERS = (await orderModal.find({ createdAt: { $gte: from, $lte: to }, orderStatus: 'Delivered' })).length
+    NO_OF_BUTTONS=Math.floor(NO_OF_ORDERS/ITEMS_PER_PAGE)
+
     const orders = await orderModal.find({ createdAt: { $gte: from, $lte: to }, orderStatus: 'Delivered' }).populate(
    
     'user'
    
     )
+    .skip(ITEMS_PER_PAGE*CURRENT_PAGE_NUMBER)
+    .limit(ITEMS_PER_PAGE)
 
  from = from.split('T')[0]
  to = to.split('T')[0]
  const netTotalAmount = orders.reduce((acc, order) => acc + order.totalAmount, 0)
  const netFinalAmount = orders.reduce((acc, order) => acc + order.finalAmount, 0)
- const netDiscount = orders.reduce((acc, order) => acc + order.discount, 0)
+ const netDiscount = orders.reduce((acc, order) => acc + order.discountAmount, 0)
  const dateRanges = [
    
   { text: 'Today', from: today, to: today },          
@@ -67,7 +73,9 @@ const salesReport=async (req, res, next) => {0
 
   console.log(orders, from, to, dateRanges, netTotalAmount, netFinalAmount, netDiscount)
    
-    res.render('admin/sales-report', { layout:'./layout/adminLayout.ejs', orders, from, to, dateRanges, netTotalAmount, netFinalAmount, netDiscount })          
+    res.render('admin/sales-report', { layout:'./layout/adminLayout.ejs',
+     orders, from, to, dateRanges, netTotalAmount, 
+     netFinalAmount, netDiscount,NO_OF_BUTTONS })      
     } catch (error) {
      console.log(error)
     next(error)
@@ -342,7 +350,7 @@ const monthlyReport = async (req, res) => {
               };
             }
             
-            monthlySales[monthName].revenue += order.finalAmount;
+            monthlySales[monthName].revenue += order.totalAmount;
             monthlySales[monthName].productCount += order.items.length;
             monthlySales[monthName].orderCount++;
       

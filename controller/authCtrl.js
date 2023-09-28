@@ -115,7 +115,7 @@ const userLogin = expressAsycnHandler(async (req, res, next) => {
       //   res.status(401).json({msg:"invalid credentials"})
     }
   } catch (error) {
-    res.status(401).json({ error: error.message +"  " +error.status });
+    res.redirect('/user/404')
   }
 });
 
@@ -168,7 +168,7 @@ const getAdminLogin = expressAsycnHandler(async (req, res, next) => {
       req: req,
     });
   } catch (error) {
-    console.log(error);
+   console.log(error)
   }
 });
 

@@ -59,6 +59,8 @@
                     <div class="row gx-2">
                       <input
                         placeholder="discount amount"
+                        min="1"
+                        max="200"
                         value="<%=data.discountAmount %>"
                         name="discountAmount"
                         id="discountAmount"
@@ -73,6 +75,8 @@
                     <div class="row gx-2">
                       <input
                         placeholder="$"
+                        min="30"
+                        max="200"
                         value="<%=data.minimumAmount %>"
                         name="minimumAmount"
                         id="minimumAmount"
@@ -89,6 +93,8 @@
                         placeholder="max redemptions"
                         value="<%=data.maxRedemptions %>"
                         name="maxRedemptions"
+                        min="1"
+                        max="200"
                         id="maxRedemptions"
                         type="number"
                         class="form-control" />

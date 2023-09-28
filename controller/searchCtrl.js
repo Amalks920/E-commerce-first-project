@@ -7,9 +7,9 @@ const searchPage=async(req,res,next)=>{
   let sort=req?.query?.sort;
   let categories=req?.query?.category?.split(',')
   let search=req?.query?.search
-  let PAGE=req?.query?.page
-  // const finalElements = categories.slice(0, -1);
-  // console.log(categories)
+  let PAGE=req?.query?.page;
+  console.log(PAGE,PAGE,PAGE,PAGE,PAGE )
+ 
           const category=await categoryModal.find({})
           
           const allProducts=await productModal.find({status:{$ne:"Delisted"}})
@@ -17,18 +17,7 @@ const searchPage=async(req,res,next)=>{
           NO_OF_PAGES=allProducts.length/9;
           console.log(NO_OF_PAGES)
           console.log("NO_OF_PAGES")
-        // const productCountByCategory = await productModal.aggregate([
-        //     {
-        //       $group: {
-        //         _id: "$productCategory", 
-        //         productCount: { $sum: 1 }, 
-        //       },
-              
-        //     },
-        //     {
-        //       $limit: 9,
-        //   }
-        //   ]);
+ 
           
     try {
         let products
@@ -59,6 +48,9 @@ const searchPage=async(req,res,next)=>{
               $match: {
                 'category.productCategory': { $in: categories }
               }
+            },
+            {
+              $skip:PAGE*9
             },
             {
                 $limit: 9,
@@ -92,7 +84,8 @@ const searchPage=async(req,res,next)=>{
             categories,
             isLoggedIn:true,
             searchInput:search,
-            NO_OF_PAGES:NO_OF_PAGES
+            NO_OF_PAGES:NO_OF_PAGES,
+            req
         })
 
         

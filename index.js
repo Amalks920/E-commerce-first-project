@@ -31,7 +31,7 @@ app.use(express.static('public/admin'))
 app.use(express.static('public/images/homepage'))
 app.use(express.static('public/admin/adminLogin'))
 app.use(express.static('public/admin-assets'))
-app.use(express.json())
+app.use(express.json({limit:"10mb"}))
 app.use(express.urlencoded({extended:true}))
 
 app.use(session({ secret: "Private", resave: true, saveUninitialized: true}))

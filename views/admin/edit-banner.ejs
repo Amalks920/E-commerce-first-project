@@ -1,0 +1,95 @@
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title"> Edit Banners </h2>
+            
+        </div>
+        <div>
+            <input type="text" placeholder="Search Categories" class="form-control bg-white">
+        </div>
+    </div>
+    
+
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <form id="bannerForm" action="/admin/edit-banner/<%=banner._id %>" method="post" enctype="multipart/form-data">
+                        <p style="color: red;" id="err"></p>
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Banner Name</label>
+                            <input   type="text" value="<%=banner.bannername %>" id="bannername" name="bannername"  placeholder="Type here" class="form-control input" id="category-name" />
+                        </div>
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                              <h4>Product Offers</h4>
+                            </div>
+                            <div class="card-body">
+                  
+                              <div class="row gx-2">
+                                <div class="col-sm-6 mb-3">
+                                  <label class="form-label">Product Offer</label>
+                                  <select name="offer" id="prod-offer" class="form-select">
+                                  <option id="default-cat" value="1" disabled >Choose Category Offer</option>
+                                  <% productOffers.forEach((offer,index)=>{ %>
+                                    
+                                    <%if(offer._id.toString()===banner.offer.toString()){%>
+                                        console.log('sldkjfjjjjjjjjj')
+                                        <option value="<%= offer._id %>" selected><%= offer.offertitle %></option>
+
+                                    <%}else{%>
+                                        <option value="<%= offer._id %>" ><%= offer.offertitle %></option>
+                                    <%}%>
+
+                                 <% }) %>
+                                  
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        <div class="mb-4">
+                            <label for="bannername" class="form-label ">Image</label>
+
+                            <input type="file" value=""  name="images" placeholder="Type here" class="form-control input" id="product_name" />
+                        </div>
+
+
+                        <!-- <div class="mb-4">
+                            <label class="form-label">Description</label>
+                            <textarea  id="description" type="text" placeholder="Type here"  name="categoryDescription" class="form-control input"></textarea>
+                        </div> -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Add Banner</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div> <!-- .row // -->
+        </div> <!-- card body .// -->
+    </div> <!-- card .// -->
+   
+</section> <!-- content-main end// -->
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+  const selectElement = document.getElementById('prod-offer');
+  const bannerId = '<%= banner._id %>'; // Replace with the correct way to access banner._id
+
+  // Loop through options and select the one that matches banner._id
+  for (let i = 0; i < selectElement.options.length; i++) {
+    const option = selectElement.options[i];
+    if (option.value === bannerId) {
+      option.selected = true;
+      break; // Stop searching once a match is found
+    }
+  }
+});
+
+</script>
+
+<script src="/javascript/banner.js"></script>

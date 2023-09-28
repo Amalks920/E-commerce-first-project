@@ -20,7 +20,7 @@
                         <p style="color: red;" id="err"><%=req.query.err %></p>
                         <div class="mb-4">
                             <label for="product_name" class="form-label">Category Name</label>
-                            <input  type="text" id="category" name="productCategory"  placeholder="Type here" class="form-control input" id="category-name" />
+                            <input  type="text" id="category" minlength="3" max="30" name="productCategory"  placeholder="Type here" class="form-control input" id="category-name" />
                         </div>
 
 
@@ -76,7 +76,7 @@
 </section> <!-- content-main end// -->
 
 
-
+<!-- 
 <script>
     const imagesInput = document.querySelector('input[type="file"]');
     const category=document.getElementById('category');
@@ -93,13 +93,13 @@
       description.classList.remove('is-invalid');
 
             // Perform validation for each field
-      if (category.value.trim() === '') {
+      if (category.value.trim() === '' || !validateCatName(category.value.trim())) {
         isValid = false;
         category.classList.add('is-invalid');
       }
 
 
-      if (description.value.trim() === '') {
+      if (description.value.trim() === '' || !validateDescription(description.value.trim())) {
           isValid = false;
           description.classList.add('is-invalid');
       }
@@ -153,4 +153,25 @@
     }
 }
 
-</script>
+
+
+function validateCatName(value){
+
+    categoryRegExpPattern=/^[A-Z][A-Za-z\s0-9]{1,49}$/
+
+    return categoryRegExpPattern.test(value)
+
+}
+
+function validateDescription(value) {
+  // Define the regular expression pattern for descriptions
+  const descriptionRegExpPattern = /^[A-Za-z0-9\s.,!?'"()\-]{3,100}$/;
+
+  // Test the value against the regular expression
+  return descriptionRegExpPattern.test(value);
+}
+
+
+</script> -->
+
+<script src="/javascript/categoryValidation.js"></script>

@@ -52,6 +52,9 @@ const getAddProduct=expressAsyncHandler(async(req,res,next)=>{
 //   },)
 
   const addProduct = expressAsyncHandler(async (req, res) => {
+    console.log(req.body)
+    console.log('req.filesss')
+    console.log(req.body.imageToSent)
     const errors = validationResult(req);
   
     if (!errors.isEmpty()) {
@@ -61,10 +64,13 @@ const getAddProduct=expressAsyncHandler(async(req,res,next)=>{
     let product = req.body;
     const images = [];
   
-    if (req.files.length > 0) {
-      for (let file of req.files) {
-        const imageName = `cropped_${file.filename}`;
-        await sharp(file.path)
+    if (req.body.imageToSent.length > 0) {
+      for (let file of req.body.imageToSent) {
+
+        const buffer = Buffer.from(file, 'base64');
+
+        const imageName = `cropped_${".png"}`;
+        await sharp(buffer)
           .resize(920, 920, { fit: 'cover' })
           .toFile(`./public/images/uploads/${imageName}`);
   

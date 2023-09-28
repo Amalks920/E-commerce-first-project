@@ -1,6 +1,5 @@
 <section class="content-main">
-    <%console.log("offer")%>
-    <%console.log(offer)%>
+ 
     <form
       id="offerForm"
       action="/admin/edit-offer/<%=offer._id %>"
@@ -9,7 +8,7 @@
       <div class="row">
         <div class="col-9">
           <div class="content-header">
-            <h2 class="content-title">Add Offer</h2>
+            <h2 class="content-title">Edit  Offer</h2>
             <div>
               <button type="submit" class="btn btn-md rounded font-sm hover-up">
                 Publish
@@ -29,7 +28,7 @@
                 <input
                   type="text"
                   name="offertitle"
-                  value="offer.offertitle"
+                  value="<%=offer.offertitle%>"
                   placeholder="Type here"
                   class="form-control"
                   id="offerName" />
@@ -140,7 +139,7 @@
   </section>
   <!-- content-main end// -->
   
-  <script>
+  <!-- <script>
     const offerForm = document.getElementById("offerForm");
     const offerNameInput = document.getElementById("offerName");
     const productCategorySelect = document.querySelector(
@@ -249,4 +248,6 @@
             event.preventDefault(); // Prevent form submission if validation fails
         }
         
-    })
+    }) -->
+
+    <script src="/javascript/offerValidation.js"></script>

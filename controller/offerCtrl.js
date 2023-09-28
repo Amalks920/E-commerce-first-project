@@ -24,8 +24,10 @@ const getEditOffers=async(req,res,next)=>{
 
 const viewOffers=async(req,res,next)=>{
     try {
-        const offers=await offerModal.find({})
-        res.render('admin/view-offers',{layout:'./layout/adminLayout.ejs',offers:offers})
+        let pageNo=req?.query?.page
+        let pageinBtn=Math.floor((await offerModal.find({})).length/pageNo)
+        const offers=await offerModal.find({}).limit(2).skip(2)
+        res.render('admin/view-offers',{layout:'./layout/adminLayout.ejs',offers:offers,pageinBtn})
     } catch (error) {
         console.log(error)
     }

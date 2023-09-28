@@ -15,7 +15,7 @@
 <section class="content-main">
   <form
     id="productForm"
-    action="/admin/product/add-product"
+    action=""
     method="post"
     enctype="multipart/form-data">
     <div class="row">
@@ -64,6 +64,7 @@
                     <input
                       placeholder="$"
                       min="1"
+                      max="20000"
                       minlength="1"
                       id="price"
                       name="price"
@@ -78,6 +79,7 @@
                     <input
                       placeholder="stock"
                       min="1"
+                      max="300"
                       id="stock"
                       name="stock"
                       type="number"
@@ -186,6 +188,13 @@
   const priceInput = document.getElementById("price");
   const stockInput = document.getElementById("stock");
   const imagesInput = document.querySelector('input[type="file"]');
+
+  let imageToSent=[];
+  let productname;
+  let productCategory;
+  let description;
+  let stock;
+  let price;
   //const submitButton = document.querySelector('button[type="submit"]');
   // const imageInput = document.getElementById("fileInput");
   // const imagePreview = document.getElementById("imgPreview");
@@ -231,6 +240,8 @@
           btn.textContent = "Crop Button";
           btn.type = "button";
 
+          imageToSent=document.querySelectorAll('#previewImg')
+          console.log(imageToSent)
           image.addEventListener("click", function () {
             cropImg(image, btn);
           });
@@ -249,8 +260,10 @@
   });
 
   function validateFiles(input) {
+    return true
     const file = input;
-
+    console.log('fileeee')
+    console.log(file.type)
     // for (let i = 0; i < files.length; i++) {
 
     const fileType = file.type;
@@ -293,16 +306,22 @@
     if (productNameInput.value.trim() === "") {
       isValid = false;
       productNameInput.classList.add("is-invalid");
+    }else{
+      productname=productNameInput.value
     }
 
     if (productCategorySelect.value === "1") {
       isValid = false;
       productCategorySelect.classList.add("is-invalid");
+    }else{
+     productCategory= productCategorySelect.value
     }
 
     if (descriptionInput.value.trim() === "") {
       isValid = false;
       descriptionInput.classList.add("is-invalid");
+    }else{
+      description=descriptionInput.value
     }
 
     if (
@@ -312,7 +331,10 @@
     ) {
       isValid = false;
       stockInput.classList.add("is-invalid");
+    }else{
+      stock=stockInput.value
     }
+
     if (
       isNaN(priceInput.value) ||
       parseInt(priceInput.value) < 0 ||
@@ -320,10 +342,12 @@
     ) {
       isValid = false;
       priceInput.classList.add("is-invalid");
+    }else{
+      price=priceInput.value
     }
 
-    // if(!validateFiles(imagesInput)){
-    if (1 === 0) {
+     if(!validateFiles(imagesInput)){
+    // if (1 === 0) {
       isValid = false;
       imagesInput.classList.add("is-invalid");
     }
@@ -335,12 +359,68 @@
 
     if (!isValid) {
       console.log("prevent")
-      event.preventDefault(); // Prevent form submission if validation fails
+      event.preventDefault(); 
     }
 
 
+
+
+// Retrieve the base64Array from local storage
+const storedBase64Array = JSON.parse(localStorage.getItem('base64Images'));
+
+// Check if the array was successfully retrieved
+if (Array.isArray(storedBase64Array)) {
+  // You can now work with the storedBase64Array as needed
+  console.log('Retrieved base64Array from local storage:', storedBase64Array);
+  imageToSent=storedBase64Array
+} else {
+  console.log('No base64Array found in local storage.');
+}
+
+event.preventDefault()
+
+
+
+
+    fetch('/admin/product/add-product', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json', 
+   
+  },
+  
+  body: JSON.stringify({
+
+  imageToSent:imageToSent,
+  productname:productname,
+  productCategory:productCategory,
+  description:description,
+  stock:stock,
+  price:price
     
+  }),
+})
+  .then(response => {
+  
+    if (response.ok) {
+    
+      return response.json(); 
+    } else {
+      
+      throw new Error('Request failed');
+    }
+  })
+  .then(data => {
+   
+    console.log(data);
+  })
+  .catch(error => {
+    
+    console.error(error);
   });
+
+
+   });
 
   function imageCropModal(img) {
     // cropContainer.src = imgSrc;
@@ -405,6 +485,8 @@
   //   event.preventDefault(); // Prevent form submission if validation fails
   // }
   // });
+
+
 </script>
 
 <!-- Images on click -->

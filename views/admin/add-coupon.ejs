@@ -42,6 +42,7 @@
                 <textarea
                 type="text"
                   name="description"
+                  max="100"
                   id="description"
                   placeholder="Type here"
                   class="form-control"
@@ -56,6 +57,8 @@
                     <label class="form-label">Discount Amount</label>
                     <div class="row gx-2">
                       <input
+                        min="1"
+                        max="200"
                         placeholder="discount amount"
                         name="discountAmount"
                         id="discountAmount"
@@ -70,6 +73,8 @@
                     <div class="row gx-2">
                       <input
                         placeholder="$"
+                        min="30"
+                        max="200"
                         name="minimumAmount"
                         id="minimumAmount"
                         type="number"
@@ -86,6 +91,8 @@
                         name="maxRedemptions"
                         id="maxRedemptions"
                         type="number"
+                        min="1"
+                        max="200"
                         class="form-control" />
                     </div>
                   </div>
