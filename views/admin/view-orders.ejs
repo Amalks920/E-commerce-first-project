@@ -113,7 +113,7 @@
                 <%for(var i=0;i<documentsNo;i++){ %>
 
                
-                <li class="page-item active"><a class="page-link" href="/admin/view-orders?page=<%=i %>"><%=i+1 %></a></li>
+                <li class="page-item  <%= req.query.page== i ? 'active' : '' %> "><a class="page-link" href="/admin/view-orders?page=<%=i %>"><%=i+1 %></a></li>
 
                 <% }%>
 
@@ -128,22 +128,14 @@
     const select=document.querySelectorAll('#option')
     const editBtns=document.querySelectorAll('#edit-btn')
     const userId=document.querySelector('#userId').value
+    const pageBtns=document.querySelectorAll('.page-item')
     let orderIdAndStatus;
     let selectedStatus;
-        // const status=selectElement.getAttribute('data-id')
-        
-        // select.forEach(function (option,index2) {
-        //     if(status===option.textContent){
-        //         console.log(selectElement.selectedIndex)
-        //         selectElement.selectedIndex=index2
-        //         return
-        //     }
-        // })
+
 
 
         selectedOrderStatus.forEach(function (selectElement,index) {
             orderIdAndStatus=JSON.parse(selectElement.getAttribute('data-id'))
-            //selectElement.options[selectElement.selectedIndex].textContent=orderIdAndStatus.orderstatus;
             
             selectElement.addEventListener('change',function () {
                  orderIdAndStatus=JSON.parse(selectElement.getAttribute('data-id'))
@@ -190,6 +182,14 @@
             })
             .catch(error=>console.log(error))
            }
+
+        pageBtns.forEach(function (pageBtn,index) {
+           
+            pageBtn.addEventListener('click',function () {
+                pageBtn.classList.add('active')
+            })
+        })
+
 
 
 

@@ -1,5 +1,6 @@
 const categoryModal = require("../model/categoryModal");
 const addressModel=require('../model/addressModal');
+const walletModal = require("../model/walletModal");
 
 const addAddressPost= async (req, res) => {
     try {
@@ -100,7 +101,20 @@ const addAddressPost= async (req, res) => {
     }
   }
 
+
+  const userOverview=async(req,res,next)=>{
+    let userId=req.session.user._id
+    try {
+        const wallet=await walletModal.findOne({user_id:userId}).populate('user_id')
+        console.log(wallet)
+        res.render('user/user-dashboard.ejs',{layout:'./layout/homeLayout.ejs',isLoggedIn:true,wallet:wallet})
+    } catch (error) {
+      res.redirect('user/404')
+    }
+  }
+
   module.exports={
     addAddressPost,getAddAddress,
-    deleteAddress,selectAddress
+    deleteAddress,selectAddress,
+    userOverview
   }

@@ -45,6 +45,7 @@ const {
   addAddressPost,
   deleteAddress,
   selectAddress,
+  userOverview,
 } = require("../controller/addressCtrl");
 
 const {
@@ -97,6 +98,13 @@ router.post(
   authorizationMiddleware,
   selectAddress
 );
+
+router.get(
+  '/user-overview',
+  setCacheControl,
+  authorizationMiddleware,
+  userOverview
+)
 
 router.get("/home", setCacheControl, authorizationMiddleware, getHomePage);
 router.get("/shop", setCacheControl, authorizationMiddleware, getShopPage);

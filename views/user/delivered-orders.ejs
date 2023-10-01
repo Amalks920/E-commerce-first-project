@@ -1,0 +1,68 @@
+<div class="colorlib-product">
+    <div class="container-fluid">
+
+        <%if(orders.length===0){ %>
+            <div class="col-sm-8 text-center" style="margin: 5px; margin-left: 300px;height: 40vh;padding-top: 130px;">
+            <h1 style="position: fixed;left: 850px;">No Orders to Show</h1>
+            </div>
+            <% }else{ %>
+
+            
+        <div class="row">
+            <h1 style="text-align: center;">My Orders</h1>
+            <% orders.forEach((order,index)=>{ %>
+
+            
+            <div class="col-sm-8 text-center" style="margin: 5px; margin-left: 400px;">
+                <div class="featured" 
+                style="background-color: #d4d5d5;
+                width: 100%;height: 200px;display: flex;
+                justify-content: center;align-items: center;gap: 100px;">
+                <div>
+                    <h3>Order ID </h3>
+                    <p><%=order._id -%></p>
+                </div>
+                <div>
+                    <h3>Total Amount </h3>
+                    <p><%=order.totalAmount -%></p>
+                </div>
+                <div>
+                    <h3>Order Status </h3>
+                    <p><%=order.orderStatus -%></p>
+                </div>
+                <div>
+                    <h3>Payment Mode </h3>
+                    <p><%=order.paymentMode -%></p>
+                </div>
+                <div>
+                    <h3> </h3>
+                    <a href="/order-details/<%=order._id -%>" style="color: blue;">View Details</a>
+                </div>
+                </div>
+            </div>
+
+            <% })-%>
+           
+        
+        </div>
+
+        <% } %>
+
+        <ul class="pagination justify-content-start" style="margin-left: 400px;">
+
+						
+  
+            <%for(var i=0;i<BTN_N0;i++){ %>
+            <li class="page-item " ><a class="page-link" href="/view-orders?page=<%=i %>" ><%=i+1%></a></li>
+            <% } %>
+    
+
+    
+    
+    
+    </ul>
+    </div>
+
+ 
+
+</div>

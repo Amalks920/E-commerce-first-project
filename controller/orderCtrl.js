@@ -8,6 +8,7 @@ const walletModal = require("../model/walletModal");
 const { disconnect } = require("mongoose");
 const couponModal = require("../model/couponModal");
 
+
 const placeOrder = async (req, res, next) => {
   const userId = req.session.user._id;
 
@@ -196,7 +197,10 @@ const viewOrders = async (req, res, next) => {
     })
    const orders= await orderModal.find({
       _id: { $in: orderIds }
-    }).skip(currentPage*ORDER_PER_PAGE).limit(ORDER_PER_PAGE)
+    }).sort({_id:-1})
+    .skip(currentPage*ORDER_PER_PAGE)
+    .limit(ORDER_PER_PAGE)
+    
 
     res.render("user/view-orders", {
       layout: "./layout/homeLayout.ejs",
@@ -460,22 +464,13 @@ const viewOrdersAdmin = async (req, res, next) => {
       },
     ]);
 
-    // const orders2 = await orderModal.find({}).populate('items.productId').populate('user').populate('address')
-    // console.log("orders2")
-    // console.log(orders2)
-    // console.log('orders2')
-
-    //  const order2=await  orderModal.findById(req?.params?.id) // Replace 'orderId' with the actual order ID you want to query
-    // .select('items.productId items.quantity items.status paymentMode')
-    // .populate('items.productId', 'productname description price') // Replace with the fields you want to populate
-    // .exec()
-
-    // console.log(Math.ceil(orders.length / 5));
+  
 
     res.render("admin/view-orders", {
       layout: "./layout/adminLayout.ejs",
       orders: orders,
       documentsNo: noOfDocuments,
+      req
     });
   } catch (error) {
     console.log(error);

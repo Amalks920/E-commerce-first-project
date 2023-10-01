@@ -27,7 +27,11 @@ const orderSchema = new mongoose.Schema({
 				enum: ['pending','Delivered','placed','Cancelled'],
 				default: 'pending',
 			},
-			
+
+			isReturned:{
+				type:Boolean,
+				default:false
+			}
 		},
 	],
 	orderStatus: {

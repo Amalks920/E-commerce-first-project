@@ -115,7 +115,7 @@ const userLogin = expressAsycnHandler(async (req, res, next) => {
       //   res.status(401).json({msg:"invalid credentials"})
     }
   } catch (error) {
-    res.redirect('/user/404')
+    res.redirect('/404')
   }
 });
 
