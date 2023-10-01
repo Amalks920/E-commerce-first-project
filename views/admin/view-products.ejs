@@ -1,48 +1,123 @@
+
 <section class="content-main">
     <div class="content-header">
         <div>
-            <h2 class="content-title card-title">Products grid</h2>
-            <p>Lorem ipsum dolor sit amet.</p>
+            <h2 class="content-title card-title">Products</h2>
+
         </div>
-        <div>
-            <a href="#" class="btn btn-light rounded font-md">Export</a>
-            <a href="#" class="btn btn-light rounded  font-md">Import</a>
-            <a href="#" class="btn btn-primary btn-sm rounded">Create new</a>
-        </div>
+
     </div>
     <div class="card mb-4">
 
         <div class="card-body">
-            <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5">
-                <% data.forEach((product)=>{ %>
-                    <a href="">
-                <div class="col">
-                    <div class="card card-product-grid">
-                        <a href="#" class="img-wrap"> <img src="/images/uploads/<%=product?.images[0]%>" alt="Product"> </a>
-                        <div class="info-wrap">
-                            <a href="#" class="title text-truncate"><%=product?.productname %></a>
-                            <div class="price mb-2"><%= product?.price %></div> <!-- price.// -->
-                            <a href="/admin/edit-product/<%=product?._id %>" class="btn btn-sm font-sm rounded btn-brand">
-                                <i class="material-icons md-edit"></i> Edit
-                            </a>
-                           
-                        </div>
-                    </div> <!-- card-product  end// -->
-                </div> <!-- col.// -->
-            </a>
-               <% }) %>
-            </div> <!-- row.// -->
+            <article class="itemlist" style="border: 1px solid rgb(204, 198, 198);">
+                <div class="row align-items-center">
+
+                    <div class="col-lg-1 col-sm-2 col-8  col-name">
+                        <a class="itemside" href="#">
+
+                            <div class="info">
+                                <h4 class="mb-0">SL NO</h4>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-sm-2 col-8  col-name">
+                        <a class="itemside" href="#">
+
+                            <div class="info">
+                                <h4 class="mb-0">Product Name</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-2 col-sm-2 col-4 col-status">
+                        <h4>Product Description</h4>
+                    </div>
+
+                    <div class="col-lg-2 col-sm-2 col-4 col-status" style="padding-left: 100px;">
+                        <h4>Total Price</h4>
+                    </div>
+                    <div class="col-lg-2 col-sm-2 col-4 col-status" style="padding-left: 100px;">
+                        <h4>Listed/Delisted</h4>
+                    </div>
+                   
+
+                    <div class="col-lg-2 col-sm-2 col-4 col-status" style="padding-left: 100px;">
+                        <h4></h4>
+                    </div>
+          
+
+                </div> <!-- row .// -->
+            </article> <!-- itemlist  .// -->
+
+           
+
+       <% data?.forEach((product,index)=>{ %>
+
+       
+            <article class="itemlist">
+              
+                <div class="row align-items-center" style="height: 100px;">
+
+                    <div class="col-lg-1 col-sm-2 col-8  col-name">
+                        <a class="itemside" href="#">
+
+                            <div class="info">
+                                <h4 class="mb-0"><%=index+1%></h4>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-sm-2 col-8  col-name">
+                        <a class="itemside" href="#">
+
+                            <div class="info">
+                                <h4 class="mb-0" style="font-size: smaller;"><%=product?.productname %></h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-2 col-sm-2 col-4 col-status">
+                        <p><%=product?.description %></p>
+                    </div>
+                   
+                    <input id="userId" type="text" value="" hidden>
+
+                    <div class="col-lg-2 col-sm-2 col-4 col-status" style="padding-left: 100px;">
+                        <h4><%=product?.price%></h4>
+                    </div>
+                    <div class="col-lg-2 col-sm-2 col-4 col-status" style="padding-left: 100px;">
+                        <p><%=product?.status %></p>
+                    </div>
+
+
+                    <div class="col-lg-2 col-sm-2 col-4 col-status" style="padding-left: 100px;">
+                        <h4><a href="/admin/edit-product/<%=product?._id %>" id="edit-btn" style="background-color: antiquewhite;border: none;width: 140px;padding: 10px;">Edit</a></h4>
+                    </div>
+
+
+                </div> <!-- row .// -->
+           
+            </article> <!-- itemlist  .// -->
+        
+        <% }) %>
+          
+
+       
+          
         </div> <!-- card-body end// -->
     </div> <!-- card end// -->
     <div class="pagination-area mt-30 mb-50">
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-start">
-                <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                <li class="page-item"><a class="page-link" href="#">02</a></li>
-                <li class="page-item"><a class="page-link" href="#">03</a></li>
-                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                <li class="page-item"><a class="page-link" href="#">16</a></li>
-                <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+
+                
+
+               <%for(var i=0;i<noOfBtns;i++){%>
+               
+                <li class="page-item active"><a class="page-link" href="/admin/view-products?page=<%=i %>"><%=i+1 %></a></li>
+                <%}%>
+                
+
             </ul>
         </nav>
     </div>

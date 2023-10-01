@@ -47,6 +47,7 @@ router.post('/remove-images', setCacheControl, adminAuthorizationMiddleware, del
 router.get('/view-orders',setCacheControl,adminAuthorizationMiddleware,viewOrdersAdmin);
 router.get('/order-products/:id',setCacheControl,adminAuthorizationMiddleware,getOrderProducts)
 
+
 router.post("/edit-order-status/:id",adminAuthorizationMiddleware,cancelOrder);
 
 router.get('/add-coupon',setCacheControl,adminAuthorizationMiddleware,addCoupon)

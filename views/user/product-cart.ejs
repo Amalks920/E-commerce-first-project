@@ -7,39 +7,26 @@
   <div class="container">
     <div class="row row-pb-lg">
       <div class="col-md-10 offset-md-1">
-        <div class="process-wrap">
-          <div class="process text-center active">
-            <p><span>01</span></p>
-            <h3>Shopping Cart</h3>
-          </div>
-          <div class="process text-center">
-            <p><span>02</span></p>
-            <h3>Checkout</h3>
-          </div>
-          <div class="process text-center">
-            <p><span>03</span></p>
-            <h3>Order Complete</h3>
-          </div>
-        </div>
+    
       </div>
     </div>
     <div class="row row-pb-lg">
-      <div class="col-md-12">
-        <div class="product-name d-flex">
-          <div class="one-forth text-left px-4">
-            <span>Product Details</span>
+      <div class="col-md-12" style="background-color: rgb(208, 208, 208);border-radius: 30px;">
+        <div class="product-name d-flex" style="background-color:rgb(61, 59, 59);color: white;">
+          <div class="one-forth text-left px-4" >
+            <span style="color: white;box-shadow: 100px;font-size: larger;">Product Details</span>
+          </div>
+          <div class="one-eight text-center" >
+            <span style="color: white;">Price</span>
           </div>
           <div class="one-eight text-center">
-            <span>Price</span>
+            <span style="color: white;">Quantity</span>
           </div>
           <div class="one-eight text-center">
-            <span>Quantity</span>
-          </div>
-          <div class="one-eight text-center">
-            <span>Total</span>
+            <span style="color: white;">Total</span>
           </div>
           <div class="one-eight text-center px-4">
-            <span>Remove</span>
+            <span style="color: white;">Remove</span>
           </div>
         </div>
         <% cart?.products?.forEach(product=>{ %>
@@ -54,7 +41,7 @@
                 margin-left: 30px;
               "></div>
             <div class="display-tc">
-              <h3><%=product?.product?.productname -%></h3>
+              <h2 style="margin-left: 15px;"><%=product?.product?.productname -%></h2>
               <p id="out-of-stock" style="color: red;display: none;"></p>
 
             </div>
@@ -65,10 +52,10 @@
           <div class="one-eight text-center">
             <div class="display-tc">
               <% if(product?.product?.offerPrice===0){ %>
-                ₹<span class="price"> <%=product?.product?.price -%></span>
+               <h3 style="font-size: larger;">₹<span class="price"> <%=product?.product?.price -%></span></h3> 
 
              <%  }else{ %>
-              ₹<span class="price"> <%=product?.product?.offerPrice -%></span>
+             <h3 style="font-size: larger;"> ₹<span class="price"> <%=product?.product?.offerPrice -%></span></h3>
 
              <% } %>
             </div>
@@ -84,7 +71,7 @@
                 hidden />
               <button
                 class="dec-btn"
-                style="height: 43px; width: 40px; border: 1px solid gainsboro">
+                style="height: 43px; width: 40px; background-color:  rgb(182, 180, 180);border: none;">
                 -
               </button>
               <input
@@ -100,7 +87,7 @@
                 readonly />
               <button
                 class="inc-btn"
-                style="height: 43px; width: 40px; border: 1px solid gainsboro" 
+                style="height: 43px; width: 40px; background-color:  rgb(182, 180, 180);border: none;" 
                 >
                 +
               </button>
@@ -111,10 +98,11 @@
 
             <% if(product?.product?.offerPrice===0){ %>
             <div class="display-tc">
-              ₹
+            <h3 style="font-size: larger;"> ₹
               <span class="total-price"
                 ><%=product?.quantity*product?.product?.price-%></span
               >
+            </h3> 
               
             </div>
             <%  }else{ %>
@@ -145,7 +133,8 @@
       <div class="col-md-12">
         <div class="total-wrap">
           <div class="row">
-            <div class="col-sm-8">
+            
+            <div class="col-sm-8" style="display: none;">
               <form action="#">
                 <div class="row form-group">
                   <div class="col-sm-9">
@@ -155,16 +144,13 @@
                       class="form-control input-number"
                       placeholder="Your Coupon Number..." />
                   </div>
-                  <div class="col-sm-3">
-                    <input
-                      type="submit"
-                      value="Apply Coupon"
-                      class="btn btn-primary" />
-                  </div>
+
+                  
+
                 </div>
               </form>
             </div>
-            <div class="col-sm-4 text-center">
+            <div class="col-sm-4 text-center" style="background-color: rgb(208, 208, 208);;">
               <div class="total">
                 <div class="sub">
                   <p>
@@ -367,7 +353,9 @@
       body: JSON.stringify({ productId, quantity }),
     })
       .then((response) => response.json())
-      .then((data) => {})
+      .then((data) => {
+        toast('product added')
+      })
       .catch((error) => console.error(error));
   }
 
@@ -427,3 +415,4 @@
       });
   }
 </script>
+<script src="/javascript/toast.js"></script>

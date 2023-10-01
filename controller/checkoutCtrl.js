@@ -11,13 +11,21 @@ const checkout = async (req, res, next) => {
     const cart = await cartModal.findOne({ user: req.session.user._id })
                     .populate({ path: "products.product" });
 
-    const coupons=await couponModal.find({maxRedemptions:{$gt:0}})
+                    const currentDate = new Date(); // Current date as a JavaScript Date object
+                
+                    
 
+                    const coupons = await couponModal.find({
+                      maxRedemptions: { $gt: 0 },
+                       expirationDate: { $gte: currentDate },
+                    });
+                    console.log('coupons')
+                    console.log(coupons)
+                    
     const selectedAddress = address?.address?.filter((address) => {
       return address?.isSelected === true;
     });
-    console.log(selectedAddress)
-    console.log(selectedAddress);
+
     res.render("user/checkout.ejs", {
       layout: "./layout/homeLayout.ejs",
       isLoggedIn: true,
@@ -27,7 +35,7 @@ const checkout = async (req, res, next) => {
       wallet:wallet
     });
   } catch (error) {
-    console.log(error);
+    res.redirect('/404')
   }
 };
 

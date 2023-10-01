@@ -8,6 +8,8 @@ const searchPage=async(req,res,next)=>{
   let categories=req?.query?.category?.split(',')
   let search=req?.query?.search
   let PAGE=req?.query?.page;
+  let from=req?.query?.from;
+  let to=req?.query?.to;
   console.log(PAGE,PAGE,PAGE,PAGE,PAGE )
  
           const category=await categoryModal.find({})
@@ -65,6 +67,12 @@ const searchPage=async(req,res,next)=>{
         }else if(sort=='hightolow'){
           products= products.sort(function(a,b){
             return b.price-a.price
+          })
+        }
+
+        if(from && to){
+          products=products.filter((product,index)=>{
+            return product?.price>=from && product?.price<=to
           })
         }
 

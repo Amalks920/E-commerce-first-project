@@ -41,9 +41,7 @@
                     <div class="col-lg-2 col-sm-2 col-4 col-status" style="padding-left: 100px;">
                         <h4>Payment Mode</h4>
                     </div>
-                    <div class="col-lg-2 col-sm-2 col-4 col-status" style="padding-left: 100px;">
-                        <h4>is Paid</h4>
-                    </div>
+
 
                 </div> <!-- row .// -->
             </article> <!-- itemlist  .// -->
@@ -77,13 +75,7 @@
                     <div class="col-lg-1 col-sm-2 col-4 col-price"> <h4><%=item.quantity %></h4> </div>
                     <div class="col-lg-2 col-sm-2 col-4 col-status">
 
-                        <select style="width: 150px; height: 20px;" data-id='<%= JSON.stringify({ orderstatus: order.orderStatus, id: order._id }) %>' id="select" >
-                            <!-- <option value="pending" id="option" <% if(item.status === 'pending') { %>selected="selected"<% } %>>pending</option> -->
-                            <option value="">Choose an Option</option>
-                            <option value="Cancelled" id="option" <% if(item.status === 'Cancelled') { %>selected="selected"<% } %>>Cancelled</option>
-
-                            <!-- <option  value="placed" id="option" <% if(item.status === 'placed') { %>selected="selected"<% } %>>placed</option> -->
-                        </select>
+                      <p><%=order.orderStatus %></p>
 
                     </div>
 
@@ -93,9 +85,7 @@
                     <div class="col-lg-2 col-sm-2 col-4 col-status" style="padding-left: 100px;">
                         <h4>COD</h4>
                     </div>
-                    <div class="col-lg-2 col-sm-2 col-4 col-status" style="padding-left: 100px;">
-                        <h4><button id="edit-btn" data-id="<%=item?.productId?._id %>" style="background-color: antiquewhite;border: none;width: 140px;padding: 10px;">Edit</button></h4>
-                    </div>
+                    
 
                 </div> <!-- row .// -->
             </article> <!-- itemlist  .// -->

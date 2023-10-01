@@ -36,13 +36,13 @@
                 <i class="fa fa-dashboard"></i> <span>Add Address</span>
                 </a>
               </li>
-              <li class="treeview" style="background-color: rgb(247, 247, 247);margin-top: 5px;">
+              <!-- <li class="treeview" style="background-color: rgb(247, 247, 247);margin-top: 5px;">
                 <a href="index.html">
                 <i class="fa fa-dashboard"></i> <span>Manage Address</span>
                 </a>
-              </li>
+              </li> -->
               <li class="treeview" style="background-color: rgb(247, 247, 247);margin-top: 5px;">
-                <a href="/view-orders">
+                <a href="/view-orders?page=0">
                 <i class="fa fa-dashboard"></i> <span>View Orders</span>
                 </a>
               </li>
@@ -68,7 +68,7 @@
 
               </div>
             </div>
-      
+            
             <div class="col-lg-6" >
               <div class="card mb-4" style="background-color: rgb(82, 79, 79);box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                 <div class="card-header">
@@ -152,7 +152,7 @@
      <% if(addresses?.address.length!=0 && addresses){ %>
 
       
-      <section style="position: absolute; top: 17%;left:1300px;">
+      <section style="position: absolute; top: 17%;left:1300px;overflow: scroll;max-height: 500px;">
         <h1>My Addresses</h1>
         <div style=" width: 600px;height: 250px;margin-top: 20px;height: fit-content;">
           <div class="address-list" style="height: fit-content;">
@@ -176,7 +176,9 @@
             </div>
 
             <% }) %>
-         
+            
+        
+        
 
     
             <!-- Add more address options as needed -->

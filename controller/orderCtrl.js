@@ -49,7 +49,7 @@ const placeOrder = async (req, res, next) => {
       },
     ]);
 
-    console.log(cart);
+   
 
     const address = await addressModal.findOne({ user: userId });
     // let selectedAddress=address.address.filter((address,index)=>{
@@ -124,6 +124,10 @@ const placeOrder = async (req, res, next) => {
       order.paymentData = razorpay_order;
       await order.save();
 
+      await couponModal.updateOne(
+        { _id: coupon },
+        { $inc: { maxRedemptions: -1 } }
+      );
       await cartModal.deleteOne({ user: req.session.user._id });
       return res
         .status(200)
@@ -136,6 +140,7 @@ const placeOrder = async (req, res, next) => {
         { $inc: { amount: -order.totalAmount } }
       );
     }
+
     await couponModal.updateOne(
       { _id: coupon },
       { $inc: { maxRedemptions: -1 } }
@@ -161,7 +166,8 @@ const orderPage = async (req, res, next) => {
 const viewOrders = async (req, res, next) => {
   try {
     // const allOrders = (await orderModal.find({ user: req.session.user._id }))
-    let ORDER_PER_PAGE=9;
+    let ORDER_PER_PAGE=3;
+    let currentPage=req?.query?.page
     
     let allOrders = await orderModal.aggregate([
       {
@@ -177,16 +183,27 @@ const viewOrders = async (req, res, next) => {
         },
       },
     ]);
-    console.log(allOrders);
 
     allOrders = allOrders.filter((order, index) => {
       return order.user == req.session.user._id;
     });
+    let allOrderLength=allOrders.length
+    let BTN_N0=Math.ceil(allOrderLength/ORDER_PER_PAGE)
+    console.log('btn no');
+    console.log(BTN_N0)
+   const orderIds=  allOrders.map((el,index)=>{
+      return el._id
+    })
+   const orders= await orderModal.find({
+      _id: { $in: orderIds }
+    }).skip(currentPage*ORDER_PER_PAGE).limit(ORDER_PER_PAGE)
 
     res.render("user/view-orders", {
       layout: "./layout/homeLayout.ejs",
       isLoggedIn: true,
-      orders: allOrders,
+      orders: orders,
+      BTN_N0
+      
     });
   } catch (error) {
     console.log(error);
@@ -477,6 +494,14 @@ const editOrder = async (req, res, next) => {
     console.log(error);
   }
 };
+
+// const viewDeliveredOrder= async (req,res,next) => {
+//   try {
+    
+//   } catch (error) {
+//     res.redirect('/404')
+//   }
+// }
 
 module.exports = {
   placeOrder,

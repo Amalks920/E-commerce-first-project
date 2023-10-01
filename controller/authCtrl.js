@@ -219,7 +219,7 @@ const getHomePage = expressAsycnHandler(async (req, res, next) => {
       NO_OF_ITEMS_PER_PAGE
     });
   } catch (error) {
-    res.redirect('/user/404')
+    res.redirect('/404')
   }
 });
 

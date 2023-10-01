@@ -11,11 +11,11 @@
   <img id="crpImg" src="" alt="crop image" />
   <button id="crop-submit">submit</button>
 </div>
-<%console.log(productOffers)%>
+
 <section class="content-main">
   <form
     id="productForm"
-    action=""
+    action="/admin/product/add-product"
     method="post"
     enctype="multipart/form-data">
     <div class="row">
@@ -40,7 +40,7 @@
               <label for="product_name" class="form-label">Product title</label>
               <input
                 type="text"
-                maxlength="10"
+                maxlength="100"
                 name="productname"
                 placeholder="Type here"
                 class="form-control"
@@ -50,7 +50,7 @@
               <label class="form-label">Full description</label>
               <textarea
                 id="description"
-                maxlength="30"
+                maxlength="300"
                 name="description"
                 placeholder="Type here"
                 class="form-control"
@@ -232,13 +232,14 @@
           }, file size ${returnFileSize(file.size)}.`;
           const image = document.createElement("img");
 
-          const btn = document.createElement("button");
+           const btn = document.createElement("button");
 
           image.src = URL.createObjectURL(file);
           image.setAttribute("id", "previewImg");
           btn.setAttribute("id", "crp-btn");
           btn.textContent = "Crop Button";
           btn.type = "button";
+          btn.style.display="none"
 
           imageToSent=document.querySelectorAll('#previewImg')
           console.log(imageToSent)
@@ -267,7 +268,7 @@
     // for (let i = 0; i < files.length; i++) {
 
     const fileType = file.type;
-
+      console.log(file)
     // Check if the file type is an image (you can add more image types as needed)
     if (fileType.startsWith("image/")) {
       // File is an image
@@ -362,65 +363,14 @@
       event.preventDefault(); 
     }
 
+    
 
-
-
-// Retrieve the base64Array from local storage
-const storedBase64Array = JSON.parse(localStorage.getItem('base64Images'));
-
-// Check if the array was successfully retrieved
-if (Array.isArray(storedBase64Array)) {
-  // You can now work with the storedBase64Array as needed
-  console.log('Retrieved base64Array from local storage:', storedBase64Array);
-  imageToSent=storedBase64Array
-} else {
-  console.log('No base64Array found in local storage.');
-}
-
-event.preventDefault()
-
-
-
-
-    fetch('/admin/product/add-product', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json', 
-   
-  },
+ 
   
-  body: JSON.stringify({
 
-  imageToSent:imageToSent,
-  productname:productname,
-  productCategory:productCategory,
-  description:description,
-  stock:stock,
-  price:price
     
-  }),
-})
-  .then(response => {
-  
-    if (response.ok) {
-    
-      return response.json(); 
-    } else {
-      
-      throw new Error('Request failed');
-    }
-  })
-  .then(data => {
-   
-    console.log(data);
-  })
-  .catch(error => {
-    
-    console.error(error);
-  });
 
-
-   });
+ });
 
   function imageCropModal(img) {
     // cropContainer.src = imgSrc;
@@ -496,3 +446,4 @@ event.preventDefault()
 
 <script src="/cropperjs/cropper.min.js" type="text/javascript"></script>
 <script src="/javascript/cropper.js"></script>
+<script src="/javascript/toast.js" type="text/javascript"></script>

@@ -20,7 +20,7 @@ const getAddProduct=expressAsyncHandler(async(req,res,next)=>{
     res.render('admin/add-products',{layout:'./layout/adminLayout',data:category,productOffers:productOffers})
 
   } catch (error) {
-    console.log(error)
+    res.redirect('/404')
   }
 })
 
@@ -54,7 +54,7 @@ const getAddProduct=expressAsyncHandler(async(req,res,next)=>{
   const addProduct = expressAsyncHandler(async (req, res) => {
     console.log(req.body)
     console.log('req.filesss')
-    console.log(req.body.imageToSent)
+    console.log(req.files)
     const errors = validationResult(req);
   
     if (!errors.isEmpty()) {
@@ -64,13 +64,13 @@ const getAddProduct=expressAsyncHandler(async(req,res,next)=>{
     let product = req.body;
     const images = [];
   
-    if (req.body.imageToSent.length > 0) {
-      for (let file of req.body.imageToSent) {
+    if (req.files.length > 0) {
+      for (let file of req.files) {
 
-        const buffer = Buffer.from(file, 'base64');
+        
 
-        const imageName = `cropped_${".png"}`;
-        await sharp(buffer)
+        const imageName = `cropped_${file.filename}`;
+        await sharp(file.path)
           .resize(920, 920, { fit: 'cover' })
           .toFile(`./public/images/uploads/${imageName}`);
   
@@ -97,9 +97,9 @@ const getAddProduct=expressAsyncHandler(async(req,res,next)=>{
   
     try {
       await Product.create(product);
-      res.redirect('/admin/product/add-product');
+      res.redirect('/admin/product/view-products');
     } catch (error) {
-      console.log(error.message);
+      res.redirect('/404')
     }
   });
   
@@ -109,12 +109,17 @@ const getAddProduct=expressAsyncHandler(async(req,res,next)=>{
 const getViewProducts=expressAsyncHandler(async(req,res,next)=>{
 
   try {
+    let ITEMS_PER_PAGE=6
+    let page=req.query.page;
+    
+    console.log(ITEMS_PER_PAGE*page)
+    const noOfBtns=Math.ceil((await productModal.find({})).length/ITEMS_PER_PAGE)
+    const products=await productModal.find({}).skip(ITEMS_PER_PAGE*page).limit(ITEMS_PER_PAGE)
 
-    const products=await productModal.find({})
-    res.render('admin/view-products',{layout:'./layout/adminLayout',data:products})
+    res.render('admin/view-products',{layout:'./layout/adminLayout',data:products,noOfBtns})
 
   } catch (error) {
-    console.log(error.message)
+    res.redirect('/404')
   }
 })
 
@@ -128,7 +133,7 @@ const getProductPage=expressAsyncHandler(async(req,res,next)=>{
     const product=await productModal.findById(req?.params?.id)
     res.render('user/product-page',{layout:'./layout/homeLayout.ejs',data:product,isLoggedIn:true})
   } catch (error) {
-    console.log(error.message)
+    res.redirect('/404')
   }
 })
 
@@ -142,7 +147,7 @@ const getEditProduct=async(req,res,next)=>{
     data:category,product:product,productOffers:productOffers})
 
   } catch (error) {
-    console.log(error)
+    res.redirect('/404')
   }
 }
 
@@ -207,9 +212,11 @@ const editProductPost=async (req, res,next) => {
 
         res.redirect('/admin/view-products');
       } catch (error) {
-        console.log(error.message);
+        res.redirect('/404')
       }
     }
+
+  
 
 
 module.exports={

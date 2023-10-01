@@ -1,26 +1,90 @@
-<div id="couponModal" style="position: absolute;background-color: white;
-width: 20%;height: 30%;display: none;z-index: 5;left: 850px;overflow: scroll; ">
-  <h1 style="text-align: center;margin-top: 10px;color: black;">Coupons</h1>
-  <button id="close" style="background-color: red;color: white;margin: 5px;">close</button>
-  <% coupons.forEach((coupon,index)=>{ %>
-    
-  
-  <div id="coupon" style="margin: 10px;padding: 5px;width: 200px;">
-    <button id="select-btn" style="margin-left: 250px;width: 100px;background-color: black;color: white;font-weight: bold;">Add</button>
-     id="couponId" value="<%=coupon?._id %>" hidden> -->
-    
-    Code : <span id="coupon-code" class="coupon-details" style="margin-bottom: 15px;"> <%=coupon.code %></span>
-    Description : <span id="description" class="coupon-details" style="margin-bottom: 15px;">  <%=coupon.descripiton %></span>
-    Discount Amount :<span id="discountAmount" class="coupon-details" style="margin-bottom: 15px;"> <%=coupon.discountAmount %></span>
-    Minimum Amount : <span id="minimumAmount" class="coupon-details" style="margin-bottom: 15px;"> <%=coupon.minimumAmount %></span>
-    Expiry : <sapn id="expirationDate" class="coupon-details" style="margin-bottom: 15px;"> <%=coupon.expirationDate %></span>
-      Expiry : <sapn id="" class="" style="margin-bottom: 15px;"> <%=coupon.discountType %></span>
-      <input type="text" id="discountType" value="<%=coupon?.discountType %>" hidden>
-      <input type="text" id="couponId" value="<%=coupon?._id %>" hidden>
+<style>
+  #couponModal {
+  position: absolute;
+  background-color: white;
+  width: 20%;
+  height: 30%;
+  display: none;
+  z-index: 5;
+  left: 850px;
+  overflow: scroll;
+}
 
-  </div>
+#close {
+  background-color: red;
+  color: white;
+  margin: 5px;
+}
+
+#coupon {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+}
+
+#select-btn {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.coupon-details {
+  margin-top: 10px;
+}
+
+.label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+</style>
+<% console.log(coupons) %>
+
+
+<div id="couponModal" style="position: fixed;top: 25%; background-color: rgb(209, 253, 248); width: 20%; height: 30%; display: none; z-index: 5; left: 850px; overflow: scroll;">
+  <h1 style="text-align: center; margin-top: 10px; color: black;">Coupons</h1>
+  <button id="close" style="background-color: red; color: white; margin: 5px;">Close</button>
+  <% coupons.forEach((coupon, index) => { %>
+    <% console.log(coupon,index) %>
+    <% console.log('coupon index') %>
+    <div id="coupon" class="coupon-container" style="background-color: rgb(4, 3, 3);">
+      <button id="select-btn" class="add-button">Add</button>
+      <input id="couponId" value="<%= coupon?._id %>" hidden/>
+      <div class="coupon-details">
+        
+        <span id="coupon-code" class="coupon-details" style="font-size: larger;font-weight: bold;color: white;"><%= coupon.code %></span>
+      </div>
+      <div class="coupon-details">
+       
+        <span id="description" class="coupon-details" style="font-size: large;color: white;"><%= coupon.description %></span>
+      </div>
+      <div class="coupon-details">
+        
+        Discount Amount:<span id="discountAmount" class="coupon-details" style="color: white;"><%= coupon.discountAmount %></span>
+      </div>
+      <div class="coupon-details">
+       
+        Minimum Amount in Cart:<span id="minimumAmount" class="coupon-details" style="color: white;"><%= coupon.minimumAmount %></span>
+      </div>
+
+      <div class="coupon-details">
+        <span class="coupon-details" style="color: white;"><%= coupon?.discountType %> </span>discount
+
+      </div>
+      <input id="discountType" value="<%=coupon?.discountType%>"  type="text" hidden>
+      <div>
+        <span  id="expirationDate" style="display: none;"><%=coupon?.expirationDate %></span>
+      </div>
+    </div>
   <% }) %>
 </div>
+
+
 
 
 

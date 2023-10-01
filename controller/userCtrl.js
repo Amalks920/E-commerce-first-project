@@ -4,13 +4,17 @@ const addressModal=require('../model/addressModal')
 
 const getViewUsers=async(req,res,next)=>{
     try {
+        let ITEMS_PER_PAGE=6;
+        let currentPage=req?.query?.page;
+       const users= await userSchema.find({})
+       const usersLength=users.length
+       const BTN_NO=Math.ceil(usersLength/ITEMS_PER_PAGE)
+       const allUsers=await userSchema.find({}).skip(currentPage*ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
 
-       const allUsers= await userSchema.find({})
-
-       res.render('admin/view-users',{layout:'./layout/adminLayout.ejs',data:allUsers})
+       res.render('admin/view-users',{layout:'./layout/adminLayout.ejs',data:allUsers,BTN_NO})
         
     } catch (error) {
-        console.log(error)
+        res.redirect('/404')
     }
 }
 
@@ -29,7 +33,7 @@ const blockUser=async(req,res,next)=>{
         return res.send(req.params.id)
         }
     } catch (error) {
-        console.log(error)
+        res.redirect('/404')
     }
     // try {
     //   const result=await userSchema.updateOne({_id:req.params.id},{isBlocked:true})
@@ -48,16 +52,20 @@ const getShopPage=async(req,res,next)=>{
        let products=await productModal.find({ status: { $ne: "Delisted" } })
        res.render('user/shopPage.ejs',{layout:'./layout/homeLayout.ejs',isLoggedIn:true,products})
     } catch (error) {
-        console.log(error)
+        res.redirect('/404')
     }
 }
 
 const userDashboard=async(req,res,next)=>{
     try {
         const addresses=await addressModal.findOne({user:req.session.user._id})
-        res.render('user/add-or-view-address.ejs',{layout:'./layout/homeLayout.ejs',isUserDashboard:true,isLoggedIn:true,addresses:addresses})
+        console.log(addresses)
+        res.render('user/add-or-view-address.ejs',{layout:'./layout/homeLayout.ejs'
+        ,isUserDashboard:true,isLoggedIn:true,
+        addresses:addresses})
     } catch (error) {
         console.log(error)
+        res.redirect('/404')
     }
 }
 

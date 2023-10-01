@@ -12,13 +12,13 @@
 						<div class="search-hotel">
 							<h3 class="agileits-sear-head">Search Here..</h3>
 							<form action="#" method="post">
-								<input id="search" type="search" value="<%=searchInput -%>" placeholder="Product name..." name="search"
+								<input id="search" type="search" style="color: black;font-size: large;" value="<%=searchInput -%>" placeholder="Product name..." name="search"
 									required="">
 								<input id="search-submit" type="submit" value=" ">
 							</form>
 						</div>
 						<!-- price range -->
-						<div class="range">
+						<div class="range" style="display: none;">
 							<h3 class="agileits-sear-head">Price range</h3>
 							<ul class="dropdown-menu6">
 								<li>
@@ -72,6 +72,37 @@
 						</div>
 						<!-- //discounts -->
 						<!-- reviews -->
+						<div class="left-side">
+							<h3 class="agileits-sear-head">Sort</h3>
+							<ul>
+								<li>
+									<input id="low-to-high" type="radio" value="3" name="price-order" class="checked"
+										onchange="handleRadioChange(this)">
+									<label for="low-to-high" class="span">0 to 500</label>
+								</li>
+								<li>
+									<input id="high-to-low" type="radio" value="4" name="price-order" class="checked"
+										onchange="handleRadioChange(this)">
+									<label for="high-to-low" class="span">500 to 1000</label>
+								</li>
+								<li>
+									<input id="high-to-low" type="radio" value="5" name="price-order" class="checked"
+										onchange="handleRadioChange(this)">
+									<label for="high-to-low" class="span">1000 to 1500</label>
+								</li>
+								<li>
+									<input id="high-to-low" type="radio" value="6" name="price-order" class="checked"
+										onchange="handleRadioChange(this)">
+									<label for="high-to-low" class="span">1500 to 2000</label>
+								</li>
+								<li>
+									<input id="high-to-low" type="radio" value="7" name="price-order" class="checked"
+										onchange="handleRadioChange(this)">
+									<label for="high-to-low" class="span">2000 to 2500</label>
+								</li>
+							</ul>
+						</div>
+
 						<div class="customer-rev left-side">
 							<h3 class="agileits-sear-head">Customer Review</h3>
 							<ul>
@@ -508,14 +539,35 @@
 				
 
 					if (input.value == 1) {
+
+
 						const newURL = `${currentURL}${separator}sort=lowtohigh`;
 						window.location.href = newURL;
-					} else {
+					} else if(input.value==2) {
 						const newURL = `${currentURL}${separator}sort=hightolow`;
 						window.location.href = newURL;
+					} else if(input.value==3){
+						let newURL=deletePriceRangeQuery(currentURL,separator)
+						 newURL=`${currentURL}${separator}from=0&to=500`
+						window.location.href = newURL;
+					} else if(input.value==4){
+						let newURL=deletePriceRangeQuery(currentURL,separator)
+						 newURL=`${newURL}${separator}from=500&to=1000`
+						window.location.href = newURL;						
+					} else if(input.value==5){
+						let newURL=deletePriceRangeQuery(currentURL,separator)
+						 newURL=`${newURL}${separator}from=1000&to=1500`
+						window.location.href = newURL;						
+					}else if(input.value==6){
+						let newURL=deletePriceRangeQuery(currentURL,separator)
+						 newURL=`${newURL}${separator}from=1500&to=2000`
+						window.location.href = newURL;	
+					}else if(input.value==7){
+						let newURL=deletePriceRangeQuery(currentURL,separator)
+						 newURL=`${newURL}${separator}from=2000&to=2500`
+						window.location.href = newURL;	
 					}
-				}
-
+			}
 				function handleSearch(searchInput) {
 					const currentURL = window.location.href;
 					const urlObject = new URL(currentURL);
@@ -533,6 +585,21 @@
 						// window.location.href = newURL;
 						location.reload(true)
 					
+				}
+
+
+				function deletePriceRangeQuery(currentURL,separator){
+				const searchParams = new URLSearchParams(currentURL.split("?")[1] || "");
+
+                // Check if "from" and "to" parameters exist
+                if (searchParams.has("from") && searchParams.has("to")) {
+                  // Remove them
+                  searchParams.delete("from");
+                  searchParams.delete("to");
+				 
+				  const newURL = `${currentURL.split("?")[0]}${"?"}${searchParams.toString()}`;
+				  return newURL
+                }
 				}
 			</script>
 
