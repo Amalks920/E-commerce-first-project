@@ -55,8 +55,15 @@ const {
   orderDetails,
   cancelOrder,
   editOrder,
+  viewDeliveredOrders,
+  viewDeliveredProducts,
+  returnProduct,
 } = require("../controller/orderCtrl");
-const { getPaymentPage, checkPayment, payment } = require("../controller/paymentCtrl");
+const {
+  getPaymentPage,
+  checkPayment,
+  payment,
+} = require("../controller/paymentCtrl");
 const { showOfferProducts } = require("../controller/offerCtrl");
 
 router.get("/", setCacheControl, getHomePageNotLoggedIn);
@@ -100,11 +107,11 @@ router.post(
 );
 
 router.get(
-  '/user-overview',
+  "/user-overview",
   setCacheControl,
   authorizationMiddleware,
   userOverview
-)
+);
 
 router.get("/home", setCacheControl, authorizationMiddleware, getHomePage);
 router.get("/shop", setCacheControl, authorizationMiddleware, getShopPage);
@@ -132,11 +139,11 @@ router.post(
 );
 
 router.post(
-  '/filter-products',
+  "/filter-products",
   setCacheControl,
   authorizationMiddleware,
   filteredProducts
-)
+);
 
 //checkout
 router.get("/checkout", setCacheControl, authorizationMiddleware, checkout);
@@ -181,33 +188,53 @@ router.get(
   orderDetails
 );
 
+router.get(
+  "/delivered-orders",
+  setCacheControl,
+  authorizationMiddleware,
+  viewDeliveredOrders
+);
 
 router.get(
-  '/razor-pay',
+  '/delivered-products/:orderId',
+  setCacheControl,
+  authorizationMiddleware,
+  viewDeliveredProducts
+)
+
+router.get(
+  "/razor-pay",
   setCacheControl,
   authorizationMiddleware,
   getPaymentPage
-
-)
+);
 
 router.post(
-  '/check-payment',
+  "/check-payment",
   setCacheControl,
   authorizationMiddleware,
   checkPayment
-)
+);
 
+router.get("/payment-page", payment);
 
 router.get(
-  '/payment-page',
-  payment
+  "/show-offer-products/:offerId",
+  setCacheControl,
+  authorizationMiddleware,
+  showOfferProducts
+);
+
+
+router.post(
+  '/return-product',
+  setCacheControl,
+  authorizationMiddleware,
+  returnProduct
+
 )
 
-
-router.get('/show-offer-products/:offerId',setCacheControl,authorizationMiddleware,showOfferProducts)
-
-router.get('/404',get404Err)
-
+router.get("/404", get404Err);
 
 module.exports = router;
 

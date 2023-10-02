@@ -1,0 +1,277 @@
+<div
+  id="modalbgo"
+  style="
+    border: 2px solid red;
+    position: absolute;
+    width: 100vw;
+    z-index: 5;
+    background-color: black;
+    opacity: 0.2;
+    display: none;
+    height: 100%;
+  "></div>
+
+<div
+  id="return-modalo"
+  style="
+    background-color: white;
+    opacity: 1;
+    width: 800px;
+    height: 400px;
+    margin-top: 250px;
+    margin-left: 650px;
+    position: fixed;
+    z-index: 6;
+    display: none;
+  ">
+  <h2 style="text-align: center; margin-top: 50px">
+    Do You Want to return the Products?
+  </h2>
+  <span
+    style="
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 100px;
+    ">
+    <button
+      id="returnbtno"
+      style="width: 100px; height: 40px; background-color: red; color: white">
+      Return
+    </button>
+    <button
+      id="exitbtno"
+      style="width: 100px; height: 40px; background-color: blue; color: white">
+      Exit
+    </button>
+  </span>
+</div>
+
+<div
+  id="modalBgDeleteProd"
+  style="
+    border: 2px solid red;
+    position: absolute;
+    width: 100vw;
+    z-index: 5;
+    background-color: black;
+    opacity: 0.2;
+    display: none;
+    height: 100%;
+  "></div>
+
+<div
+  id="cancel-product-modal"
+  style="
+    background-color: white;
+    opacity: 1;
+    width: 800px;
+    height: 400px;
+    margin-top: 200px;
+    margin-left: 650px;
+    position: fixed;
+    z-index: 6;
+    display: none;
+  ">
+  <h2 style="text-align: center; margin-top: 50px">
+    Do You Want to Cancel the Product?
+  </h2>
+  <span
+    style="
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 100px;
+    ">
+    <button
+      id="cancelBtnProduct"
+      style="width: 100px; height: 40px; background-color: red; color: white">
+      Cancel
+    </button>
+    <button
+      id="exitBtnProduct"
+      style="width: 100px; height: 40px; background-color: blue; color: white">
+      Exit
+    </button>
+  </span>
+</div>
+
+<div class="ads-grid_shop">
+  <div class="shop_inner_inf">
+    <div class="privacy about">
+      <h3>Order<span>Details</span></h3>
+
+      <div class="checkout-right" style="margin-bottom: 50px">
+        <table class="timetable_sub">
+          <thead>
+            <tr>
+              <th>SL No.</th>
+              <th>Product</th>
+              <th>Quality</th>
+              <th>Product Name</th>
+
+              <th>Price</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            <input value="" name="userId" id="userId" type="text" hidden />
+            <input type="text" value="<%=order?._id %>" name="" id="orderId" hidden />
+            
+        
+       
+            <%order?.items?.forEach(function (item,index) { %>
+
+                <input type="text" data-id="<%=item?.productId?._id %>" name="" id="productId" hidden />
+            <tr class="rem1">
+              <td class="invert"><h3></h3></td>
+              <td class="invert-image">
+                <a href=""
+                  ><img
+                    src="/images/uploads/<%=item?.productId?.images[0] %>"
+                    alt=""
+                    class="img-responsive"
+                    style="width: 250px"
+                /></a>
+              </td>
+          
+
+              <td class="invert">
+               <p><%=item?.quantity %></p>
+              </td>
+
+              <td class="invert"><h3><%=item?.productId?.productname %></h3></td>
+             <% if(item?.productId?.offerPrice){ %>
+
+            
+              <td class="invert"><h3>₹<%=item?.productId?.offerPrice %></h3></td>
+              <% }else{ %>
+                <td class="invert"><h3>₹<%=item?.productId?.price %></h3></td>
+
+             <%  } %>
+              <td class="invert">
+                <div class="rem"></div>
+
+                <%if(item?.isReturned){%>
+                    <h1 style="color: red;">Returned</h1>
+                    <%}else{%>
+                    
+                <button
+                  id="return-product"
+                  data-id="<%=item?.productId?._id %>"
+                  style="background-color: transparent; color: red;border: 1px solid red;width: 200px;height: 50px;">
+                  Return 
+                </button>
+                <%}%>
+              </td>
+            </tr>
+            <%  })%>
+
+          </tbody>
+        </table>
+        <button
+          id="cancel-btn"
+          style="
+            margin-top: 40px;
+            background-color: red;
+            color: white;
+            width: 200px;
+            height: 60px;
+          ">
+          Cancel Order
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- /newsletter-->
+  <div class="newsletter_w3layouts_agile">
+    <div class="col-sm-6 newsleft">
+      <h3>Sign up for Newsletter !</h3>
+    </div>
+    <div class="col-sm-6 newsright">
+      <form action="#" method="post">
+        <input
+          type="email"
+          placeholder="Enter your email..."
+          name="email"
+          required="" />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+
+    <div class="clearfix"></div>
+  </div>
+  <!-- //newsletter-->
+</div>
+
+
+<script>
+    const returnBtns=document.querySelectorAll('#return-product')
+    const modalBg=document.querySelector('#modalbgo')
+    const returnModal=document.querySelector('#return-modalo')
+    const returnConfirm=document.querySelector('#returnbtno')
+    const exit=document.querySelector('#exitbtno')
+    const orderId=document.querySelector('#orderId').value;
+    let productIdEl=document.querySelectorAll('#productId')
+
+
+
+    returnBtns.forEach((btn,index)=>{
+        btn.addEventListener('click',function () {
+            productId=btn.getAttribute('data-id')
+            console.log(productId)
+           modalBg.style.display="block"
+           returnModal.style.display="block"
+        })
+    })
+
+    exit.addEventListener('click', function () {
+        modalBg.style.display="none"
+        returnModal.style.display="none"
+    })
+
+    returnConfirm.addEventListener('click',async function () {
+        try {   
+            const response = await fetch(
+            `/return-product?orderId=${orderId}&productId=${productId}`, // Use "&" to separate query parameters
+            {
+             method: "POST",
+             headers: {
+           "Content-Type": "application/json", // Specify the content type as JSON if needed
+             },
+             body: JSON.stringify({ /* Your request data here */ }), // Include the data you want to send in the body
+             }
+            );
+          const data=await response.json()
+          console.log(data)
+          if(data.response){
+            window.location.href=`/delivered-products/${orderId}`;
+          }
+        } catch (error) {
+           console.log(error) 
+        }
+    })
+
+
+    function getProductId(index){
+        
+    }
+</script>
+
+
+
+
+
+
+
+
+
+<style>
+    #return-product:hover{
+        background-color: red;
+        color: white;
+    }
+</style>
+
+
+

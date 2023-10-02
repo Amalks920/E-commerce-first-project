@@ -7,6 +7,7 @@ const Razorpay = require("razorpay");
 const walletModal = require("../model/walletModal");
 const { disconnect } = require("mongoose");
 const couponModal = require("../model/couponModal");
+const { findReturnedPrdoucts } = require("../helper/productsHelper");
 
 
 const placeOrder = async (req, res, next) => {
@@ -490,13 +491,82 @@ const editOrder = async (req, res, next) => {
   }
 };
 
-// const viewDeliveredOrder= async (req,res,next) => {
-//   try {
+
+
+const viewDeliveredOrders= async (req,res,next) => {
+  let userId=req.session.user._id
+  try {
+    const ITEMS_PER_PAGE=3;
+    const currentPage=req?.query?.page;
+    let BTN_NO;
+    const orders=await orderModal.find({user:userId,orderStatus:'Delivered'})
+   BTN_NO=Math.ceil(orders.length/ITEMS_PER_PAGE);
+    console.log(BTN_NO)
+    console.log('btn nod')
+    res.render('user/delivered-orders',{layout:'./layout/homeLayout.ejs',
+    isLoggedIn:true,orders:orders,BTN_NO:BTN_NO
+  })
+  } catch (error) {
+    res.redirect('/404')
+  }
+}
+
+const viewDeliveredProducts=async (req,res,next)=>{
+  try {
+    let ITEMS_PER_PAGE=3;
+    let currentPage=req?.query?.page;
     
-//   } catch (error) {
-//     res.redirect('/404')
-//   }
-// }
+const sevenDaysAgo = new Date();
+sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    const order = await orderModal
+    .findOne({_id:req.params.orderId,createdAt:{$gte:sevenDaysAgo}})
+    .populate("items.productId")
+    .populate("user")
+    .populate("address")
+
+    
+    
+
+    res.render('user/deliveredProducts.ejs',{layout:'./layout/homeLayout.ejs'
+    ,order:order,isLoggedIn:true})
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const returnProduct=async(req,res,next)=>{
+  let orderId=req.query.orderId;
+  let productId=req.query.productId;
+  try {
+    await orderModal.findOneAndUpdate(
+      {
+        _id:orderId,
+        'items.productId':productId
+      },
+      {
+        $set: {
+          'items.$.isReturned':true
+        }
+      },
+      {
+        new:true
+      }
+    )
+    res.status(200).json({response:true});
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const returnedProducts=async(req,res,next)=>{
+  const returnedProducts= await findReturnedPrdoucts()
+  res.render('admin/cancelledProducts',
+  {layout:'./layout/adminLayout.ejs',products:returnedProducts})
+
+}
+
 
 module.exports = {
   placeOrder,
@@ -507,4 +577,8 @@ module.exports = {
   orderDetails,
   cancelOrder,
   viewOrdersAdmin,
+  viewDeliveredOrders,
+  viewDeliveredProducts,
+  returnProduct,
+  returnedProducts
 };

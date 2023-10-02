@@ -8,6 +8,7 @@ const dbConnect=()=>{
         
     } catch (error) {
         console.log(`connection failed ${error}`);
+        
     }
 }
 
